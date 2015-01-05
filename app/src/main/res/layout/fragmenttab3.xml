@@ -1,13 +1,33 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent" >
+    android:layout_height="match_parent"
+    android:background="#ffffff">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:layout_centerVertical="true"
-        android:text="FragmentTab3" />
+    <RelativeLayout
+        android:id="@+id/store_name"
+        android:layout_width="match_parent"
+        android:layout_height="220px"
+        android:background="#F2F4F5"
+        android:paddingBottom="27px"
+        android:paddingLeft="30px"
+        android:paddingRight="30px"
+        android:text="FragmentTab1">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="#2996CC"
+            android:gravity="center"
+            android:text="1022"
+            android:textColor="#ffffff"
+            android:textSize="34dp" />
+    </RelativeLayout>
+
+    <LinearLayout
+        android:layout_below="@id/store_name"
+        android:layout_width="match_parent"
+        android:layout_height="3px"
+        android:background="#C2C7CC" />
 
 </RelativeLayout>
