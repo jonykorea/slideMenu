@@ -32,7 +32,7 @@
             android:background="#1F2226"
             android:textColor="#909AA1"
             android:gravity="left|center_vertical"
-            android:text="Account" />
+            android:text="Settings" />
     </LinearLayout>
 
 
