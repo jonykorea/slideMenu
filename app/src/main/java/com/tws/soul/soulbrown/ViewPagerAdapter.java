@@ -7,8 +7,10 @@ import android.support.v4.app.FragmentPagerAdapter;
 public class ViewPagerAdapter extends FragmentPagerAdapter {
 
 	// Declare the number of ViewPager pages
-	final int PAGE_COUNT = 2;
-	private String titles[] = new String[] { "Tab1", "Tab2" };
+
+	private String titles[] = new String[] { "Tab1", "Tab2", "Tab3" };
+
+    final int PAGE_COUNT = titles.length;
 
 	public ViewPagerAdapter(FragmentManager fm) {
 		super(fm);
@@ -18,17 +20,22 @@ public class ViewPagerAdapter extends FragmentPagerAdapter {
 	public Fragment getItem(int position) {
 		switch (position) {
 
-			// Open FragmentTab1.java
+			// Open ViewPagerFragment01.java
 		case 0:
-			FragmentTab1 fragmenttab1 = new FragmentTab1();
-			return fragmenttab1;
+			ViewPagerFragment01 fragmenttab1ViewPager = new ViewPagerFragment01();
+			return fragmenttab1ViewPager;
 
-			// Open FragmentTab2.java
+			// Open ViewPagerFragment02.java
 		case 1:
-			FragmentTab2 fragmenttab2 = new FragmentTab2();
-			return fragmenttab2;
+			ViewPagerFragment02 fragmenttab2ViewPager = new ViewPagerFragment02();
+			return fragmenttab2ViewPager;
+
+        case 2:
+                ViewPagerFragment03 fragmenttab3ViewPager = new ViewPagerFragment03();
+                return fragmenttab3ViewPager;
 		}
-		return null;
+
+    		return null;
 	}
 
 	public CharSequence getPageTitle(int position) {

@@ -5,31 +5,27 @@ import android.app.Activity;
 import android.app.ActionBar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
-import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
-import android.content.Context;
-import android.os.Build;
 import android.os.Bundle;
-import android.view.Gravity;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.support.v4.widget.DrawerLayout;
-import android.widget.ArrayAdapter;
-import android.widget.TextView;
 import android.widget.Toast;
 
 
 public class SoulBrownMainActivity extends FragmentActivity
-        implements NavigationDrawerFragment.NavigationDrawerCallbacks {
+        implements NavigationDrawerFragment.NavigationDrawerCallbacks , MenuFragment02.CustomOnClickListener{
 
+    Fragment fragment1 = new MenuFragment01();
+    Fragment fragment2 = new MenuFragment02();
     /**
      * Fragment managing the behaviors, interactions and presentation of the navigation drawer.
      */
     private NavigationDrawerFragment mNavigationDrawerFragment;
-
     /**
      * Used to store the last screen title. For use in {@link #restoreActionBar()}.
      */
@@ -49,8 +45,6 @@ public class SoulBrownMainActivity extends FragmentActivity
                 R.id.navigation_drawer,
                 (DrawerLayout) findViewById(R.id.drawer_layout));
     }
-    Fragment fragment1 = new Fragment1();
-    Fragment fragment2 = new Fragment2();
 
     @Override
     public void onNavigationDrawerItemSelected(int position) {
@@ -66,24 +60,35 @@ public class SoulBrownMainActivity extends FragmentActivity
 
     private void selectItem(int position) {
 
-        Toast.makeText(this,"selectItem "+position,Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, "selectItem " + position, Toast.LENGTH_SHORT).show();
 
         FragmentTransaction ft;
 
-        ft  = getSupportFragmentManager().beginTransaction();
+        ft = getSupportFragmentManager().beginTransaction();
         // Locate Position
         switch (position) {
             case 0:
                 ft.replace(R.id.container, fragment1);
                 break;
             case 1:
+            case 2:
+            case 3:
                 ft.replace(R.id.container, fragment2);
                 break;
-            case 2:
-                ft.replace(R.id.container, fragment2);
-            break;
+
         }
+
         ft.commit();
+
+        if (position != 0 && fragment2 != null) {
+            int movePos = position - 1;
+
+            Log.i("jony","movePos "+movePos);
+
+            ((MenuFragment02) fragment2).setPosition(movePos);
+        }
+
+
         //mDrawerList.setItemChecked(position, true);
         // Get the title followed by the position
         //setTitle(title[position]);
@@ -141,6 +146,15 @@ public class SoulBrownMainActivity extends FragmentActivity
         return super.onOptionsItemSelected(item);
     }
 
+    @Override
+    public void onChangeViewPager(int position) {
+
+        Log.i("jony","onChangeViewPager "+ position );
+
+        mNavigationDrawerFragment.setListViewItemChecked(position + 1);
+
+    }
+
     /**
      * A placeholder fragment containing a simple view.
      */
@@ -150,6 +164,9 @@ public class SoulBrownMainActivity extends FragmentActivity
          * fragment.
          */
         private static final String ARG_SECTION_NUMBER = "section_number";
+
+        public PlaceholderFragment() {
+        }
 
         /**
          * Returns a new instance of this fragment for the given section
@@ -161,9 +178,6 @@ public class SoulBrownMainActivity extends FragmentActivity
             args.putInt(ARG_SECTION_NUMBER, sectionNumber);
             fragment.setArguments(args);
             return fragment;
-        }
-
-        public PlaceholderFragment() {
         }
 
         @Override
