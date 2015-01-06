@@ -25,6 +25,13 @@ import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
+import com.tws.common.listview.adapter.GenericAdapter;
+import com.tws.common.listview.domain.Nations;
+import com.tws.common.listview.viewmapping.NationsView;
+
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Fragment used for managing interactions for and presentation of a navigation drawer.
  * See the <a href="https://developer.android.com/design/patterns/navigation-drawer.html#Interaction">
@@ -91,14 +98,21 @@ public class NavigationDrawerFragment extends Fragment {
 
     RelativeLayout mRlRootLayout;
 
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+
+        String[] NATIONS = new String[] { getString(R.string.title_section1),
+                getString(R.string.title_section2),
+                getString(R.string.title_section3),
+                getString(R.string.title_section4)};
 
         mRlRootLayout = (RelativeLayout) inflater.inflate(
                 R.layout.fragment_navigation_drawer, container, false);
 
         mDrawerListView = (ListView) mRlRootLayout.findViewById(R.id.menu_listview);
+
 
         mDrawerListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -106,6 +120,15 @@ public class NavigationDrawerFragment extends Fragment {
                 selectItem(position);
             }
         });
+
+        List<NationsView> lst = new ArrayList<NationsView>();
+        for (int i = 0; i < NATIONS.length; i++) {
+            NationsView mv = new NationsView(new Nations(NATIONS[i],
+                    R.drawable.ic_launcher), R.layout.list_nations);
+            lst.add(mv);
+        }
+        mDrawerListView.setAdapter(new GenericAdapter(lst, getActivity()));
+        /*
         mDrawerListView.setAdapter(new ArrayAdapter<String>(
                 getActionBar().getThemedContext(),
                 android.R.layout.simple_list_item_activated_1,
@@ -116,6 +139,8 @@ public class NavigationDrawerFragment extends Fragment {
                         getString(R.string.title_section3),
                         getString(R.string.title_section4),
                 }));
+        */
+
         mDrawerListView.setItemChecked(mCurrentSelectedPosition, true);
 
         return mRlRootLayout;
