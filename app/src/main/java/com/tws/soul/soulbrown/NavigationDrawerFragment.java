@@ -128,6 +128,7 @@ public class NavigationDrawerFragment extends Fragment {
             lst.add(mv);
         }
         mDrawerListView.setAdapter(new GenericAdapter(lst, getActivity()));
+        mDrawerListView.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
         /*
         mDrawerListView.setAdapter(new ArrayAdapter<String>(
                 getActionBar().getThemedContext(),
