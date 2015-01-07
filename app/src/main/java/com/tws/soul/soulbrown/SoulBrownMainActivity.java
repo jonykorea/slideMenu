@@ -3,6 +3,7 @@ package com.tws.soul.soulbrown;
 import android.app.Activity;
 
 import android.app.ActionBar;
+import android.content.Context;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.support.v4.app.Fragment;
@@ -16,6 +17,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.support.v4.widget.DrawerLayout;
+import android.widget.ImageButton;
 import android.widget.Toast;
 
 
@@ -115,9 +117,38 @@ public class SoulBrownMainActivity extends FragmentActivity
     public void restoreActionBar() {
         ActionBar actionBar = getActionBar();
         actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
-        actionBar.setDisplayShowTitleEnabled(true);
-        actionBar.setTitle(mTitle);
+       // actionBar.setDisplayShowTitleEnabled(true);
+        //actionBar.setTitle(mTitle);
         actionBar.setBackgroundDrawable(new ColorDrawable(Color.parseColor("#F2F4F5")));
+        //actionBar.setIcon(null);
+
+
+        LayoutInflater inflator = (LayoutInflater) this
+                .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+
+        getActionBar().setDisplayShowCustomEnabled(true);
+        actionBar.setDisplayShowTitleEnabled(false);
+        // actionBar.setDisplayUseLogoEnabled(false);
+        actionBar.setDisplayHomeAsUpEnabled(true);
+        actionBar.setDisplayUseLogoEnabled(false);
+        actionBar.setDisplayShowHomeEnabled(false);
+        // getActionBar().setIcon(R.drawable.ic_navigation_drawer);
+        // navigation icon on actionbar
+        actionBar.setHomeButtonEnabled(true);
+        actionBar.setIcon(null);
+        View actionBarView = inflator.inflate(R.layout.actionbar_custom_layout, null);
+        getActionBar().setCustomView(actionBarView);
+
+        ImageButton ibMenuShow = (ImageButton) actionBarView.findViewById(R.id.title_menu);
+
+        ibMenuShow.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                mNavigationDrawerFragment.openCloseDrawerMenu();
+
+            }
+        });
     }
 
 
@@ -197,5 +228,7 @@ public class SoulBrownMainActivity extends FragmentActivity
                     getArguments().getInt(ARG_SECTION_NUMBER));
         }
     }
+
+
 
 }

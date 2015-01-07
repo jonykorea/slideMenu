@@ -3,6 +3,7 @@ package com.tws.soul.soulbrown;
 
 import android.app.Activity;
 import android.app.ActionBar;
+import android.content.Context;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.support.v4.app.Fragment;
@@ -21,6 +22,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
@@ -135,6 +137,7 @@ public class NavigationDrawerFragment extends Fragment {
     }
 
     public boolean isDrawerOpen() {
+
         return mDrawerLayout != null && mDrawerLayout.isDrawerOpen(mFragmentContainerView);
     }
 
@@ -152,11 +155,41 @@ public class NavigationDrawerFragment extends Fragment {
         mDrawerLayout.setDrawerShadow(R.drawable.drawer_shadow, GravityCompat.START);
         // set up the drawer's list view with items and click listener
 
+        /*
         ActionBar actionBar = getActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
         actionBar.setHomeButtonEnabled(true);
         actionBar.setBackgroundDrawable(new ColorDrawable(Color.parseColor("#F2F4F5")));
         actionBar.setIcon(null);
+        */
+        ActionBar actionBar = getActionBar();
+        actionBar.setBackgroundDrawable(new ColorDrawable(Color.parseColor("#F2F4F5")));
+        LayoutInflater inflator = (LayoutInflater) getActivity()
+                .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+
+        getActionBar().setDisplayShowCustomEnabled(true);
+        actionBar.setDisplayShowTitleEnabled(false);
+        // actionBar.setDisplayUseLogoEnabled(false);
+        actionBar.setDisplayHomeAsUpEnabled(true);
+        actionBar.setDisplayUseLogoEnabled(false);
+        actionBar.setDisplayShowHomeEnabled(false);
+        // getActionBar().setIcon(R.drawable.ic_navigation_drawer);
+        // navigation icon on actionbar
+        actionBar.setHomeButtonEnabled(true);
+        actionBar.setIcon(null);
+        View actionBarView = inflator.inflate(R.layout.actionbar_custom_layout, null);
+        getActionBar().setCustomView(actionBarView);
+
+        ImageButton ibMenuShow = (ImageButton) actionBarView.findViewById(R.id.title_menu);
+
+        ibMenuShow.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                openCloseDrawerMenu();
+
+            }
+        });
 
         // ActionBarDrawerToggle ties together the the proper interactions
         // between the navigation drawer and the action bar app icon.
@@ -292,11 +325,41 @@ public class NavigationDrawerFragment extends Fragment {
      */
     private void showGlobalContextActionBar() {
         ActionBar actionBar = getActionBar();
+        /*
         actionBar.setIcon(null);
         actionBar.setDisplayShowTitleEnabled(true);
         actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
         actionBar.setTitle(R.string.app_name);
+q       */
 
+        ;
+        actionBar.setBackgroundDrawable(new ColorDrawable(Color.parseColor("#F2F4F5")));
+        LayoutInflater inflator = (LayoutInflater) getActivity()
+                .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+
+        getActionBar().setDisplayShowCustomEnabled(true);
+        actionBar.setDisplayShowTitleEnabled(false);
+        // actionBar.setDisplayUseLogoEnabled(false);
+        actionBar.setDisplayHomeAsUpEnabled(true);
+        actionBar.setDisplayUseLogoEnabled(false);
+        actionBar.setDisplayShowHomeEnabled(false);
+        // getActionBar().setIcon(R.drawable.ic_navigation_drawer);
+        // navigation icon on actionbar
+        actionBar.setHomeButtonEnabled(true);
+        actionBar.setIcon(null);
+        View actionBarView = inflator.inflate(R.layout.actionbar_custom_layout, null);
+        getActionBar().setCustomView(actionBarView);
+
+        ImageButton ibMenuShow = (ImageButton) actionBarView.findViewById(R.id.title_menu);
+
+        ibMenuShow.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                openCloseDrawerMenu();
+
+            }
+        });
         // test
         /*
         getActionBar().setBackgroundDrawable(
@@ -332,5 +395,19 @@ public class NavigationDrawerFragment extends Fragment {
          * Called when an item in the navigation drawer is selected.
          */
         void onNavigationDrawerItemSelected(int position);
+    }
+
+    public void openCloseDrawerMenu()
+    {
+        if(isDrawerOpen())
+        {
+            // close
+            mDrawerLayout.closeDrawer(mFragmentContainerView);
+        }
+        else
+        {
+            // open
+            mDrawerLayout.openDrawer(mFragmentContainerView);
+        }
     }
 }
