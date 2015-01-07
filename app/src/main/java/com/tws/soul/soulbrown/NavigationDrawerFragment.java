@@ -128,21 +128,8 @@ public class NavigationDrawerFragment extends Fragment {
             lst.add(mv);
         }
         mDrawerListView.setAdapter(new GenericAdapter(lst, getActivity()));
-        mDrawerListView.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
-        /*
-        mDrawerListView.setAdapter(new ArrayAdapter<String>(
-                getActionBar().getThemedContext(),
-                android.R.layout.simple_list_item_activated_1,
-                android.R.id.text1,
-                new String[]{
-                        getString(R.string.title_section1),
-                        getString(R.string.title_section2),
-                        getString(R.string.title_section3),
-                        getString(R.string.title_section4),
-                }));
-        */
 
-        mDrawerListView.setItemChecked(mCurrentSelectedPosition, true);
+         mDrawerListView.setItemChecked(mCurrentSelectedPosition, true);
 
         return mRlRootLayout;
     }
@@ -169,6 +156,7 @@ public class NavigationDrawerFragment extends Fragment {
         actionBar.setDisplayHomeAsUpEnabled(true);
         actionBar.setHomeButtonEnabled(true);
         actionBar.setBackgroundDrawable(new ColorDrawable(Color.parseColor("#F2F4F5")));
+        actionBar.setIcon(null);
 
         // ActionBarDrawerToggle ties together the the proper interactions
         // between the navigation drawer and the action bar app icon.
@@ -304,9 +292,32 @@ public class NavigationDrawerFragment extends Fragment {
      */
     private void showGlobalContextActionBar() {
         ActionBar actionBar = getActionBar();
+        actionBar.setIcon(null);
         actionBar.setDisplayShowTitleEnabled(true);
         actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
         actionBar.setTitle(R.string.app_name);
+
+        // test
+        /*
+        getActionBar().setBackgroundDrawable(
+                new ColorDrawable(Color.parseColor("yourcolor here"))); //$NON-NLS-1$
+        LayoutInflater inflator = (LayoutInflater) this
+                .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        ActionBar actionBar = getActionBar();
+        getActionBar().setDisplayShowCustomEnabled(true);
+        actionBar.setDisplayShowTitleEnabled(false);
+        // actionBar.setDisplayUseLogoEnabled(false);
+        actionBar.setDisplayHomeAsUpEnabled(true);
+        actionBar.setDisplayUseLogoEnabled(false);
+        actionBar.setDisplayShowHomeEnabled(false);
+        // getActionBar().setIcon(R.drawable.ic_navigation_drawer);
+        // navigation icon on actionbar
+        actionBar.setHomeButtonEnabled(true);
+        actionBar.setIcon(null);
+        View actionBarView = inflator.inflate(R.layout.actionbar_custom_layout, null);
+        getActionBar().setCustomView(actionBarView);
+        */
+        // test
     }
 
     private ActionBar getActionBar() {

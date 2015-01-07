@@ -17,13 +17,13 @@
     <LinearLayout
         android:id="@+id/menu_setting"
         android:layout_width="match_parent"
-        android:layout_height="197px"
+        android:layout_height="@dimen/size_65.5"
         android:layout_alignParentBottom="true"
         android:background="#1F2226">
 
         <ImageView
-            android:layout_width="197px"
-            android:layout_height="197px" />
+            android:layout_width="@dimen/size_65.5"
+            android:layout_height="@dimen/size_65.5" />
 
         <Button
             android:id="@+id/menu_btn_setting"
@@ -31,6 +31,7 @@
             android:layout_height="match_parent"
             android:background="#1F2226"
             android:textColor="#909AA1"
+            android:textSize="@dimen/size_25"
             android:gravity="left|center_vertical"
             android:text="Settings" />
     </LinearLayout>

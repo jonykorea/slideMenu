@@ -7,11 +7,11 @@
     <RelativeLayout
         android:id="@+id/store_name"
         android:layout_width="match_parent"
-        android:layout_height="220px"
+        android:layout_height="@dimen/size_73"
         android:background="#F2F4F5"
-        android:paddingBottom="27px"
-        android:paddingLeft="30px"
-        android:paddingRight="30px"
+        android:paddingBottom="@dimen/size_9"
+        android:paddingLeft="@dimen/size_10"
+        android:paddingRight="@dimen/size_10"
         android:text="FragmentTab1">
 
         <TextView
@@ -21,13 +21,13 @@
             android:gravity="center"
             android:text="Atti"
             android:textColor="#ffffff"
-            android:textSize="34dp" />
+            android:textSize="@dimen/size_34" />
     </RelativeLayout>
 
     <LinearLayout
         android:layout_below="@id/store_name"
         android:layout_width="match_parent"
-        android:layout_height="3px"
+        android:layout_height="@dimen/size_1"
         android:background="#C2C7CC" />
 
 </RelativeLayout>

@@ -2,13 +2,12 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:background="#1F2226"
-
-    android:layout_height="147px" >
+    android:layout_height="@dimen/size_65.5" >
 
     <ImageView
         android:id="@+id/logo"
-        android:layout_width="147px"
-        android:layout_height="147px"
+        android:layout_width="@dimen/size_65.5"
+        android:layout_height="@dimen/size_65.5"
         >
     </ImageView>
 
@@ -20,7 +19,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
 
-        android:textSize="30dp" >
+        android:textSize="@dimen/size_25" >
     </TextView>
 
 </LinearLayout>
