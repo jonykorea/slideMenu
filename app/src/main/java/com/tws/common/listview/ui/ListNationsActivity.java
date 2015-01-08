@@ -11,8 +11,8 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.Toast;
 
 import com.tws.common.listview.adapter.GenericAdapter;
-import com.tws.common.listview.domain.Nations;
-import com.tws.common.listview.viewmapping.NationsView;
+import com.tws.common.listview.domain.SideMenu;
+import com.tws.common.listview.viewmapping.SideMenuView;
 import com.tws.soul.soulbrown.R;
 
 public class ListNationsActivity extends ListActivity {
@@ -26,10 +26,10 @@ public class ListNationsActivity extends ListActivity {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
-		List<NationsView> lst = new ArrayList<NationsView>();
+		List<SideMenuView> lst = new ArrayList<SideMenuView>();
 		for (int i = 0; i < NATIONS.length; i++) {
-			NationsView mv = new NationsView(new Nations(NATIONS[i],
-					R.drawable.ic_launcher), R.layout.list_nations);
+			SideMenuView mv = new SideMenuView(new SideMenu(NATIONS[i],
+					R.drawable.ic_launcher), R.layout.list_sidemenu);
 			lst.add(mv);
 		}
 		setListAdapter(new GenericAdapter(lst, getApplicationContext()));

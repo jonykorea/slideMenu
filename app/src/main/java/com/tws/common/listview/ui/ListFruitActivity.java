@@ -8,8 +8,8 @@ import android.os.Bundle;
 
 
 import com.tws.common.listview.adapter.GenericAdapter;
-import com.tws.common.listview.domain.Fruit;
-import com.tws.common.listview.viewmapping.FruitView;
+import com.tws.common.listview.domain.OrderList;
+import com.tws.common.listview.viewmapping.OrderListView;
 import com.tws.soul.soulbrown.R;
 
 public class ListFruitActivity extends ListActivity {
@@ -22,9 +22,9 @@ public class ListFruitActivity extends ListActivity {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
-		List<FruitView> lst = new ArrayList<FruitView>();
+		List<OrderListView> lst = new ArrayList<OrderListView>();
 		for(int i = 0; i < FRUITS.length; i++){
-			FruitView mv = new FruitView(new Fruit(FRUITS[i]), R.layout.list_fruit);
+			OrderListView mv = new OrderListView(new OrderList(FRUITS[i]), R.layout.list_order);
 			lst.add(mv);
 		}
 		setListAdapter(new GenericAdapter(lst, getApplicationContext()));

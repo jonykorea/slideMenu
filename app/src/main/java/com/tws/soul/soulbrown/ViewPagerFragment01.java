@@ -9,11 +9,11 @@ import android.view.ViewGroup;
 
 public class ViewPagerFragment01 extends Fragment {
 
-	@Override
-	public View onCreateView(LayoutInflater inflater, ViewGroup container,
-			Bundle savedInstanceState) {
-		// Get the view from fragmenttab1.xml
-		View view = inflater.inflate(R.layout.fragmenttab1, container, false);
-		return view;
-	}
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        // Get the view from fragment_viewpager_01.xml
+        View view = inflater.inflate(R.layout.fragment_viewpager_01, container, false);
+        return view;
+    }
 }

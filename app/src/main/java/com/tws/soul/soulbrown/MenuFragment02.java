@@ -103,8 +103,8 @@ public class MenuFragment02 extends Fragment {
             @Override
             public void run() {
                 // 실행할 동작 코딩
-
-                mViewPager.setCurrentItem(mPosition, false);
+                if( mViewPager != null)
+                    mViewPager.setCurrentItem(mPosition, false);
             }
         }, 200);
 

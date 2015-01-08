@@ -18,6 +18,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.support.v4.widget.DrawerLayout;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 
@@ -26,6 +28,7 @@ public class SoulBrownMainActivity extends FragmentActivity
 
     Fragment fragment1 = new MenuFragment01();
     Fragment fragment2 = new MenuFragment02();
+
     /**
      * Fragment managing the behaviors, interactions and presentation of the navigation drawer.
      */
@@ -139,7 +142,7 @@ public class SoulBrownMainActivity extends FragmentActivity
         View actionBarView = inflator.inflate(R.layout.actionbar_custom_layout, null);
         getActionBar().setCustomView(actionBarView);
 
-        ImageButton ibMenuShow = (ImageButton) actionBarView.findViewById(R.id.title_menu);
+        LinearLayout ibMenuShow = (LinearLayout) actionBarView.findViewById(R.id.title_btn_menu);
 
         ibMenuShow.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -217,7 +220,7 @@ public class SoulBrownMainActivity extends FragmentActivity
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
                                  Bundle savedInstanceState) {
-            View rootView = inflater.inflate(R.layout.fragment_soul_brown_main, container, false);
+            View rootView = inflater.inflate(R.layout.fragment_orderlist, container, false);
             return rootView;
         }
 

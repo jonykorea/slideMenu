@@ -2,17 +2,24 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_gravity="fill_horizontal"
-    android:background="#F2F4F5"
-    android:paddingLeft="@dimen/size_10"
-    android:orientation="horizontal">
+    android:background="#F2F4F5">
 
-    <ImageButton
+    <LinearLayout
+        android:onClick="true"
+        android:id="@+id/title_btn_menu"
+        android:orientation="horizontal"
+        android:background="#F2F4F5"
+        android:gravity="center"
+        android:layout_width="@dimen/size_48.5"
+        android:layout_height="@dimen/size_48.5">
 
-        android:id="@+id/title_menu"
-        android:layout_width="@dimen/size_30"
-        android:layout_height="@dimen/size_30"
-        android:layout_alignParentLeft="true"
-        android:layout_centerVertical="true"
-        />
+        <ImageButton
+
+            android:duplicateParentState="true"
+            android:layout_width="@dimen/size_20"
+            android:layout_height="@dimen/size_12.5"
+            android:background="@drawable/menu" />
+
+    </LinearLayout>
+
 </RelativeLayout>

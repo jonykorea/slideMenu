@@ -21,15 +21,15 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import com.tws.common.listview.adapter.GenericAdapter;
-import com.tws.common.listview.domain.Nations;
-import com.tws.common.listview.viewmapping.NationsView;
+import com.tws.common.listview.domain.SideMenu;
+import com.tws.common.listview.viewmapping.SideMenuView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -123,10 +123,10 @@ public class NavigationDrawerFragment extends Fragment {
             }
         });
 
-        List<NationsView> lst = new ArrayList<NationsView>();
+        List<SideMenuView> lst = new ArrayList<SideMenuView>();
         for (int i = 0; i < NATIONS.length; i++) {
-            NationsView mv = new NationsView(new Nations(NATIONS[i],
-                    R.drawable.ic_launcher), R.layout.list_nations);
+            SideMenuView mv = new SideMenuView(new SideMenu(NATIONS[i],
+                    R.drawable.ic_launcher), R.layout.list_sidemenu);
             lst.add(mv);
         }
         mDrawerListView.setAdapter(new GenericAdapter(lst, getActivity()));
@@ -180,7 +180,7 @@ public class NavigationDrawerFragment extends Fragment {
         View actionBarView = inflator.inflate(R.layout.actionbar_custom_layout, null);
         getActionBar().setCustomView(actionBarView);
 
-        ImageButton ibMenuShow = (ImageButton) actionBarView.findViewById(R.id.title_menu);
+        LinearLayout ibMenuShow = (LinearLayout) actionBarView.findViewById(R.id.title_btn_menu);
 
         ibMenuShow.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -350,7 +350,7 @@ q       */
         View actionBarView = inflator.inflate(R.layout.actionbar_custom_layout, null);
         getActionBar().setCustomView(actionBarView);
 
-        ImageButton ibMenuShow = (ImageButton) actionBarView.findViewById(R.id.title_menu);
+        LinearLayout ibMenuShow = (LinearLayout) actionBarView.findViewById(R.id.title_btn_menu);
 
         ibMenuShow.setOnClickListener(new View.OnClickListener() {
             @Override

@@ -8,7 +8,7 @@ import android.widget.TextView;
 import com.tws.common.listview.view.InvokeView;
 import com.tws.soul.soulbrown.R;
 
-public class NationsViewHolder {
+public class SideMenuViewHolder {
 
     @InvokeView(viewId = R.id.label)
     public TextView text;
