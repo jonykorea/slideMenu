@@ -1,1 +1,1 @@
-include ':app', ':TwsNetworkLib'
+include ':TwsNetworkLib', ':app', ':TwsCommonLib'
