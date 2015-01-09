@@ -5,17 +5,20 @@
     android:layout_height="@dimen/size_65.5" >
 
     <ImageView
-        android:id="@+id/logo"
-        android:layout_width="@dimen/size_65.5"
-        android:layout_height="@dimen/size_65.5"
+        android:layout_marginLeft="@dimen/size_10"
+        android:id="@+id/menu_img"
+        android:layout_gravity="center_vertical"
+        android:layout_width="@dimen/size_29.5"
+        android:layout_height="@dimen/size_29.5"
         >
     </ImageView>
 
     <TextView
+        android:layout_marginLeft="@dimen/size_10"
         android:duplicateParentState="true"
         android:gravity="center_vertical"
         android:textColor="@drawable/selector_color_menu"
-        android:id="@+id/label"
+        android:id="@+id/menu_name"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
 

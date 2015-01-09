@@ -6,6 +6,9 @@ import android.app.ActionBar;
 import android.content.Context;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.location.Location;
+import android.os.Handler;
+import android.os.Message;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentTransaction;
@@ -21,6 +24,9 @@ import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
+
+import com.tws.common.lib.gms.LocationDefines;
+import com.tws.common.lib.gms.LocationGMS;
 
 
 public class SoulBrownMainActivity extends FragmentActivity
@@ -51,6 +57,9 @@ public class SoulBrownMainActivity extends FragmentActivity
         mNavigationDrawerFragment.setUp(
                 R.id.navigation_drawer,
                 (DrawerLayout) findViewById(R.id.drawer_layout));
+
+        // location
+        requestLocation();
     }
 
     @Override
@@ -231,6 +240,67 @@ public class SoulBrownMainActivity extends FragmentActivity
                     getArguments().getInt(ARG_SECTION_NUMBER));
         }
     }
+
+    private void requestLocation()
+    {
+        LocationGMS location = new LocationGMS(SoulBrownMainActivity.this,
+                LocationResultHandler);
+
+        location.connect();
+
+    }
+
+    // gms location S
+
+    public Handler LocationResultHandler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+
+            if (isFinishing())
+                return;
+
+            switch (msg.what) {
+
+                case LocationDefines.GMS_CONNECT_SUCC:
+                    Log.i("LocationResultHandler", "GMS_CONNECT_SUCC");
+
+                    break;
+                case LocationDefines.GMS_CONNECT_FAIL:
+                    Log.i("LocationResultHandler", "GMS_CONNECT_FAIL");
+
+                    break;
+                case LocationDefines.GMS_DISCONNECT_SUCC:
+                    Log.i("LocationResultHandler", "GMS_DISCONNECT_SUCC");
+                    break;
+                case LocationDefines.GMS_LOCATION_NEED_SETTING:
+                    Log.i("LocationResultHandler", "GMS_LOCATION_NEED_SETTING");
+                    break;
+                case LocationDefines.GMS_LOCATION_SUCC:
+                    Log.i("LocationResultHandler", "GMS_LOCATION_SUCC");
+
+                    if (msg.obj != null) {
+                        Location location = (Location) msg.obj;
+
+                        Log.i("LocationResultHandler", "location getAccuracy : "
+                                + location.getAccuracy());
+                        Log.i("LocationResultHandler", "location getLongitude : "
+                                + location.getLongitude());
+                        Log.i("LocationResultHandler", "location getLatitude : "
+                                + location.getLatitude());
+                    } else {
+
+                    }
+
+                    break;
+                case LocationDefines.GMS_LOCATION_FAIL:
+                    Log.i("LocationResultHandler", "GMS_LOCATION_FAIL");
+                    break;
+
+            }
+
+        }
+    };
+    // gms location E
 
 
 

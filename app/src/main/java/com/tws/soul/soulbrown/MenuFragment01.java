@@ -7,9 +7,14 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
 
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.app.define.LOG;
 import com.tws.common.listview.adapter.GenericAdapter;
 import com.tws.common.listview.domain.OrderList;
 import com.tws.common.listview.viewmapping.OrderListView;
+import com.tws.network.data.CoreGetPublicKey;
+import com.tws.network.lib.ApiAgent;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,9 +22,32 @@ import java.util.List;
 public class MenuFragment01 extends Fragment {
     ListView mOrderListView;
 
+    private ApiAgent api;
+
+    private void initApiAgent()
+    {
+        if( api == null)
+        {
+            api = new ApiAgent();
+        }
+    }
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        initApiAgent();
+    }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+
+        initApiAgent();
+
+        // 네트워크 테스트 S
+        apiGetPublicKey();
+        // 네트워크 테스트 E
+
         // Get the view from fragment_viewpager_01.xml
         View rootLayout = inflater.inflate(R.layout.fragment_orderlist, container, false);
 
@@ -38,10 +66,57 @@ public class MenuFragment01 extends Fragment {
 
         mOrderListView.setAdapter(new GenericAdapter(list, getActivity()));
 
-
-
-
         return rootLayout;
     }
-	
+
+
+    // get Publickey
+    public void apiGetPublicKey() {
+
+        LOG.d("apiGetPublicKey");
+
+        if (api != null) {
+            api.apiPublicKey(getActivity(), new Response.Listener<CoreGetPublicKey>() {
+                @Override
+                public void onResponse(CoreGetPublicKey coreGetPublicKey) {
+
+                    LOG.d("apiPublicKey result " + coreGetPublicKey.result);
+                    LOG.d("apiPublicKey status " + coreGetPublicKey.status);
+
+                    // save DB : public key
+                    // return data check
+                    LOG.d("r_public.result : " + coreGetPublicKey.result);
+                    LOG.d("r_public.errormsg : " + coreGetPublicKey.errormsg);
+                    LOG.d("r_public.result : " + coreGetPublicKey.status);
+                    LOG.d("r_public.resMsg : " + coreGetPublicKey.resMsg);
+                    LOG.d("r_public.errMessage : " + coreGetPublicKey.errMessage);
+
+                    if (coreGetPublicKey.result == 0) {
+
+                        // success
+                        String publickey = coreGetPublicKey.key;
+
+                        LOG.d("publickey : " + publickey);
+
+
+                    } else {
+                        // fail
+                        int code = coreGetPublicKey.result;
+                        String errormsg = coreGetPublicKey.errormsg;
+
+                    }
+
+                }
+            }, new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError volleyError) {
+
+                    LOG.d("apiPublicKey VolleyError " + volleyError.getMessage());
+
+                }
+            });
+        }
+    }
+
+
 }

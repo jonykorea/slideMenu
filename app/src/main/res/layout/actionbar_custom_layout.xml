@@ -8,7 +8,7 @@
         android:onClick="true"
         android:id="@+id/title_btn_menu"
         android:orientation="horizontal"
-        android:background="#F2F4F5"
+        android:background="@drawable/selector_f2f4f5_d9dbdc"
         android:gravity="center"
         android:layout_width="@dimen/size_48.5"
         android:layout_height="@dimen/size_48.5">

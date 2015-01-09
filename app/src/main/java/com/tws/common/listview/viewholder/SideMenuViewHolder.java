@@ -10,9 +10,9 @@ import com.tws.soul.soulbrown.R;
 
 public class SideMenuViewHolder {
 
-    @InvokeView(viewId = R.id.label)
+    @InvokeView(viewId = R.id.menu_name)
     public TextView text;
 
-    @InvokeView(viewId = R.id.logo)
+    @InvokeView(viewId = R.id.menu_img)
     public ImageView image;
 }

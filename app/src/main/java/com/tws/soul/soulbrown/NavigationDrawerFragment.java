@@ -126,7 +126,7 @@ public class NavigationDrawerFragment extends Fragment {
         List<SideMenuView> lst = new ArrayList<SideMenuView>();
         for (int i = 0; i < NATIONS.length; i++) {
             SideMenuView mv = new SideMenuView(new SideMenu(NATIONS[i],
-                    R.drawable.ic_launcher), R.layout.list_sidemenu);
+                    R.xml.xml_icon_menu_list), R.layout.list_sidemenu);
             lst.add(mv);
         }
         mDrawerListView.setAdapter(new GenericAdapter(lst, getActivity()));

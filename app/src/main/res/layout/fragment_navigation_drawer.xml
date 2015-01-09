@@ -22,10 +22,14 @@
         android:background="#1F2226">
 
         <ImageView
-            android:layout_width="@dimen/size_65.5"
-            android:layout_height="@dimen/size_65.5" />
+            android:layout_marginLeft="@dimen/size_10"
+            android:background="@drawable/menu_list_icon"
+            android:layout_gravity="center_vertical"
+            android:layout_width="@dimen/size_29.5"
+            android:layout_height="@dimen/size_29.5"/>
 
         <Button
+            android:layout_marginLeft="@dimen/size_10"
             android:id="@+id/menu_btn_setting"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -34,7 +38,11 @@
             android:textSize="@dimen/size_25"
             android:gravity="left|center_vertical"
             android:text="Settings" />
+
     </LinearLayout>
+
+
+
 
 
 </RelativeLayout>

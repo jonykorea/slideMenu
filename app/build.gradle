@@ -23,4 +23,5 @@ dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
     compile 'com.android.support:support-v4:18.+'
     compile project(':TwsNetworkLib')
+    compile project(':TwsCommonLib')
 }
