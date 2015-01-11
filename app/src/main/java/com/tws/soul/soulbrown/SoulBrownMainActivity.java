@@ -32,7 +32,8 @@ import com.tws.common.lib.gms.LocationGMS;
 public class SoulBrownMainActivity extends FragmentActivity
         implements NavigationDrawerFragment.NavigationDrawerCallbacks , MenuFragment02.CustomOnClickListener{
 
-    Fragment fragment1 = new MenuFragment01();
+    //Fragment fragment1 = new MenuFragment01();
+    Fragment fragment1 = new MenuFragment01_sticky();
     Fragment fragment2 = new MenuFragment02();
 
     /**

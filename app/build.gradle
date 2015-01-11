@@ -22,6 +22,11 @@ android {
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
     compile 'com.android.support:support-v4:18.+'
+    compile 'com.android.support:recyclerview-v7:21.+'
+    compile 'com.android.support:cardview-v7:21.+'
     compile project(':TwsNetworkLib')
     compile project(':TwsCommonLib')
+    compile project(':stickylistviewlib')
+
+    compile 'com.makeramen:roundedimageview:1.5.0'
 }

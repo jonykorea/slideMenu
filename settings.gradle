@@ -1,1 +1,1 @@
-include ':TwsNetworkLib', ':app', ':TwsCommonLib'
+include ':TwsNetworkLib', ':TwsCommonLib', ':stickylistviewlib', ':app', ':stickylistviewdemo'

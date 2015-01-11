@@ -14,20 +14,67 @@
         android:paddingRight="@dimen/size_10"
         android:text="FragmentTab1">
 
-        <TextView
+        <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="#2996CC"
-            android:gravity="center"
-            android:text="Haru"
-            android:textColor="#ffffff"
-            android:textSize="@dimen/size_34" />
+            android:paddingLeft="15dp"
+            android:paddingRight="15dp">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="left|center_vertical"
+                android:text="Haru : "
+                android:textColor="#ffffff"
+                android:textSize="@dimen/size_34" />
+
+
+
+            <TextView
+                android:id="@+id/title_count"
+                android:layout_width="32dp"
+                android:layout_height="31dp"
+                android:text="3"
+                android:textSize="16dp"
+                android:gravity="center"
+                android:paddingRight="4dp"
+                android:paddingBottom="4dp"
+                android:textStyle="bold"
+                android:textColor="#ffffff"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:background="@drawable/count_w" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginRight="10dp"
+                android:layout_toLeftOf="@id/title_count"
+                android:gravity="center_vertical"
+                android:text="￦3,000원"
+
+                android:textColor="#ffffff"
+                android:textSize="@dimen/size_24" />
+
+        </RelativeLayout>
     </RelativeLayout>
 
     <LinearLayout
-        android:layout_below="@id/store_name"
+        android:id="@+id/store_title"
         android:layout_width="match_parent"
         android:layout_height="@dimen/size_1"
-        android:background="#C2C7CC" />
+        android:layout_below="@id/store_name"
+        android:background="#C2C7CC"
+        android:orientation="horizontal" />
+
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/list"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/store_title"
+
+        />
 
 </RelativeLayout>

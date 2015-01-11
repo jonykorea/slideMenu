@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="98px"
+    android:background="#FFFFFF">
+
+    <ImageView
+        android:id="@+id/row_store"
+        android:layout_width="98px"
+        android:layout_height="98px"
+        android:layout_alignParentLeft="true"
+        android:layout_marginLeft="10dp"
+        android:background="@drawable/ic_launcher" />
+
+    <LinearLayout
+        android:layout_toRightOf="@id/row_store"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginLeft="10dp"
+        android:layout_toLeftOf="@+id/row_img"
+
+        android:orientation="vertical">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1">
+
+            <TextView
+                android:id="@+id/text"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_alignParentLeft="true"
+                android:background="#FFFFFF"
+                android:gravity="center"
+                android:text="1,000원"
+                android:textColor="#3D454C"
+                android:textSize="20dp" />
+
+
+            <TextView
+                android:id="@+id/date"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+
+                android:layout_alignParentRight="true"
+                android:background="#FFFFFF"
+                android:gravity="center"
+                android:text="오후 11:10"
+                android:textColor="#3D454C"
+                android:textSize="20dp" />
+
+        </RelativeLayout>
+
+        <TextView
+            android:id="@+id/orderitem"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="#FFFFFF"
+            android:gravity="left"
+            android:singleLine="true"
+            android:text="아메리카노, 까페라떼, 빙수"
+            android:textColor="#3D454C"
+            android:textSize="20dp" />
+    </LinearLayout>
+
+    <ImageView
+        android:id="@+id/row_img"
+        android:layout_width="10dp"
+        android:layout_height="match_parent"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="10dp"
+        android:background="@drawable/ic_launcher" />
+</RelativeLayout>

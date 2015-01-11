@@ -28,7 +28,7 @@ public class TwsCommonLibMainActivity extends Activity implements onSubmitListen
                 MyCustomDialog fragment1 = new MyCustomDialog();
                 fragment1.mListener = TwsCommonLibMainActivity.this;
                 fragment1.text = mTextView.getText().toString();
-                fragment1.show(getFragmentManager(), "");
+                fragment1.show(getFragmentManager(),"");
 
             }
         });
