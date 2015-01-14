@@ -115,37 +115,40 @@ public class MenuFragment02 extends Fragment {
 
     private void initDataSet() {
         // Set the ViewPagerAdapter into ViewPager
-        mViewPager.setAdapter(new ViewPagerAdapter(getChildFragmentManager()));
-        mViewPager.setOffscreenPageLimit(3);
+        if( mViewPager != null) {
+            mViewPager.setAdapter(new ViewPagerAdapter(getChildFragmentManager()));
 
-        mViewPager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            mViewPager.setOffscreenPageLimit(3);
+
+            mViewPager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
 
 
-            @Override
-            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+                @Override
+                public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
 
-            }
-
-            @Override
-            public void onPageSelected(int position) {
-                if (customListener != null) {
-                    customListener.onChangeViewPager(position);
                 }
-            }
 
-            @Override
-            public void onPageScrollStateChanged(int state) {
+                @Override
+                public void onPageSelected(int position) {
+                    if (customListener != null) {
+                        customListener.onChangeViewPager(position);
+                    }
+                }
 
-            }
-        });
+                @Override
+                public void onPageScrollStateChanged(int state) {
 
-        new Handler().postDelayed(new Runnable() {// 0.2 초 후에 실행
-            @Override
-            public void run() {
-                // 실행할 동작 코딩
-                if (mViewPager != null)
-                    mViewPager.setCurrentItem(mPosition, false);
-            }
-        }, 200);
+                }
+            });
+
+            new Handler().postDelayed(new Runnable() {// 0.2 초 후에 실행
+                @Override
+                public void run() {
+                    // 실행할 동작 코딩
+                    if (mViewPager != null)
+                        mViewPager.setCurrentItem(mPosition, false);
+                }
+            }, 200);
+        }
     }
 }

@@ -58,7 +58,7 @@ public class SplashActivity extends Activity {
 
 
     // apiUserChecker
-    public void apiUserChecker(String userID) {
+    public void apiUserChecker(final String userID) {
 
         ApiAgent api = new ApiAgent();
 
@@ -80,6 +80,9 @@ public class SplashActivity extends Activity {
                         // success
 
                         LOG.d("apiSetUserLoc Succ");
+
+                        PrefUserInfo prefUserInfo = new PrefUserInfo(SplashActivity.this);
+                        prefUserInfo.setUserID(userID);
 
                         Intent intent = new Intent(context, SoulBrownMainActivity.class);
                         intent.putExtra(ExtraType.USER_TYPE,retCode.usertype);

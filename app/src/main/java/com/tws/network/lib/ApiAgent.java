@@ -10,16 +10,20 @@ import com.app.AppController;
 import com.app.define.LOG;
 import com.tws.network.data.CoreGetPublicKey;
 import com.tws.network.data.RetCode;
+import com.tws.network.data.RetOrderMenu;
 import com.tws.network.data.RetUserChecker;
 import com.tws.network.lib.AirGsonRequest;
 import com.tws.network.lib.JsonGsonRequest;
 import com.tws.network.util.CommonParams;
 import com.tws.network.util.DeviceInfo;
+import com.tws.soul.soulbrown.data.Menu;
 
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 /**
  * Created by jonychoi on 14. 11. 21..
@@ -41,6 +45,10 @@ public class ApiAgent {
 
     // check user
     private static final String URL_USER_CHECKER = "/soulbrown/if/storeuserchecker";
+
+    // order
+    private static final String URL_ORDER_MENU = "/soulbrown/if/ordermenu";
+
 
 
     // 없으면 입력창 노출.
@@ -119,9 +127,9 @@ public class ApiAgent {
         try {
 
             jsonParams.put("source","USERUI");
-            jsonParams.put("userid","jony@thinkware.co.kr");
-            jsonParams.put("lon","127.234234");
-            jsonParams.put("lat","36.364354");
+            jsonParams.put("userid",userid);
+            jsonParams.put("lon",lon);
+            jsonParams.put("lat",lat);
 
             //jsonParams = CommonParams.getCommonParams(context, jsonParams);
 
@@ -208,6 +216,85 @@ public class ApiAgent {
         AppController.getInstance().addToRequestQueue(gsObjRequest);
 
     }
+    // apiOrderMenu
+    public void apiOrderMenu(Context context,String userid, String storeid, String arriveTime , List<Menu> listMenu, Response.Listener<RetOrderMenu> succListener, Response.ErrorListener failListener) {
+
+        String url = URL_DOMAIN + URL_ORDER_MENU;
+
+        // set add header S
+        HashMap<String, String> header = new HashMap<String, String>();
+/*
+        String auth = DeviceInfo.getAuth(context);
+
+        if (!TextUtils.isEmpty(auth))
+            header.put("auth_key", auth);
+
+        header.put("mdn", DeviceInfo.getMDN(context));
+*/
+        // set add header E
+
+        // set params S
+        JSONObject jsonParams = new JSONObject();
+        JSONArray jsonArray = new JSONArray();
+        JSONObject jsonSubParams = null;
+
+        try {
+
+            jsonParams.put("source","USERUI");
+            jsonParams.put("userid",userid);
+            jsonParams.put("storeid",storeid);
+            jsonParams.put("arrivaltime",arriveTime);
+
+            if(listMenu!=null) {
+                for (int i = 0; i < listMenu.size(); i++) {
+
+
+                    jsonSubParams = new JSONObject();
+
+                    int cnt = listMenu.get(i).count;
+
+                    if( cnt != 0) {
+
+                        jsonSubParams.put("menuname", listMenu.get(i).name);
+                        jsonSubParams.put("menuprice", Integer.toString(listMenu.get(i).price));
+                        jsonSubParams.put("count", Integer.toString(cnt));
+                        jsonArray.put(jsonSubParams);
+                    }
+                }
+            jsonParams.put("orderdata", jsonArray);
+
+            }
+            //jsonParams = CommonParams.getCommonParams(context, jsonParams);
+
+        } catch (Exception e) {
+            LOG.d("apiOrderMenu error:" + e.getMessage());
+            jsonParams = null;
+        }
+
+        String reqParams = null;
+
+        if (jsonParams != null)
+            reqParams = jsonParams.toString();
+
+        LOG.d("reqParams " + reqParams);
+
+
+        // set params E
+
+        // request!
+        JsonGsonRequest<RetOrderMenu> gsObjRequest = new JsonGsonRequest<RetOrderMenu>(
+                Request.Method.POST,
+                url,
+                RetOrderMenu.class, header, reqParams,
+                succListener, failListener
+
+        );
+
+        // request queue!
+        AppController.getInstance().addToRequestQueue(gsObjRequest);
+
+    }
+
 
     // ui Api E
 

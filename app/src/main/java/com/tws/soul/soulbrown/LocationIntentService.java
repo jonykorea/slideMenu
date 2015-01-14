@@ -9,6 +9,7 @@ import android.os.IBinder;
 import android.os.Looper;
 import android.os.Message;
 import android.os.PowerManager;
+import android.text.TextUtils;
 import android.util.Log;
 
 import com.android.volley.Response;
@@ -18,7 +19,9 @@ import com.tws.common.lib.gms.LocationDefines;
 import com.tws.common.lib.gms.LocationGMS;
 import com.tws.network.data.CoreGetPublicKey;
 import com.tws.network.data.RetCode;
+import com.tws.network.data.ServerDefineCode;
 import com.tws.network.lib.ApiAgent;
+import com.tws.soul.soulbrown.pref.PrefUserInfo;
 
 /**
  * An {@link IntentService} subclass for handling asynchronous task requests in
@@ -116,8 +119,12 @@ public class LocationIntentService extends IntentService {
         String lon = Double.toString(location.getLongitude());
         String lat = Double.toString(location.getLatitude());
 
-        if (api != null) {
-            api.apiUserLoc(this, "userid", "lon", "lat", new Response.Listener<RetCode>() {
+        PrefUserInfo prefUserInfo = new PrefUserInfo(this);
+
+        String userID = prefUserInfo.getUserID();
+
+        if (api != null && !TextUtils.isEmpty(userID)) {
+            api.apiUserLoc(this, userID, lon, lat, new Response.Listener<RetCode>() {
                 @Override
                 public void onResponse(RetCode retCode) {
 
@@ -126,8 +133,7 @@ public class LocationIntentService extends IntentService {
                     LOG.d("r_public.result : " + retCode.result);
                     LOG.d("r_public.errormsg : " + retCode.errormsg);
 
-
-                    if (retCode.result == 1) {
+                    if (retCode.result == ServerDefineCode.NET_RESULT_SUCC) {
 
                         // success
 

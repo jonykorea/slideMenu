@@ -7,6 +7,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.Window;
 import android.view.animation.AnimationUtils;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -30,6 +31,10 @@ public class OrderDialog
 
     ButtonFlat buttonAccept;
     ButtonFlat buttonCancel;
+
+    TextView tvArriveTime;
+    LinearLayout llArriveTimeUp;
+    LinearLayout llArriveTimeDown;
 
     View.OnClickListener onAcceptButtonClickListener;
     View.OnClickListener onCancelButtonClickListener;
@@ -91,6 +96,69 @@ public class OrderDialog
                     onCancelButtonClickListener.onClick(v);
             }
         });
+
+        this.tvArriveTime =  (TextView) findViewById(R.id.order_arrive_time_txt);
+        this.llArriveTimeUp = (LinearLayout) findViewById(R.id.order_arrive_time_up);
+
+        llArriveTimeUp.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                upArriveTime();
+            }
+        });
+
+        this.llArriveTimeDown = (LinearLayout) findViewById(R.id.order_arrive_time_down);
+
+        llArriveTimeDown.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                downArriveTime();
+            }
+        });
+    }
+
+    private void upArriveTime() {
+        String textTime = (String) tvArriveTime.getText();
+
+        textTime = textTime.replace("분","");
+
+        int time = Integer.parseInt(textTime);
+
+        if (time < 60) {
+
+            time += 10;
+
+        } else
+        {
+
+        }
+
+        tvArriveTime.setText(time+"분");
+
+    }
+
+    private void downArriveTime()
+    {
+        String textTime = (String) tvArriveTime.getText();
+
+        textTime = textTime.replace("분","");
+
+        int time = Integer.parseInt(textTime);
+
+        if (time > 0) {
+
+            time -= 10;
+
+        } else
+        {
+
+        }
+
+        tvArriveTime.setText(time+"분");
+    }
+
+    public TextView getArriveTime() {
+        return tvArriveTime;
     }
 
     @Override

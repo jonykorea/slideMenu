@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#55000000"
-    android:padding="32dp" >
+    android:padding="32dp">
 
     <RelativeLayout
         android:id="@+id/contentDialog"
@@ -15,100 +15,130 @@
         android:padding="24dp">
 
         <TextView
-            android:layout_marginTop="10dp"
             android:id="@+id/title"
-            android:textSize="20dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="5dp"
+            android:layout_marginTop="10dp"
             android:text="xxx"
-            android:textStyle="bold"
             android:textAppearance="?android:attr/textAppearanceLarge"
-            android:textColor="#000" />
+            android:textColor="#000"
+            android:textSize="20dp"
+            android:textStyle="bold" />
 
         <LinearLayout
-            android:layout_below="@id/title"
-
             android:layout_width="match_parent"
+
             android:layout_height="1dp"
+            android:layout_below="@id/title"
             android:background="#2996CC"
-            android:orientation="horizontal"/>
+            android:orientation="horizontal" />
 
         <ScrollView
             android:id="@+id/message_scrollView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@id/title"
-            android:paddingBottom="50dp"
+            android:paddingBottom="10dp"
             android:scrollbarSize="2dp"
-            android:scrollbarThumbVertical="@color/thumbColor" >
+            android:scrollbarThumbVertical="@color/thumbColor">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:paddingTop="20dp"
-                android:orientation="vertical" >
+                android:orientation="vertical"
+                android:paddingTop="20dp">
 
                 <TextView
                     android:id="@+id/message"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textColor="#000"
                     android:text="msg"
+                    android:textColor="#000"
 
-                    android:textSize="16dp"  />
+                    android:textSize="16dp" />
             </LinearLayout>
         </ScrollView>
 
         <LinearLayout
-            android:id="@+id/order_arrive_time"
-            android:layout_alignBottom="@id/message_scrollView"
-            android:orientation="horizontal"
+            android:id="@+id/order_arrive_time_layout"
             android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/message_scrollView"
             android:gravity="center"
-            android:layout_height="wrap_content">
-
-            <LinearLayout
-                android:clickable="true"
-                android:layout_width="49dp"
-                android:layout_height="49dp"
-
-                android:gravity="center">
-
-                <ImageView
-                    android:layout_width="19dp"
-                    android:layout_height="2.5dp"
-                    android:background="@drawable/icon_remove" />
-            </LinearLayout>
+            android:orientation="vertical">
 
             <TextView
-                android:text="예상시간"
-                android:textColor="#2996CC"
-                android:gravity="center"
-                android:layout_width="100dp"
-                android:layout_height="50dp" />
+                android:textSize="14dp"
+                android:textColor="#ff0000"
+                android:text="※ 도착 예정시간을 확인해주세요."
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
 
             <LinearLayout
-                android:clickable="true"
-                android:layout_width="49dp"
-                android:layout_height="49dp"
 
-                android:gravity="center">
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:orientation="horizontal">
 
-                <ImageView
-                    android:layout_width="19dp"
-                    android:layout_height="19.5dp"
-                    android:background="@drawable/icon_add" />
+                <LinearLayout
+                    android:background="@drawable/selector_fafafa_f2f4f5"
+                    android:id="@+id/order_arrive_time_down"
+                    android:layout_width="49dp"
+                    android:layout_height="49dp"
+                    android:clickable="true"
+                    android:gravity="center">
+
+                    <ImageView
+                        android:layout_width="19dp"
+                        android:layout_height="2.5dp"
+                        android:background="@drawable/icon_remove" />
+                </LinearLayout>
+
+                <TextView
+                    android:id="@+id/order_arrive_time_txt"
+                    android:layout_width="100dp"
+                    android:layout_height="50dp"
+                    android:gravity="center"
+                    android:text="10분"
+                    android:textColor="#2996CC"
+                    android:textSize="20dp"
+                    android:textStyle="bold" />
+
+                <LinearLayout
+                    android:background="@drawable/selector_fafafa_f2f4f5"
+                    android:id="@+id/order_arrive_time_up"
+                    android:layout_width="49dp"
+                    android:layout_height="49dp"
+                    android:clickable="true"
+                    android:gravity="center">
+
+                    <ImageView
+                        android:layout_width="19dp"
+                        android:layout_height="19.5dp"
+                        android:background="@drawable/icon_add" />
+                </LinearLayout>
             </LinearLayout>
+
+            <LinearLayout
+                android:layout_marginTop="15dp"
+                android:layout_width="match_parent"
+
+                android:layout_height="1dp"
+                android:layout_below="@id/title"
+                android:background="#2996CC"
+                android:orientation="horizontal" />
+
         </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@id/order_arrive_time"
+            android:layout_below="@id/order_arrive_time_layout"
             android:layout_marginTop="10dp"
             android:gravity="right"
-            android:orientation="horizontal" >
+            android:orientation="horizontal">
 
 
             <com.tws.common.lib.views.ButtonFlat
@@ -124,7 +154,7 @@
                 android:layout_height="wrap_content"
                 android:text="확인 "
                 android:textColor="#1E88E5" />
-            </LinearLayout>
+        </LinearLayout>
 
     </RelativeLayout>
 

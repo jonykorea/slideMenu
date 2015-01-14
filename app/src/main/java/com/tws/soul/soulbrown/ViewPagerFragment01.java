@@ -6,11 +6,13 @@ import android.animation.ValueAnimator;
 import android.app.AlarmManager;
 import android.content.Context;
 import android.content.Intent;
+import android.location.Location;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,14 +20,23 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.app.define.LOG;
 import com.tws.common.lib.dialog.CuzDialog;
 import com.tws.common.lib.soulbrownlib.OrderDialog;
 import com.tws.common.listview.adapter.MenuListAdapter;
+import com.tws.network.data.RetCode;
+import com.tws.network.data.RetOrderMenu;
+import com.tws.network.data.ServerDefineCode;
+import com.tws.network.data.StoreCode;
+import com.tws.network.lib.ApiAgent;
 import com.tws.soul.soulbrown.broadcast.AlarmManagerBroadcastReceiver;
 import com.tws.soul.soulbrown.data.Menu;
 import com.tws.soul.soulbrown.data.MenuDataManager;
 import com.tws.soul.soulbrown.lib.ConvertPrice;
 import com.tws.soul.soulbrown.lib.Notice;
+import com.tws.soul.soulbrown.pref.PrefUserInfo;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -33,15 +44,14 @@ import java.util.List;
 
 public class ViewPagerFragment01 extends Fragment {
 
+    List<Menu> orderMenu;
+    AnimatorSet animatorSet;
+    OrderDialog orderDialog;
     private RecyclerView mRecyclerView;
     private MenuListAdapter mAdapter;
     private TextView tvItemSumCount;
     private TextView tvItemSumPrice;
     private RelativeLayout rlItemBtn;
-
-    List<Menu> orderMenu;
-
-    AnimatorSet animatorSet;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -91,13 +101,13 @@ public class ViewPagerFragment01 extends Fragment {
         return view;
     }
 
-    private void showDialog(List<Menu> ListMenu) {
+    private void showDialog(final List<Menu> ListMenu) {
 
         String orderMenuList = "";
         int sumPrice = 0;
 
         if (ListMenu != null) {
-            if( ListMenu.size() > 0) {
+            if (ListMenu.size() > 0) {
 
 
                 for (int i = 0; i < ListMenu.size(); i++) {
@@ -114,14 +124,19 @@ public class ViewPagerFragment01 extends Fragment {
 
                 }
 
-                orderMenuList += "총 합계 : "+ ConvertPrice.getPrice(sumPrice);
+                orderMenuList += "총 합계 : " + ConvertPrice.getPrice(sumPrice);
 
-                OrderDialog orderDialog = new OrderDialog(getActivity(), "주문", orderMenuList);
+                orderDialog = new OrderDialog(getActivity(), "주문", orderMenuList);
 
                 orderDialog.setOnAcceptButtonClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
 
+                        String arriveTime = (String) ((TextView) orderDialog.getArriveTime()).getText();
+
+                        arriveTime = arriveTime.replace("분", "");
+
+                        apiOrderMenu(StoreCode.CODE_HARU, ListMenu, arriveTime);
 
                     }
                 });
@@ -138,26 +153,95 @@ public class ViewPagerFragment01 extends Fragment {
                 orderDialog.getButtonAccept().setText("주문");
                 orderDialog.getButtonCancel().setText("취소");
 
-            }
-            else
-            {
-                   showToast("주문 선택을 해주세요.");
+            } else {
+                showToast("주문 선택을 해주세요.");
             }
         }
 
 
     }
 
-    private void showToast(int resID)
+    private String getArriveTime(String arriveTime)
     {
+        LOG.d("requestOrder arriveTime : " + arriveTime);
+        long time = Long.parseLong(arriveTime) * 60;
+        LOG.d("requestOrder time : " + time);
+
+        long nowUnixTime =  System.currentTimeMillis();
+
+        LOG.d("requestOrder nowUnixTime : " + nowUnixTime);
+
+        long arriveUnixTime = nowUnixTime +  (time *1000);
+
+        LOG.d("requestOrder arriveUnixTime : " + arriveUnixTime);
+
+        arriveUnixTime = arriveUnixTime / 1000;
+
+        String calcTime = Long.toString(arriveUnixTime);
+
+        LOG.d("requestOrder calcTime : " + calcTime);
+
+        return calcTime;
+
+    }
+
+    // apiSetUserLoc
+    public void apiOrderMenu(String storeID, List<Menu> listMenu, String arriveTime) {
+
+        ApiAgent api = new ApiAgent();
+
+        String calcTime = getArriveTime(arriveTime);
+
+        PrefUserInfo prefUserInfo = new PrefUserInfo(getActivity());
+
+        String userID = prefUserInfo.getUserID();
+
+        LOG.d("apiOrderMenu userID "+ userID);
+
+        if (api != null && !TextUtils.isEmpty(userID)) {
+            api.apiOrderMenu(getActivity(), userID, storeID, calcTime , listMenu, new Response.Listener<RetOrderMenu>() {
+                @Override
+                public void onResponse(RetOrderMenu retCode) {
+
+                    LOG.d("retCode.result : " + retCode.result);
+                    LOG.d("retCode.errormsg : " + retCode.errormsg);
+
+                    if (retCode.result == ServerDefineCode.NET_RESULT_SUCC) {
+
+                        // success
+                        LOG.d("apiOrderMenu Succ");
+
+                        // 성공시 메뉴 리셋. > 알람 setting.
+
+
+                    } else {
+                        // fail
+                        LOG.d("apiOrderMenu Fail "+retCode.result );
+
+                    }
+
+                }
+            }, new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError volleyError) {
+
+
+
+                    LOG.d("apiOrderMenu VolleyError " + volleyError.getMessage());
+
+                }
+            });
+        }
+    }
+
+    private void showToast(int resID) {
         if (Notice.toast != null) {
             Notice.toast.setText(resID);
             Notice.toast.show();
         }
     }
 
-    private void showToast(String msg)
-    {
+    private void showToast(String msg) {
         if (Notice.toast != null) {
             Notice.toast.setText(msg);
             Notice.toast.show();
