@@ -5,6 +5,7 @@ import java.lang.reflect.Field;
 import android.app.Activity;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.util.Log;
@@ -47,7 +48,7 @@ public class MenuFragment02 extends Fragment {
 
         Log.i("jony", "onDestroy MenuFragment02 ");
 
-        mViewPager = null;
+
 
     }
 
@@ -56,6 +57,9 @@ public class MenuFragment02 extends Fragment {
         super.onDestroyView();
 
         Log.i("jony", "onDestroyView MenuFragment02 ");
+
+        isInit = true;
+        mViewPager = null;
     }
 
     @Override
@@ -63,53 +67,16 @@ public class MenuFragment02 extends Fragment {
         super.onCreate(savedInstanceState);
 
         Log.i("jony", "onCreate MenuFragment02 ");
+
     }
     ViewPager mViewPager;
+    boolean isInit = true;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        Log.i("jony", "onCreateView MenuFragment02 mPosition "+ mPosition);
-
-        View view = inflater.inflate(R.layout.viewpager_main, container, false);
-        // Locate the ViewPager in viewpager_main.xml
-        mViewPager = (ViewPager) view.findViewById(R.id.viewPager);
-        // Set the ViewPagerAdapter into ViewPager
-        mViewPager.setAdapter(new ViewPagerAdapter(getChildFragmentManager()));
-
-        mViewPager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
-
-
-            @Override
-            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-
-            }
-
-            @Override
-            public void onPageSelected(int position) {
-                if( customListener != null)
-                {
-                    customListener.onChangeViewPager(position);
-                }
-            }
-
-            @Override
-            public void onPageScrollStateChanged(int state) {
-
-            }
-        });
-
-        new Handler().postDelayed(new Runnable() {// 0.2 초 후에 실행
-            @Override
-            public void run() {
-                // 실행할 동작 코딩
-                if( mViewPager != null)
-                    mViewPager.setCurrentItem(mPosition, false);
-            }
-        }, 200);
-
-
-        return view;
+        return inflater.inflate(R.layout.viewpager_main, container, false);
     }
 
     @Override
@@ -125,5 +92,60 @@ public class MenuFragment02 extends Fragment {
         } catch (IllegalAccessException e) {
             throw new RuntimeException(e);
         }
+    }
+
+
+    @Override
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+        mViewPager = (ViewPager) view.findViewById(R.id.viewPager);
+
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                initDataSet();
+            }
+        }, 300);
+
+    }
+
+
+
+
+    private void initDataSet() {
+        // Set the ViewPagerAdapter into ViewPager
+        mViewPager.setAdapter(new ViewPagerAdapter(getChildFragmentManager()));
+        mViewPager.setOffscreenPageLimit(3);
+
+        mViewPager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+
+
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+                if (customListener != null) {
+                    customListener.onChangeViewPager(position);
+                }
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+
+            }
+        });
+
+        new Handler().postDelayed(new Runnable() {// 0.2 초 후에 실행
+            @Override
+            public void run() {
+                // 실행할 동작 코딩
+                if (mViewPager != null)
+                    mViewPager.setCurrentItem(mPosition, false);
+            }
+        }, 200);
     }
 }

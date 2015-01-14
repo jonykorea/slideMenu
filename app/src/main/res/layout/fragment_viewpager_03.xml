@@ -12,22 +12,72 @@
         android:paddingBottom="@dimen/size_9"
         android:paddingLeft="@dimen/size_10"
         android:paddingRight="@dimen/size_10"
-        android:text="FragmentTab1">
+        >
 
-        <TextView
+        <RelativeLayout
+            android:id="@+id/store_item_btn"
+            android:clickable="true"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="#2996CC"
-            android:gravity="center"
-            android:text="1022"
-            android:textColor="#ffffff"
-            android:textSize="@dimen/size_34" />
+            android:background="@drawable/selector_349bcd_2f8bb9"
+            android:paddingLeft="15dp"
+            android:paddingRight="15dp">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="left|center_vertical"
+                android:text="2FLAT : "
+                android:textColor="#ffffff"
+                android:textSize="@dimen/size_34" />
+
+
+
+            <TextView
+                android:id="@+id/store_item_sum_count"
+                android:layout_width="32dp"
+                android:layout_height="31dp"
+                android:text="0"
+                android:textSize="16dp"
+                android:gravity="center"
+                android:paddingRight="4dp"
+                android:paddingBottom="4dp"
+                android:textStyle="bold"
+                android:textColor="#ffffff"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:background="@drawable/icon_upper_menu_white" />
+
+            <TextView
+                android:id="@+id/store_item_sum_price"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginRight="10dp"
+                android:layout_toLeftOf="@id/store_item_sum_count"
+                android:gravity="center_vertical"
+                android:text="￦ 0원"
+
+                android:textColor="#ffffff"
+                android:textSize="@dimen/size_24" />
+
+        </RelativeLayout>
     </RelativeLayout>
 
     <LinearLayout
-        android:layout_below="@id/store_name"
+        android:id="@+id/store_title"
         android:layout_width="match_parent"
         android:layout_height="@dimen/size_1"
-        android:background="#C2C7CC" />
+        android:layout_below="@id/store_name"
+        android:background="#C2C7CC"
+        android:orientation="horizontal" />
+
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/list"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/store_title"
+
+        />
 
 </RelativeLayout>

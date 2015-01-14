@@ -20,19 +20,17 @@ public class ViewPagerAdapter extends FragmentPagerAdapter {
 	public Fragment getItem(int position) {
 		switch (position) {
 
-			// Open ViewPagerFragment01.java
 		case 0:
-			ViewPagerFragment01 fragmenttab1ViewPager = new ViewPagerFragment01();
-			return fragmenttab1ViewPager;
+			ViewPagerFragment01 storeMenuFragment01 = new ViewPagerFragment01();
+			return storeMenuFragment01;
 
-			// Open ViewPagerFragment02.java
 		case 1:
-			ViewPagerFragment02 fragmenttab2ViewPager = new ViewPagerFragment02();
-			return fragmenttab2ViewPager;
+			ViewPagerFragment02 storeMenuFragment02 = new ViewPagerFragment02();
+			return storeMenuFragment02;
 
         case 2:
-                ViewPagerFragment03 fragmenttab3ViewPager = new ViewPagerFragment03();
-                return fragmenttab3ViewPager;
+                ViewPagerFragment03 storeMenuFragment03 = new ViewPagerFragment03();
+                return storeMenuFragment03;
 		}
 
     		return null;

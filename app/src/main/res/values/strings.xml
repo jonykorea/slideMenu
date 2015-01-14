@@ -11,4 +11,11 @@
     <string name="action_example">Example action</string>
     <string name="action_settings">Settings</string>
 
+
+    <string name="price_warning">지나친 음료는 정신 건강에 해롭습니다.</string>
+    <string name="orderlist">주문 내역</string>
+    <string name="store_haru">HARU</string>
+    <string name="store_1022">1022</string>
+    <string name="store_2flat">2FLAT</string>
+
 </resources>

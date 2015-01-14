@@ -7,6 +7,7 @@ import android.content.Context;
 import android.location.Location;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Looper;
 import android.os.Message;
 import android.util.Log;
 
@@ -80,7 +81,7 @@ import com.google.android.gms.location.LocationRequest;
 
 public class LocationGMS implements ConnectionCallbacks, OnConnectionFailedListener, LocationListener {
 
-    private static final int EXPIRE_TIME = 5000;
+    private static final int EXPIRE_TIME = 8000;
     // locations objects
     LocationClient mLocationClient;
     Location mCurrentLocation;
@@ -99,7 +100,7 @@ public class LocationGMS implements ConnectionCallbacks, OnConnectionFailedListe
         }
     };
 
-    private Handler mExpireHandler = new Handler(){
+    private Handler mExpireHandler = new Handler(Looper.getMainLooper()){
         @Override
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
@@ -122,7 +123,7 @@ public class LocationGMS implements ConnectionCallbacks, OnConnectionFailedListe
         // Set the fastest update interval to 1 second
         mLocationRequest.setFastestInterval(1000 * 1);
 
-//		mLocationRequest.setExpirationDuration(1000 * EXPIRE_TIME);
+		mLocationRequest.setExpirationDuration(EXPIRE_TIME);
 
         mLocationRequest.setNumUpdates(1);
     }

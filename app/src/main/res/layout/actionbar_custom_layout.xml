@@ -18,7 +18,7 @@
             android:duplicateParentState="true"
             android:layout_width="@dimen/size_20"
             android:layout_height="@dimen/size_12.5"
-            android:background="@drawable/menu" />
+            android:background="@drawable/icon_widget_navy" />
 
     </LinearLayout>
 

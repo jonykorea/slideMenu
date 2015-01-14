@@ -4,8 +4,10 @@ import android.annotation.TargetApi;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -33,35 +35,94 @@ public class MenuFragment01_sticky extends Fragment implements
         StickyListHeadersListView.OnStickyHeaderOffsetChangedListener,
         StickyListHeadersListView.OnStickyHeaderChangedListener{
 
-    private StickyListAdapter mAdapter;
+    private StickyListAdapter listAapter;
     private boolean fadeHeader = true;
 
     private StickyListHeadersListView stickyList;
     private SwipeRefreshLayout refreshLayout;
-
-
-
-    ListView mOrderListView;
+    private LayoutInflater inflater;
 
     private ApiAgent api;
-
-    private void initApiAgent()
-    {
-        if( api == null)
-        {
-            api = new ApiAgent();
-        }
-    }
 
     ArrayList<String> data;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        initApiAgent();
+        api = new ApiAgent();
 
 
 
+
+        // control
+        /*
+        mAdapter.restore();
+        mAdapter.notifyDataSetChanged();
+        mAdapter.clear();
+        */
+    }
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+
+        this.inflater = inflater;
+
+        return inflater.inflate(R.layout.fragment_orderlist_sticky, container, false);
+    }
+
+    @Override
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+        refreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.refresh_layout);
+        refreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+
+                // refresh
+                data.add("ATT");
+
+                listAapter.restore(data);
+
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        refreshLayout.setRefreshing(false);
+                    }
+                }, 2000);
+            }
+        });
+
+        stickyList = (StickyListHeadersListView) view.findViewById(R.id.list);
+        stickyList.setOnItemClickListener(this);
+        stickyList.setOnHeaderClickListener(this);
+        stickyList.setOnStickyHeaderChangedListener(this);
+        stickyList.setOnStickyHeaderOffsetChangedListener(this);
+        stickyList.addHeaderView(inflater.inflate(R.layout.list_header, null));
+        stickyList.addFooterView(inflater.inflate(R.layout.list_footer, null));
+        stickyList.setEmptyView(view.findViewById(R.id.empty));
+        stickyList.setDrawingListUnderStickyHeader(true);
+        stickyList.setAreHeadersSticky(true);
+        stickyList.setAdapter(listAapter);
+
+        // option
+        //stickyList.setStickyHeaderTopOffset(-10);
+        stickyList.setDrawingListUnderStickyHeader(true);
+        boolean setFastScroll = false;
+        stickyList.setFastScrollEnabled(setFastScroll);
+        stickyList.setFastScrollAlwaysVisible(setFastScroll);
+
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                initDataSet();
+            }
+        }, 300);
+
+    }
+    private void initDataSet()
+    {
         data = new ArrayList<String>();
 
         for(int i = 0; i < 30;i++)
@@ -83,90 +144,17 @@ public class MenuFragment01_sticky extends Fragment implements
                 data.add(i,"GH"+ i);
             }
 
-         }
+        }
 
-        mAdapter = new StickyListAdapter(getActivity(), data);
+        listAapter = new StickyListAdapter(getActivity(), data);
 
-
-
-        // control
-        /*
-        mAdapter.restore();
-        mAdapter.notifyDataSetChanged();
-        mAdapter.clear();
-        */
-    }
-
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-
-        initApiAgent();
+        stickyList.setAdapter(listAapter);
 
         // 네트워크 테스트 S
         apiGetPublicKey();
         // 네트워크 테스트 E
 
-        // Get the view from fragment_viewpager_01.xml
-        View rootLayout = inflater.inflate(R.layout.fragment_orderlist_sticky, container, false);
-
-        /* 일반 listview
-        mOrderListView = (ListView) rootLayout.findViewById(R.id.order_listview);
-
-
-        String[] orderHistoryList = new String[] { "Apple", "Avocado", "Banana",
-                "Blueberry", "Coconut", "Durian", "Guava", "Kiwifruit",
-                "Jackfruit", "Mango", "Olive", "Pear", "Sugar-apple" };
-
-        List<OrderListView> list = new ArrayList<OrderListView>();
-        for(int i = 0; i < orderHistoryList.length; i++){
-            OrderListView mv = new OrderListView(new OrderList(orderHistoryList[i]), R.layout.list_order);
-            list.add(mv);
-        }
-
-        mOrderListView.setAdapter(new GenericAdapter(list, getActivity()));
-        */
-
-        refreshLayout = (SwipeRefreshLayout) rootLayout.findViewById(R.id.refresh_layout);
-        refreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-
-                data.add("ATT");
-
-                mAdapter.restore(data);
-
-                new Handler().postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        refreshLayout.setRefreshing(false);
-                    }
-                }, 2000);
-            }
-        });
-
-        stickyList = (StickyListHeadersListView) rootLayout.findViewById(R.id.list);
-        stickyList.setOnItemClickListener(this);
-        stickyList.setOnHeaderClickListener(this);
-        stickyList.setOnStickyHeaderChangedListener(this);
-        stickyList.setOnStickyHeaderOffsetChangedListener(this);
-        stickyList.addHeaderView(inflater.inflate(R.layout.list_header, null));
-        stickyList.addFooterView(inflater.inflate(R.layout.list_footer, null));
-        stickyList.setEmptyView(rootLayout.findViewById(R.id.empty));
-        stickyList.setDrawingListUnderStickyHeader(true);
-        stickyList.setAreHeadersSticky(true);
-        stickyList.setAdapter(mAdapter);
-
-        // option
-        stickyList.setStickyHeaderTopOffset(-20);
-        stickyList.setDrawingListUnderStickyHeader(true);
-        boolean setFastScroll = false;
-        stickyList.setFastScrollEnabled(setFastScroll);
-        stickyList.setFastScrollAlwaysVisible(setFastScroll);
-
-        return rootLayout;
     }
-
 
     // get Publickey
     public void apiGetPublicKey() {
@@ -241,6 +229,5 @@ public class MenuFragment01_sticky extends Fragment implements
     public void onStickyHeaderChanged(StickyListHeadersListView l, View header, int itemPosition, long headerId) {
         header.setAlpha(1);
     }
-
 
 }

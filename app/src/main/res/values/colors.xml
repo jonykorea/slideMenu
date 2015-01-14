@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="ffffff">#ffffff</color>
-    <color name="fafafa">#fafafa</color>
-    <color name="f2f4f5">#f2f4f5</color>
-    <color name="d9dbdc">#d9dbdc</color>
+    <color name="c_ffffff">#ffffff</color>
+    <color name="c_fafafa">#fafafa</color>
+    <color name="c_f2f4f5">#f2f4f5</color>
+    <color name="c_d9dbdc">#d9dbdc</color>
+    <color name="c_349bcd">#349bcd</color>
+    <color name="c_2f8bb9">#2f8bb9</color>
 
     <color name="primary">#673ab7</color>
     <color name="primary_dark">#512da8</color>

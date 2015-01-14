@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="98px"
-    >
+    android:layout_height="@dimen/size_52"
+    android:paddingBottom="@dimen/size_1"
+    android:paddingTop="@dimen/size_1">
 
     <ImageView
-        android:layout_marginLeft="15dp"
+        android:layout_marginLeft="@dimen/size_15"
         android:id="@+id/row_store"
-        android:layout_width="33dp"
-        android:layout_height="24dp"
+        android:layout_width="@dimen/size_33"
+        android:layout_height="@dimen/size_24"
         android:layout_centerVertical="true"
         android:layout_alignParentLeft="true"
-
         android:background="@drawable/ic_launcher" />
 
     <LinearLayout
@@ -19,8 +19,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginLeft="10dp"
-        android:layout_toLeftOf="@+id/row_img"
-
+        android:layout_toLeftOf="@+id/row_next"
         android:orientation="vertical">
 
         <RelativeLayout
@@ -29,51 +28,59 @@
             android:layout_weight="1">
 
             <TextView
-                android:id="@+id/text"
+                android:id="@+id/row_price"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_alignParentLeft="true"
-
                 android:gravity="center"
-                android:text="1,000원"
+                android:text="￦ 1,000원"
                 android:textColor="#3D454C"
-                android:textSize="16dp" />
+                android:textSize="@dimen/size_16" />
 
 
             <TextView
-                android:id="@+id/date"
+                android:id="@+id/row_time"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-
                 android:layout_alignParentRight="true"
-
                 android:gravity="center"
                 android:text="오후 11:10"
                 android:textColor="#3D454C"
-                android:textSize="16dp" />
+                android:textSize="@dimen/size_16" />
 
         </RelativeLayout>
 
         <TextView
-            android:id="@+id/orderitem"
+
+            android:id="@+id/row_menu"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="1"
-
-            android:gravity="left"
+            android:gravity="left|center_vertical"
             android:singleLine="true"
             android:text="아메리카노, 까페라떼, 빙수"
             android:textColor="#3D454C"
-            android:textSize="16dp" />
+            android:textSize="@dimen/size_16" />
     </LinearLayout>
 
     <ImageView
         android:layout_centerVertical="true"
-        android:id="@+id/row_img"
-        android:layout_width="9dp"
-        android:layout_height="15dp"
+        android:id="@+id/row_next"
+        android:layout_width="@dimen/size_9"
+        android:layout_height="@dimen/size_15"
         android:layout_alignParentRight="true"
-        android:layout_marginLeft="20dp"
-        android:layout_marginRight="15dp"
-        android:background="@drawable/next_icon" />
+        android:layout_marginLeft="@dimen/size_20"
+        android:layout_marginRight="@dimen/size_15"
+        android:background="@drawable/icon_next_gray" />
+
+
+
+    <LinearLayout
+        android:layout_marginLeft="@dimen/size_30"
+        android:layout_marginRight="@dimen/size_30"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/size_1"
+        android:layout_alignParentBottom="true"
+        android:background="#C3C8CD"
+        android:orientation="horizontal"></LinearLayout>
 </RelativeLayout>

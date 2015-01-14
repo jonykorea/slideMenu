@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:cardview="http://schemas.android.com/tools"
+
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingLeft="@dimen/size_5"
+    android:paddingRight="@dimen/size_5"
+    android:paddingBottom="@dimen/size_3"
+    android:paddingTop="@dimen/size_3"
+    android:orientation="vertical">
+
+    <android.support.v7.widget.CardView xmlns:card_view="http://schemas.android.com/apk/res-auto"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/size_173"
+        android:layout_centerInParent="true"
+
+        card_view:cardCornerRadius="@dimen/size_5"
+        card_view:cardElevation="@dimen/size_2">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:paddingLeft="@dimen/size_5"
+            android:paddingTop="@dimen/size_5"
+            android:paddingBottom="@dimen/size_5">
+
+
+            <com.makeramen.RoundedImageView xmlns:app="http://schemas.android.com/apk/res-auto"
+                android:id="@+id/item_menu_info_image"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+
+                android:scaleType="centerCrop"
+                android:layout_toLeftOf="@+id/item_menu_control_layout"
+                android:layout_marginRight="@dimen/size_5"
+                app:riv_corner_radius="@dimen/size_5"
+                app:riv_border_width="1dp"
+                app:riv_border_color="#C3C8CD"
+                app:riv_mutate_background="true"
+                app:riv_oval="false" />
+
+
+            <LinearLayout
+                android:layout_alignLeft="@id/item_menu_info_image"
+                android:layout_alignRight="@id/item_menu_info_image"
+                android:id="@+id/item_menu_info_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="#B3FAFAFA"
+                android:layout_alignParentBottom="true"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_weight="1"
+                    android:id="@+id/item_menu_info_name"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:textColor="#349bcd"
+                    android:textStyle="bold"
+                    android:textSize="@dimen/size_14" />
+
+
+                <TextView
+                    android:layout_weight="1"
+                    android:textStyle="bold"
+                    android:id="@+id/item_menu_info_price"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:textColor="#349bcd"
+                    android:text="￦ 2,000원"
+                    android:textSize="@dimen/size_14" />
+            </LinearLayout>
+
+            <RelativeLayout
+                android:id="@+id/item_menu_control_layout"
+                android:layout_width="@dimen/size_50"
+
+                android:paddingTop="@dimen/size_5"
+                android:paddingBottom="@dimen/size_5"
+                android:layout_height="match_parent"
+                android:layout_alignParentRight="true">
+
+                <LinearLayout
+                    android:layout_width="@dimen/size_1"
+                    android:layout_height="@dimen/size_49"
+                    android:layout_alignParentTop="true"
+                    android:layout_toLeftOf="@+id/item_menu_control_add"
+                    android:background="#C3C8CD"
+                    android:orientation="horizontal">
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:clickable="true"
+                    android:background="@drawable/selector_fafafa_f2f4f5"
+                    android:id="@+id/item_menu_control_add"
+                    android:layout_width="@dimen/size_49"
+                    android:layout_height="@dimen/size_49"
+                    android:layout_alignParentRight="true"
+                    android:layout_alignParentTop="true"
+                    android:gravity="center">
+
+                    <ImageView
+                        android:layout_width="@dimen/size_19"
+                        android:layout_height="@dimen/size_19.5"
+                        android:background="@drawable/icon_add" />
+                </LinearLayout>
+
+
+                <LinearLayout
+                    android:layout_width="@dimen/size_1"
+                    android:layout_height="@dimen/size_49"
+                    android:layout_alignParentBottom="true"
+                    android:layout_toLeftOf="@+id/item_menu_control_remove"
+                    android:background="#C3C8CD"
+                    android:orientation="horizontal"></LinearLayout>
+
+                <TextView
+                    android:id="@+id/item_menu_control_count"
+                    android:layout_width="@dimen/size_49"
+                    android:layout_height="match_parent"
+                    android:layout_above="@+id/item_menu_control_remove"
+                    android:layout_alignParentRight="true"
+                    android:layout_below="@+id/item_menu_control_add"
+                    android:gravity="center"
+                    android:textColor="#349bcd"
+                    android:text="0"
+                    android:textSize="@dimen/size_20"
+                    android:textStyle="bold" />
+
+                <LinearLayout
+                    android:clickable="true"
+                    android:background="@drawable/selector_fafafa_f2f4f5"
+                    android:id="@+id/item_menu_control_remove"
+                    android:layout_width="@dimen/size_49"
+                    android:layout_height="@dimen/size_49"
+                    android:layout_alignParentBottom="true"
+                    android:layout_alignParentRight="true"
+                    android:gravity="center">
+
+                    <ImageView
+                        android:layout_width="@dimen/size_19"
+                        android:layout_height="@dimen/size_2.5"
+                        android:background="@drawable/icon_remove" />
+                </LinearLayout>
+            </RelativeLayout>
+
+        </RelativeLayout>
+
+    </android.support.v7.widget.CardView>
+</RelativeLayout>

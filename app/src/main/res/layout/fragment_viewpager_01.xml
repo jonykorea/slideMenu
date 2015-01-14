@@ -12,12 +12,14 @@
         android:paddingBottom="@dimen/size_9"
         android:paddingLeft="@dimen/size_10"
         android:paddingRight="@dimen/size_10"
-        android:text="FragmentTab1">
+        >
 
         <RelativeLayout
+            android:id="@+id/store_item_btn"
+            android:clickable="true"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="#2996CC"
+            android:background="@drawable/selector_349bcd_2f8bb9"
             android:paddingLeft="15dp"
             android:paddingRight="15dp">
 
@@ -32,10 +34,10 @@
 
 
             <TextView
-                android:id="@+id/title_count"
+                android:id="@+id/store_item_sum_count"
                 android:layout_width="32dp"
                 android:layout_height="31dp"
-                android:text="3"
+                android:text="0"
                 android:textSize="16dp"
                 android:gravity="center"
                 android:paddingRight="4dp"
@@ -44,15 +46,16 @@
                 android:textColor="#ffffff"
                 android:layout_alignParentRight="true"
                 android:layout_centerVertical="true"
-                android:background="@drawable/count_w" />
+                android:background="@drawable/icon_upper_menu_white" />
 
             <TextView
+                android:id="@+id/store_item_sum_price"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_marginRight="10dp"
-                android:layout_toLeftOf="@id/title_count"
+                android:layout_toLeftOf="@id/store_item_sum_count"
                 android:gravity="center_vertical"
-                android:text="￦3,000원"
+                android:text="￦ 0원"
 
                 android:textColor="#ffffff"
                 android:textSize="@dimen/size_24" />

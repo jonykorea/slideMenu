@@ -93,8 +93,8 @@ public class StickyListAdapter extends BaseAdapter implements
 
         if (convertView == null) {
             holder = new ViewHolder();
-            convertView = mInflater.inflate(R.layout.test_list_item_layout, parent, false);
-            holder.text = (TextView) convertView.findViewById(R.id.text);
+            convertView = mInflater.inflate(R.layout.list_order_info, parent, false);
+            holder.text = (TextView) convertView.findViewById(R.id.row_time);
             convertView.setTag(holder);
         } else {
             holder = (ViewHolder) convertView.getTag();
@@ -111,8 +111,8 @@ public class StickyListAdapter extends BaseAdapter implements
 
         if (convertView == null) {
             holder = new HeaderViewHolder();
-            convertView = mInflater.inflate(R.layout.header, parent, false);
-            holder.text = (TextView) convertView.findViewById(R.id.text1);
+            convertView = mInflater.inflate(R.layout.header_date, parent, false);
+            holder.text = (TextView) convertView.findViewById(R.id.header_date);
             convertView.setTag(holder);
         } else {
             holder = (HeaderViewHolder) convertView.getTag();

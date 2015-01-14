@@ -2,6 +2,7 @@ package com.tws.soul.soulbrown;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,30 +20,21 @@ import com.tws.network.lib.ApiAgent;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MenuFragment01 extends Fragment {
+public class MenuFragment01_listview extends Fragment {
     ListView mOrderListView;
 
     private ApiAgent api;
 
-    private void initApiAgent()
-    {
-        if( api == null)
-        {
-            api = new ApiAgent();
-        }
-    }
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        initApiAgent();
+        api = new ApiAgent();
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-
-        initApiAgent();
 
         // 네트워크 테스트 S
         apiGetPublicKey();
@@ -69,9 +61,17 @@ public class MenuFragment01 extends Fragment {
         return rootLayout;
     }
 
+    @Override
+    public void setMenuVisibility(boolean menuVisible) {
+        super.setMenuVisibility(menuVisible);
+
+        Log.i("jony","setMenuVisibility "+menuVisible );
+
+    }
 
     // get Publickey
     public void apiGetPublicKey() {
+
 
         LOG.d("apiGetPublicKey");
 

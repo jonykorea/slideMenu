@@ -14,6 +14,7 @@ import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.view.DragEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -60,13 +61,13 @@ public class NavigationDrawerFragment extends Fragment {
     /**
      * Helper component that ties the action bar to the navigation drawer.
      */
-    private ActionBarDrawerToggle mDrawerToggle;
+    //private ActionBarDrawerToggle mDrawerToggle;
 
     private DrawerLayout mDrawerLayout;
     private ListView mDrawerListView;
     private View mFragmentContainerView;
 
-    private int mCurrentSelectedPosition = 1;
+    private int mCurrentSelectedPosition = SoulBrownMainActivity.INIT_MENU_POSITION;
     private boolean mFromSavedInstanceState;
     private boolean mUserLearnedDrawer;
 
@@ -89,6 +90,7 @@ public class NavigationDrawerFragment extends Fragment {
 
         // Select either the default item (0) or the last selected item.
         selectItem(mCurrentSelectedPosition);
+
     }
 
     @Override
@@ -105,11 +107,6 @@ public class NavigationDrawerFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        String[] NATIONS = new String[] { getString(R.string.title_section1),
-                getString(R.string.title_section2),
-                getString(R.string.title_section3),
-                getString(R.string.title_section4)};
-
         mRlRootLayout = (RelativeLayout) inflater.inflate(
                 R.layout.fragment_navigation_drawer, container, false);
 
@@ -123,15 +120,18 @@ public class NavigationDrawerFragment extends Fragment {
             }
         });
 
-        List<SideMenuView> lst = new ArrayList<SideMenuView>();
-        for (int i = 0; i < NATIONS.length; i++) {
-            SideMenuView mv = new SideMenuView(new SideMenu(NATIONS[i],
-                    R.xml.xml_icon_menu_list), R.layout.list_sidemenu);
-            lst.add(mv);
-        }
-        mDrawerListView.setAdapter(new GenericAdapter(lst, getActivity()));
+        List<SideMenuView> list = new ArrayList<SideMenuView>();
 
-         mDrawerListView.setItemChecked(mCurrentSelectedPosition, true);
+        String[] menuTitle = getMenuTitle();
+
+        for (int i = 0; i < menuTitle.length; i++) {
+            SideMenuView mv = new SideMenuView(new SideMenu(menuTitle[i],
+                    R.xml.xml_icon_menu_list), R.layout.list_sidemenu);
+            list.add(mv);
+        }
+        mDrawerListView.setAdapter(new GenericAdapter(list, getActivity()));
+
+        mDrawerListView.setItemChecked(mCurrentSelectedPosition, true);
 
         return mRlRootLayout;
     }
@@ -155,30 +155,21 @@ public class NavigationDrawerFragment extends Fragment {
         mDrawerLayout.setDrawerShadow(R.drawable.drawer_shadow, GravityCompat.START);
         // set up the drawer's list view with items and click listener
 
-        /*
-        ActionBar actionBar = getActionBar();
-        actionBar.setDisplayHomeAsUpEnabled(true);
-        actionBar.setHomeButtonEnabled(true);
-        actionBar.setBackgroundDrawable(new ColorDrawable(Color.parseColor("#F2F4F5")));
-        actionBar.setIcon(null);
-        */
         ActionBar actionBar = getActionBar();
         actionBar.setBackgroundDrawable(new ColorDrawable(Color.parseColor("#F2F4F5")));
-        LayoutInflater inflator = (LayoutInflater) getActivity()
-                .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
-        getActionBar().setDisplayShowCustomEnabled(true);
         actionBar.setDisplayShowTitleEnabled(false);
-        // actionBar.setDisplayUseLogoEnabled(false);
-        actionBar.setDisplayHomeAsUpEnabled(true);
+        actionBar.setDisplayHomeAsUpEnabled(false);
         actionBar.setDisplayUseLogoEnabled(false);
         actionBar.setDisplayShowHomeEnabled(false);
-        // getActionBar().setIcon(R.drawable.ic_navigation_drawer);
-        // navigation icon on actionbar
-        actionBar.setHomeButtonEnabled(true);
+        actionBar.setHomeButtonEnabled(false);
         actionBar.setIcon(null);
-        View actionBarView = inflator.inflate(R.layout.actionbar_custom_layout, null);
+
+        LayoutInflater inflater = (LayoutInflater) getActivity()
+                .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        View actionBarView = inflater.inflate(R.layout.actionbar_custom_layout, null);
         getActionBar().setCustomView(actionBarView);
+        getActionBar().setDisplayShowCustomEnabled(true);
 
         LinearLayout ibMenuShow = (LinearLayout) actionBarView.findViewById(R.id.title_btn_menu);
 
@@ -191,60 +182,36 @@ public class NavigationDrawerFragment extends Fragment {
             }
         });
 
-        // ActionBarDrawerToggle ties together the the proper interactions
-        // between the navigation drawer and the action bar app icon.
-        mDrawerToggle = new ActionBarDrawerToggle(
-                getActivity(),                    /* host Activity */
-                mDrawerLayout,                    /* DrawerLayout object */
-                R.drawable.ic_drawer,             /* nav drawer image to replace 'Up' caret */
-                R.string.navigation_drawer_open,  /* "open drawer" description for accessibility */
-                R.string.navigation_drawer_close  /* "close drawer" description for accessibility */
-        ) {
-            @Override
-            public void onDrawerClosed(View drawerView) {
-                super.onDrawerClosed(drawerView);
-                if (!isAdded()) {
-                    return;
-                }
-
-                getActivity().invalidateOptionsMenu(); // calls onPrepareOptionsMenu()
-            }
-
-            @Override
-            public void onDrawerOpened(View drawerView) {
-                super.onDrawerOpened(drawerView);
-                if (!isAdded()) {
-                    return;
-                }
-
-                if (!mUserLearnedDrawer) {
-                    // The user manually opened the drawer; store this flag to prevent auto-showing
-                    // the navigation drawer automatically in the future.
-                    mUserLearnedDrawer = true;
-                    SharedPreferences sp = PreferenceManager
-                            .getDefaultSharedPreferences(getActivity());
-                    sp.edit().putBoolean(PREF_USER_LEARNED_DRAWER, true).apply();
-                }
-
-                getActivity().invalidateOptionsMenu(); // calls onPrepareOptionsMenu()
-            }
-        };
-
         // If the user hasn't 'learned' about the drawer, open it to introduce them to the drawer,
         // per the navigation drawer design guidelines.
         if (!mUserLearnedDrawer && !mFromSavedInstanceState) {
             mDrawerLayout.openDrawer(mFragmentContainerView);
         }
 
-        // Defer code dependent on restoration of previous instance state.
-        mDrawerLayout.post(new Runnable() {
+        mDrawerLayout.setDrawerListener(new DrawerLayout.DrawerListener() {
             @Override
-            public void run() {
-                mDrawerToggle.syncState();
+            public void onDrawerSlide(View view, float v) {
+
+            }
+
+            @Override
+            public void onDrawerOpened(View view) {
+
+            }
+
+            @Override
+            public void onDrawerClosed(View view) {
+
+                mCallbacks.onChangeDrawerLayout(mCurrentSelectedPosition);
+
+            }
+
+            @Override
+            public void onDrawerStateChanged(int i) {
+
             }
         });
 
-        mDrawerLayout.setDrawerListener(mDrawerToggle);
     }
 
     private void selectItem(int position) {
@@ -287,102 +254,6 @@ public class NavigationDrawerFragment extends Fragment {
         outState.putInt(STATE_SELECTED_POSITION, mCurrentSelectedPosition);
     }
 
-    @Override
-    public void onConfigurationChanged(Configuration newConfig) {
-        super.onConfigurationChanged(newConfig);
-        // Forward the new configuration the drawer toggle component.
-        mDrawerToggle.onConfigurationChanged(newConfig);
-    }
-
-    @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        // If the drawer is open, show the global app actions in the action bar. See also
-        // showGlobalContextActionBar, which controls the top-left area of the action bar.
-        if (mDrawerLayout != null && isDrawerOpen()) {
-            //inflater.inflate(R.menu.global, menu);
-            showGlobalContextActionBar();
-        }
-        super.onCreateOptionsMenu(menu, inflater);
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        if (mDrawerToggle.onOptionsItemSelected(item)) {
-            return true;
-        }
-
-        if (item.getItemId() == R.id.action_example) {
-            Toast.makeText(getActivity(), "Example action.", Toast.LENGTH_SHORT).show();
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
-    }
-
-    /**
-     * Per the navigation drawer design guidelines, updates the action bar to show the global app
-     * 'context', rather than just what's in the current screen.
-     */
-    private void showGlobalContextActionBar() {
-        ActionBar actionBar = getActionBar();
-        /*
-        actionBar.setIcon(null);
-        actionBar.setDisplayShowTitleEnabled(true);
-        actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
-        actionBar.setTitle(R.string.app_name);
-q       */
-
-        ;
-        actionBar.setBackgroundDrawable(new ColorDrawable(Color.parseColor("#F2F4F5")));
-        LayoutInflater inflator = (LayoutInflater) getActivity()
-                .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-
-        getActionBar().setDisplayShowCustomEnabled(true);
-        actionBar.setDisplayShowTitleEnabled(false);
-        // actionBar.setDisplayUseLogoEnabled(false);
-        actionBar.setDisplayHomeAsUpEnabled(true);
-        actionBar.setDisplayUseLogoEnabled(false);
-        actionBar.setDisplayShowHomeEnabled(false);
-        // getActionBar().setIcon(R.drawable.ic_navigation_drawer);
-        // navigation icon on actionbar
-        actionBar.setHomeButtonEnabled(true);
-        actionBar.setIcon(null);
-        View actionBarView = inflator.inflate(R.layout.actionbar_custom_layout, null);
-        getActionBar().setCustomView(actionBarView);
-
-        LinearLayout ibMenuShow = (LinearLayout) actionBarView.findViewById(R.id.title_btn_menu);
-
-        ibMenuShow.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-                openCloseDrawerMenu();
-
-            }
-        });
-        // test
-        /*
-        getActionBar().setBackgroundDrawable(
-                new ColorDrawable(Color.parseColor("yourcolor here"))); //$NON-NLS-1$
-        LayoutInflater inflator = (LayoutInflater) this
-                .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        ActionBar actionBar = getActionBar();
-        getActionBar().setDisplayShowCustomEnabled(true);
-        actionBar.setDisplayShowTitleEnabled(false);
-        // actionBar.setDisplayUseLogoEnabled(false);
-        actionBar.setDisplayHomeAsUpEnabled(true);
-        actionBar.setDisplayUseLogoEnabled(false);
-        actionBar.setDisplayShowHomeEnabled(false);
-        // getActionBar().setIcon(R.drawable.ic_navigation_drawer);
-        // navigation icon on actionbar
-        actionBar.setHomeButtonEnabled(true);
-        actionBar.setIcon(null);
-        View actionBarView = inflator.inflate(R.layout.actionbar_custom_layout, null);
-        getActionBar().setCustomView(actionBarView);
-        */
-        // test
-    }
-
     private ActionBar getActionBar() {
         return getActivity().getActionBar();
     }
@@ -395,6 +266,8 @@ q       */
          * Called when an item in the navigation drawer is selected.
          */
         void onNavigationDrawerItemSelected(int position);
+
+        void onChangeDrawerLayout(int position);
     }
 
     public void openCloseDrawerMenu()
@@ -409,5 +282,15 @@ q       */
             // open
             mDrawerLayout.openDrawer(mFragmentContainerView);
         }
+    }
+
+    private String[] getMenuTitle()
+    {
+        String[] MenuTitle = new String[] { getString(R.string.orderlist),
+                getString(R.string.store_haru),
+                getString(R.string.store_1022),
+                getString(R.string.store_2flat)};
+
+        return MenuTitle;
     }
 }

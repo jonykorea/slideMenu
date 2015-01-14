@@ -34,7 +34,7 @@ public class TestBaseAdapter extends BaseAdapter implements
 
         mOrderDate = new HashMap<String,String>();
 
-        //mCountries = context.getResources().getStringArray(R.array.countries);
+        mCountries = context.getResources().getStringArray(R.array.countries);
         mSectionIndices = getSectionIndices();
         mSectionLetters = getSectionLetters();
 
