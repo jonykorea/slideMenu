@@ -17,6 +17,7 @@ import com.android.volley.VolleyError;
 import com.app.define.LOG;
 import com.tws.common.lib.gms.LocationDefines;
 import com.tws.common.lib.gms.LocationGMS;
+import com.tws.common.lib.mgr.WakeupMgr;
 import com.tws.network.data.CoreGetPublicKey;
 import com.tws.network.data.RetCode;
 import com.tws.network.data.ServerDefineCode;
@@ -31,16 +32,16 @@ import com.tws.soul.soulbrown.pref.PrefUserInfo;
  */
 public class LocationIntentService extends IntentService {
 
-    PowerManager.WakeLock wl;
+
+    private WakeupMgr wakeupMgr;
+
     @Override
     protected void onHandleIntent(Intent intent) {
 
-        PowerManager pm = (PowerManager) this.getSystemService(Context.POWER_SERVICE);
-        wl = pm.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "sb service");
-        //Acquire the lock
-        wl.acquire();
+        wakeupMgr.setPowerWakeUp(1);
 
         uploadLocation();
+
     }
 
     public LocationIntentService() {
@@ -128,8 +129,6 @@ public class LocationIntentService extends IntentService {
                 @Override
                 public void onResponse(RetCode retCode) {
 
-                    wl.release();
-
                     LOG.d("r_public.result : " + retCode.result);
                     LOG.d("r_public.errormsg : " + retCode.errormsg);
 
@@ -146,12 +145,14 @@ public class LocationIntentService extends IntentService {
 
                     }
 
+                    wakeupMgr.releaseWifiManager();
+
                 }
             }, new Response.ErrorListener() {
                 @Override
                 public void onErrorResponse(VolleyError volleyError) {
 
-                    wl.release();
+                    wakeupMgr.releaseWifiManager();
 
                     LOG.d("apiSetUserLoc VolleyError " + volleyError.getMessage());
 
@@ -164,6 +165,9 @@ public class LocationIntentService extends IntentService {
     public void onCreate() {
         super.onCreate();
         LOG.d("LocationIntentService onCreate ");
+
+        wakeupMgr = new WakeupMgr(this);
+
     }
 
     @Override

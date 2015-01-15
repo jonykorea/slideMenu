@@ -47,11 +47,6 @@ public class NavigationDrawerFragment extends Fragment {
      */
     private static final String STATE_SELECTED_POSITION = "selected_navigation_drawer_position";
 
-    /**
-     * Per the design guidelines, you should show the drawer on launch until the user manually
-     * expands it. This shared preference tracks this.
-     */
-    private static final String PREF_USER_LEARNED_DRAWER = "navigation_drawer_learned";
 
     /**
      * A pointer to the current callbacks instance (the Activity).
@@ -69,7 +64,8 @@ public class NavigationDrawerFragment extends Fragment {
 
     private int mCurrentSelectedPosition = SoulBrownMainActivity.INIT_MENU_POSITION;
     private boolean mFromSavedInstanceState;
-    private boolean mUserLearnedDrawer;
+
+    RelativeLayout mRlRootLayout;
 
     public NavigationDrawerFragment() {
     }
@@ -80,12 +76,10 @@ public class NavigationDrawerFragment extends Fragment {
 
         // Read in the flag indicating whether or not the user has demonstrated awareness of the
         // drawer. See PREF_USER_LEARNED_DRAWER for details.
-        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getActivity());
-        mUserLearnedDrawer = sp.getBoolean(PREF_USER_LEARNED_DRAWER, false);
 
         if (savedInstanceState != null) {
             mCurrentSelectedPosition = savedInstanceState.getInt(STATE_SELECTED_POSITION);
-            mFromSavedInstanceState = true;
+            //mFromSavedInstanceState = true;
         }
 
         // Select either the default item (0) or the last selected item.
@@ -99,9 +93,6 @@ public class NavigationDrawerFragment extends Fragment {
         // Indicate that this fragment would like to influence the set of actions in the action bar.
         setHasOptionsMenu(true);
     }
-
-    RelativeLayout mRlRootLayout;
-
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -182,11 +173,6 @@ public class NavigationDrawerFragment extends Fragment {
             }
         });
 
-        // If the user hasn't 'learned' about the drawer, open it to introduce them to the drawer,
-        // per the navigation drawer design guidelines.
-        if (!mUserLearnedDrawer && !mFromSavedInstanceState) {
-            mDrawerLayout.openDrawer(mFragmentContainerView);
-        }
 
         mDrawerLayout.setDrawerListener(new DrawerLayout.DrawerListener() {
             @Override

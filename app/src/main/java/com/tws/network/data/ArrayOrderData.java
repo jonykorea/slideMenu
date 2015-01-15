@@ -7,4 +7,5 @@ public class ArrayOrderData {
 
     public String menuname;
     public String menuprice;
+    public int count;
 }

@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent" >
     
-    <TextView android:text="Header"
+    <com.tws.widget.CuzTextView android:text="최근 주문 내역"
     android:layout_width="match_parent"
     android:layout_height="100dp"
     android:gravity="center"

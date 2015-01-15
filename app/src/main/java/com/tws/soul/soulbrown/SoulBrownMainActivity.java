@@ -412,4 +412,21 @@ public class SoulBrownMainActivity extends FragmentActivity
 
         checkPlayServices();
     }
+
+    @Override
+    public void onBackPressed() {
+
+
+        if(mNavigationDrawerFragment.isDrawerOpen()) {
+            mNavigationDrawerFragment.openCloseDrawerMenu();
+
+            return;
+        }
+        else
+        {
+            finish();
+        }
+
+        super.onBackPressed();
+    }
 }

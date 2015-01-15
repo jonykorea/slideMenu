@@ -7,23 +7,38 @@ import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.app.define.LOG;
+import com.tws.common.lib.soulbrownlib.OrderDialog;
 import com.tws.common.listview.adapter.GenericAdapter;
 import com.tws.common.listview.adapter.StickyListAdapter;
 import com.tws.common.listview.domain.OrderList;
 import com.tws.common.listview.viewmapping.OrderListView;
+import com.tws.network.data.ArrayOrderData;
+import com.tws.network.data.ArrayOrderList;
 import com.tws.network.data.CoreGetPublicKey;
+import com.tws.network.data.RetOrderList;
+import com.tws.network.data.RetOrderMenu;
+import com.tws.network.data.ServerDefineCode;
+import com.tws.network.data.StoreCode;
 import com.tws.network.lib.ApiAgent;
+import com.tws.soul.soulbrown.broadcast.AlarmManagerBroadcastReceiver;
+import com.tws.soul.soulbrown.data.Menu;
+import com.tws.soul.soulbrown.lib.ConvertPrice;
+import com.tws.soul.soulbrown.lib.Notice;
+import com.tws.soul.soulbrown.pref.PrefOrderInfo;
+import com.tws.soul.soulbrown.pref.PrefUserInfo;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,7 +48,9 @@ import se.emilsjolander.stickylistheaders.StickyListHeadersListView;
 public class MenuFragment01_sticky extends Fragment implements
         AdapterView.OnItemClickListener, StickyListHeadersListView.OnHeaderClickListener,
         StickyListHeadersListView.OnStickyHeaderOffsetChangedListener,
-        StickyListHeadersListView.OnStickyHeaderChangedListener{
+        StickyListHeadersListView.OnStickyHeaderChangedListener {
+
+    private final String SELECT_FLAG_USER = "user-all";
 
     private StickyListAdapter listAapter;
     private boolean fadeHeader = true;
@@ -42,17 +59,11 @@ public class MenuFragment01_sticky extends Fragment implements
     private SwipeRefreshLayout refreshLayout;
     private LayoutInflater inflater;
 
-    private ApiAgent api;
+    private RetOrderList mOrderListData;
 
-    ArrayList<String> data;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        api = new ApiAgent();
-
-
-
 
         // control
         /*
@@ -60,6 +71,7 @@ public class MenuFragment01_sticky extends Fragment implements
         mAdapter.notifyDataSetChanged();
         mAdapter.clear();
         */
+        Notice.toast = Toast.makeText(getActivity(), "", Toast.LENGTH_SHORT);
     }
 
     @Override
@@ -80,17 +92,22 @@ public class MenuFragment01_sticky extends Fragment implements
             @Override
             public void onRefresh() {
 
+                //refresh
+                initData();
+
                 // refresh
-                data.add("ATT");
+                //data.add("ATT");
 
-                listAapter.restore(data);
+                //listAapter.restore(data);
 
+                /*
                 new Handler().postDelayed(new Runnable() {
                     @Override
                     public void run() {
                         refreshLayout.setRefreshing(false);
                     }
                 }, 2000);
+                */
             }
         });
 
@@ -116,104 +133,123 @@ public class MenuFragment01_sticky extends Fragment implements
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
-                initDataSet();
+
+                initData();
+
+
             }
         }, 300);
 
     }
-    private void initDataSet()
-    {
-        data = new ArrayList<String>();
 
-        for(int i = 0; i < 30;i++)
-        {
-            if( i < 5)
-            {
-                data.add(i,"CAB"+ i);
-            }
-            else if( i < 10)
-            {
-                data.add(i,"DCD"+ i);
-            }
-            else if( i < 20)
-            {
-                data.add(i,"EF"+ i);
-            }
-            else
-            {
-                data.add(i,"GH"+ i);
-            }
+    private void initData()
+    {
+        PrefUserInfo prefUserInfo = new PrefUserInfo(getActivity());
+
+        String userID = prefUserInfo.getUserID();
+
+        if (!TextUtils.isEmpty(userID))
+            apiOrderList("USERUI", userID, SELECT_FLAG_USER);
+        else {
 
         }
+    }
 
-        listAapter = new StickyListAdapter(getActivity(), data);
+    private void refreshDataSet(RetOrderList orderListData) {
+
+        mOrderListData = orderListData;
+
+        listAapter = new StickyListAdapter(getActivity(), orderListData.orderlist);
 
         stickyList.setAdapter(listAapter);
 
-        // 네트워크 테스트 S
-        apiGetPublicKey();
-        // 네트워크 테스트 E
-
     }
 
-    // get Publickey
-    public void apiGetPublicKey() {
 
-        LOG.d("apiGetPublicKey");
+    // apiOrderList
+    public void apiOrderList(String source, String userCode, String selectFlag) {
 
-        if (api != null) {
-            api.apiPublicKey(getActivity(), new Response.Listener<CoreGetPublicKey>() {
+        ApiAgent api = new ApiAgent();
+
+        PrefUserInfo prefUserInfo = new PrefUserInfo(getActivity());
+
+        String userID = prefUserInfo.getUserID();
+
+        LOG.d("apiOrderList userID " + userID);
+
+        if (api != null && !TextUtils.isEmpty(userID)) {
+            api.apiGetOrderList(getActivity(), source, userCode, null, selectFlag, new Response.Listener<RetOrderList>() {
                 @Override
-                public void onResponse(CoreGetPublicKey coreGetPublicKey) {
+                public void onResponse(RetOrderList retCode) {
 
-                    LOG.d("apiPublicKey result " + coreGetPublicKey.result);
-                    LOG.d("apiPublicKey status " + coreGetPublicKey.status);
+                    if( refreshLayout != null ) {
 
-                    // save DB : public key
-                    // return data check
-                    LOG.d("r_public.result : " + coreGetPublicKey.result);
-                    LOG.d("r_public.errormsg : " + coreGetPublicKey.errormsg);
-                    LOG.d("r_public.result : " + coreGetPublicKey.status);
-                    LOG.d("r_public.resMsg : " + coreGetPublicKey.resMsg);
-                    LOG.d("r_public.errMessage : " + coreGetPublicKey.errMessage);
+                        if( refreshLayout.isRefreshing())
+                            refreshLayout.setRefreshing(false);
+                    }
 
-                    if (coreGetPublicKey.result == 0) {
+                    LOG.d("retCode.result : " + retCode.result);
+                    LOG.d("retCode.errormsg : " + retCode.errormsg);
+
+
+                    if (retCode.result == ServerDefineCode.NET_RESULT_SUCC) {
 
                         // success
-                        String publickey = coreGetPublicKey.key;
+                        LOG.d("apiOrderList Succ");
 
-                        LOG.d("publickey : " + publickey);
+                        if (retCode.orderlist != null)
+                            refreshDataSet(retCode);
+                        else {
+                            // 주문 내역이 없다.
+                        }
 
 
                     } else {
                         // fail
-                        int code = coreGetPublicKey.result;
-                        String errormsg = coreGetPublicKey.errormsg;
+                        LOG.d("apiOrderList Fail " + retCode.result);
+
+                        //showToast("주문 이력 오류 : "+ retCode.errormsg+"["+retCode.result+"]");
 
                     }
 
                 }
             }, new Response.ErrorListener() {
+
+
                 @Override
                 public void onErrorResponse(VolleyError volleyError) {
 
-                    LOG.d("apiPublicKey VolleyError " + volleyError.getMessage());
+                    if( refreshLayout != null ) {
+
+                        if( refreshLayout.isRefreshing())
+                            refreshLayout.setRefreshing(false);
+                    }
+                    LOG.d("apiOrderList VolleyError " + volleyError.getMessage());
+
+                    //showToast("네트워크 오류 : "+ volleyError.getMessage());
 
                 }
             });
         }
     }
 
-
-
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        Toast.makeText(getActivity(), "Item " + position + " clicked!", Toast.LENGTH_SHORT).show();
+
+        if (mOrderListData != null && mOrderListData.orderlist != null) {
+
+            setOrderMenu(mOrderListData.orderlist.get(position - 1));
+
+        }
+
+        //Toast.makeText(getActivity(), "Item " + position + " clicked!", Toast.LENGTH_SHORT).show();
     }
 
     @Override
     public void onHeaderClick(StickyListHeadersListView l, View header, int itemPosition, long headerId, boolean currentlySticky) {
-        Toast.makeText(getActivity(), "Header " + headerId + " currentlySticky ? " + currentlySticky, Toast.LENGTH_SHORT).show();
+        //Toast.makeText(getActivity(), "Header " + headerId + " currentlySticky ? " + currentlySticky, Toast.LENGTH_SHORT).show();
+
+
     }
 
     @Override
@@ -228,6 +264,237 @@ public class MenuFragment01_sticky extends Fragment implements
     @TargetApi(Build.VERSION_CODES.HONEYCOMB)
     public void onStickyHeaderChanged(StickyListHeadersListView l, View header, int itemPosition, long headerId) {
         header.setAlpha(1);
+
     }
+
+    public void setOrderMenu(ArrayOrderList orderMenu) {
+
+        String storeID = orderMenu.storeid;
+        ArrayList<ArrayOrderData> orderData = orderMenu.orderdata;
+
+
+        List<Menu> ListMenu = new ArrayList<Menu>();
+
+        for(int i = 0;i<orderData.size();i++)
+        {
+            Menu menu = new Menu();
+
+            menu.count = orderData.get(i).count;
+            menu.price = Integer.parseInt(orderData.get(i).menuprice);
+            menu.name = orderData.get(i).menuname;
+
+            ListMenu.add(menu);
+        }
+
+        showDialog(storeID, ListMenu);
+    }
+
+    private OrderDialog orderDialog;
+
+    private void showDialog(final String storeID, final List<Menu> ListMenu) {
+
+        if (orderDialog != null && orderDialog.isShowing())
+            return;
+
+        String orderMenuList = "";
+        int sumPrice = 0;
+
+        if (ListMenu != null) {
+            if (ListMenu.size() > 0) {
+
+
+                for (int i = 0; i < ListMenu.size(); i++) {
+                    int cnt = ListMenu.get(i).count;
+                    String name = ListMenu.get(i).name;
+                    int price = ListMenu.get(i).price;
+
+                    sumPrice += price * cnt;
+
+                    if (ListMenu.get(i).count != 0) {
+                        orderMenuList += name + " : " + cnt + "개\n";
+                        //orderMenuList += ConvertPrice.getPrice(price * cnt)+"\n";
+                    }
+
+                }
+
+                orderMenuList += "총 합계 : " + ConvertPrice.getPrice(sumPrice);
+
+
+                orderDialog = new OrderDialog(getActivity(), "재주문", orderMenuList);
+
+                orderDialog.setOnAcceptButtonClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+
+                        String arriveTime = (String) ((TextView) orderDialog.getArriveTime()).getText();
+
+                        apiOrderMenu(storeID, ListMenu, arriveTime);
+
+                    }
+                });
+
+                orderDialog.setOnCancelButtonClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+
+                    }
+                });
+
+
+                orderDialog.show();
+
+                // get setting time S
+                PrefOrderInfo prefOrderInfo = new PrefOrderInfo(getActivity());
+
+                String settingTime = prefOrderInfo.getSettingTime();
+
+                orderDialog.setTvArriveTime(settingTime);
+
+                // get setting time E
+
+                orderDialog.getButtonAccept().setText("재주문");
+                orderDialog.getButtonCancel().setText("취소");
+
+            } else {
+                showToast("주문 선택을 해주세요.");
+            }
+        }
+
+
+    }
+
+    private String getArriveTime(String arriveTime) {
+        LOG.d("requestOrder arriveTime : " + arriveTime);
+
+        arriveTime = arriveTime.replace("분", "");
+
+        long time = Long.parseLong(arriveTime) * 60;
+        LOG.d("requestOrder time : " + time);
+
+        long nowUnixTime = System.currentTimeMillis();
+
+        LOG.d("requestOrder nowUnixTime : " + nowUnixTime);
+
+        long arriveUnixTime = nowUnixTime + (time * 1000);
+
+        LOG.d("requestOrder arriveUnixTime : " + arriveUnixTime);
+
+        arriveUnixTime = arriveUnixTime / 1000;
+
+        String calcTime = Long.toString(arriveUnixTime);
+
+        LOG.d("requestOrder calcTime : " + calcTime);
+
+        return calcTime;
+
+    }
+
+    // apiSetUserLoc
+    public void apiOrderMenu(String storeID, List<Menu> listMenu, final String arriveTime) {
+
+        ApiAgent api = new ApiAgent();
+
+        String calcTime = getArriveTime(arriveTime);
+
+        PrefUserInfo prefUserInfo = new PrefUserInfo(getActivity());
+
+        String userID = prefUserInfo.getUserID();
+
+        LOG.d("apiOrderMenu userID " + userID);
+
+        if (api != null && !TextUtils.isEmpty(userID)) {
+            api.apiOrderMenu(getActivity(), userID, storeID, calcTime, listMenu, new Response.Listener<RetOrderMenu>() {
+                @Override
+                public void onResponse(RetOrderMenu retCode) {
+
+                    LOG.d("retCode.result : " + retCode.result);
+                    LOG.d("retCode.errormsg : " + retCode.errormsg);
+                    LOG.d("retCode.orderkey : " + retCode.orderkey);
+                    LOG.d("retCode.arrivaltime : " + retCode.arrivaltime);
+
+                    if (retCode.result == ServerDefineCode.NET_RESULT_SUCC) {
+
+                        // success
+                        LOG.d("apiOrderMenu Succ");
+
+                        // 성공시 메뉴 리셋. > 알람 setting.
+
+                        // save setting time S
+                        PrefOrderInfo prefOrderInfo = new PrefOrderInfo(getActivity());
+
+                        prefOrderInfo.setSettingTime(arriveTime);
+                        // save setting time E
+
+                        setSchLocation(retCode);
+
+
+                    } else {
+                        // fail
+                        LOG.d("apiOrderMenu Fail " + retCode.result);
+
+                        showToast("주문 오류 : " + retCode.errormsg + "[" + retCode.result + "]");
+
+                    }
+
+                }
+            }, new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError volleyError) {
+
+
+                    LOG.d("apiOrderMenu VolleyError " + volleyError.getMessage());
+
+                    showToast("네트워크 오류 : " + volleyError.getMessage());
+
+                }
+            });
+        }
+    }
+
+    private void setSchLocation(RetOrderMenu orderMenuInfo) {
+
+        initData();
+
+        showToast("정상적으로 재주문되었습니다.");
+
+        String time = orderMenuInfo.arrivaltime;
+
+        long arriveUnixTime = Long.parseLong(time);
+        LOG.d("setSchLocation arriveUnixTime : " + arriveUnixTime);
+
+        // save arriveTime
+        PrefOrderInfo prefOrderInfo = new PrefOrderInfo(getActivity());
+        prefOrderInfo.setArriveTime(arriveUnixTime * 1000);
+
+        long nowUnixTime = System.currentTimeMillis() / 1000;
+        LOG.d("setSchLocation nowUnixTime : " + nowUnixTime);
+
+        final long MIN_10 = 60 * 10;
+        long calcUnixTime = (arriveUnixTime - nowUnixTime) - MIN_10;
+        LOG.d("setSchLocation calcUnixTime : " + calcUnixTime);
+
+        if (calcUnixTime < 0) {
+            calcUnixTime = 0;
+        }
+
+        AlarmManagerBroadcastReceiver alarmManagerBroadcastReceiver = new AlarmManagerBroadcastReceiver();
+        alarmManagerBroadcastReceiver.setOnetimeTimer(getActivity(), calcUnixTime);
+
+    }
+
+    private void showToast(int resID) {
+        if (Notice.toast != null) {
+            Notice.toast.setText(resID);
+            Notice.toast.show();
+        }
+    }
+
+    private void showToast(String msg) {
+        if (Notice.toast != null) {
+            Notice.toast.setText(msg);
+            Notice.toast.show();
+        }
+    }
+
 
 }

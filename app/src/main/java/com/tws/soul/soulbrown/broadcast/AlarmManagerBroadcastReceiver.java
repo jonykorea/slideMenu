@@ -14,6 +14,7 @@ import android.widget.Toast;
 
 import com.tws.soul.soulbrown.LocationIntentService;
 import com.tws.soul.soulbrown.gcm.GcmIntentService;
+import com.tws.soul.soulbrown.pref.PrefOrderInfo;
 
 import java.text.Format;
 import java.text.SimpleDateFormat;
@@ -48,15 +49,24 @@ public class AlarmManagerBroadcastReceiver extends WakefulBroadcastReceiver {
 
         Toast.makeText(context, msgStr, Toast.LENGTH_LONG).show();
 
-        // test Service
-        //Intent intentSvc = new Intent(context,LocationIntentService.class);
+        // check pref!
+        PrefOrderInfo prefOrderInfo = new PrefOrderInfo(context);
+        long arriveUnixTime = prefOrderInfo.getArriveTime();
+        long calcUnixTime = arriveUnixTime - System.currentTimeMillis();
+        if (calcUnixTime >= 0) {
+            //repeat 60 sec
+            setOnetimeTimer(context, 60);
 
-        ComponentName comp = new ComponentName(context.getPackageName(),
-                LocationIntentService.class.getName());
-        // Start the service, keeping the device awake while it is launching.
-        startWakefulService(context, (intent.setComponent(comp)));
-        setResultCode(Activity.RESULT_OK);
+            // test Service
+            //Intent intentSvc = new Intent(context,LocationIntentService.class);
 
+            ComponentName comp = new ComponentName(context.getPackageName(),
+                    LocationIntentService.class.getName());
+            // Start the service, keeping the device awake while it is launching.
+            startWakefulService(context, (intent.setComponent(comp)));
+            setResultCode(Activity.RESULT_OK);
+
+        }
 
         //Release the lock
         //wl.release();
@@ -78,11 +88,11 @@ public class AlarmManagerBroadcastReceiver extends WakefulBroadcastReceiver {
         alarmManager.cancel(sender);
     }
 
-    public void setOnetimeTimer(Context context) {
+    public void setOnetimeTimer(Context context, long time) {
         AlarmManager am = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
         Intent intent = new Intent(context, AlarmManagerBroadcastReceiver.class);
         intent.putExtra(ONE_TIME, Boolean.TRUE);
         PendingIntent pi = PendingIntent.getBroadcast(context, 0, intent, 0);
-        am.set(AlarmManager.RTC_WAKEUP, System.currentTimeMillis(), pi);
+        am.set(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() + 1000 * time, pi);
     }
 }

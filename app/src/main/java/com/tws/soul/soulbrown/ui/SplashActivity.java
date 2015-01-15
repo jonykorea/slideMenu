@@ -26,6 +26,8 @@ public class SplashActivity extends Activity {
 
     private Context context;
 
+    private static int ACT_RESULT_CODE = 100;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -86,7 +88,7 @@ public class SplashActivity extends Activity {
 
                         Intent intent = new Intent(context, SoulBrownMainActivity.class);
                         intent.putExtra(ExtraType.USER_TYPE,retCode.usertype);
-                        startActivity(intent);
+                        startActivityForResult(intent,ACT_RESULT_CODE);
 
 
                     } else {
@@ -104,6 +106,16 @@ public class SplashActivity extends Activity {
 
                 }
             });
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if( requestCode == ACT_RESULT_CODE )
+        {
+            finish();
         }
     }
 

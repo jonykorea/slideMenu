@@ -9,7 +9,16 @@ import android.widget.BaseAdapter;
 import android.widget.SectionIndexer;
 import android.widget.TextView;
 
+import com.app.define.LOG;
+import com.google.android.gms.drive.internal.p;
+import com.tws.common.lib.utils.TimeUtil;
+import com.tws.common.listview.domain.OrderList;
+import com.tws.network.data.ArrayOrderData;
+import com.tws.network.data.ArrayOrderList;
+import com.tws.network.data.ReceiptInfoRow;
+import com.tws.network.data.RetOrderList;
 import com.tws.soul.soulbrown.R;
+import com.tws.soul.soulbrown.lib.ConvertPrice;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -20,15 +29,16 @@ public class StickyListAdapter extends BaseAdapter implements
         StickyListHeadersAdapter, SectionIndexer {
 
     private final Context mContext;
-    private String[] mCountries;
     private int[] mSectionIndices;
     private Character[] mSectionLetters;
     private LayoutInflater mInflater;
 
     private HashMap<String,String> mOrderDate;
-    private ArrayList<String> mData;
+    private ArrayList<ArrayOrderList> mData;
 
-    public StickyListAdapter(Context context, ArrayList<String> data) {
+    private final int INIT_INDEX = 0;
+
+    public StickyListAdapter(Context context, ArrayList<ArrayOrderList> data) {
         mContext = context;
         mInflater = LayoutInflater.from(context);
 
@@ -36,25 +46,46 @@ public class StickyListAdapter extends BaseAdapter implements
 
         mOrderDate = new HashMap<String,String>();
 
-        //mCountries = context.getResources().getStringArray(R.array.countries);
         mSectionIndices = getSectionIndices();
         mSectionLetters = getSectionLetters();
-
 
     }
 
     private int[] getSectionIndices() {
+
+        String timeYYYYMMDD = TimeUtil.getSimpleDateFormatYMD(mData.get(0).regdate);
+
+        LOG.d("getSimpleDateFormatYMD : " + TimeUtil.getSimpleDateFormatYMD(mData.get(0).regdate));
+
         ArrayList<Integer> sectionIndices = new ArrayList<Integer>();
-        char lastFirstChar = mData.get(0).charAt(0);
+
+        String headCompare = timeYYYYMMDD;
+
+        int index = 0;
+        mData.get(0).index = Integer.toString(index);
+
         sectionIndices.add(0);
-        mOrderDate.put(Integer.toString(0),"12월 1일 수요일");
+        mOrderDate.put(Integer.toString(0),mData.get(0).regdate);
 
         for (int i = 1; i < mData.size(); i++) {
-            if ( mData.get(0).charAt(0) != lastFirstChar) {
-                lastFirstChar =  mData.get(0).charAt(0);
+
+            timeYYYYMMDD =  TimeUtil.getSimpleDateFormatYMD(mData.get(i).regdate);
+
+            if( !headCompare.equals(timeYYYYMMDD)){
+
+                index++;
+
+                headCompare = timeYYYYMMDD;
+
+                mData.get(i).index = Integer.toString(index);
+
                 sectionIndices.add(i);
 
-                mOrderDate.put(Integer.toString(i),"12월 1일 수요일");
+                mOrderDate.put(Integer.toString(i),mData.get(i).regdate);
+            }
+            else
+            {
+                mData.get(i).index = Integer.toString(index);
             }
         }
         int[] sections = new int[sectionIndices.size()];
@@ -67,7 +98,7 @@ public class StickyListAdapter extends BaseAdapter implements
     private Character[] getSectionLetters() {
         Character[] letters = new Character[mSectionIndices.length];
         for (int i = 0; i < mSectionIndices.length; i++) {
-            letters[i] =  mData.get(mSectionIndices[i]).charAt(0);
+            letters[i] =  mData.get(mSectionIndices[i]).index.charAt(0);
         }
         return letters;
     }
@@ -94,15 +125,66 @@ public class StickyListAdapter extends BaseAdapter implements
         if (convertView == null) {
             holder = new ViewHolder();
             convertView = mInflater.inflate(R.layout.list_order_info, parent, false);
-            holder.text = (TextView) convertView.findViewById(R.id.row_time);
+            holder.tvMenu = (TextView) convertView.findViewById(R.id.row_menu);
+            holder.tvPrice = (TextView) convertView.findViewById(R.id.row_price);
+            holder.tvTime = (TextView) convertView.findViewById(R.id.row_time);
             convertView.setTag(holder);
         } else {
             holder = (ViewHolder) convertView.getTag();
         }
 
-        //holder.text.setText(mCountries[position]);
+        ReceiptInfoRow receiptInfoRow;
+
+        String regUnixTime = mData.get(position).regdate;
+
+        receiptInfoRow = getSumPrice(mData.get(position).orderdata);
+        receiptInfoRow.store = mData.get(position).storeid;
+
+
+        String regTime = TimeUtil.getNewSimpleDateFormat("a hh시 mm분", regUnixTime);
+
+        holder.tvTime.setText(regTime);
+
+        holder.tvPrice.setText(receiptInfoRow.sumPrice);
+
+        holder.tvMenu.setText(receiptInfoRow.sumMenu);
+
+
+
 
         return convertView;
+    }
+
+    private ReceiptInfoRow getSumPrice(ArrayList<ArrayOrderData> orderData) {
+
+        ReceiptInfoRow receiptInfoRow = new ReceiptInfoRow();
+
+        int sum = 0;
+        String sumMenu = "";
+
+        if( orderData != null)
+        {
+
+            for(int i = 0 ; i< orderData.size() ; i++)
+            {
+                int count = orderData.get(i).count;
+                int price = Integer.parseInt(orderData.get(i).menuprice);
+
+                sum += count * price;
+
+                if( i == orderData.size() - 1)
+                    sumMenu += orderData.get(i).menuname ;
+                else
+                    sumMenu += orderData.get(i).menuname + ", ";
+
+            }
+        }
+
+        receiptInfoRow.sumPrice = ConvertPrice.getPrice(sum);
+        receiptInfoRow.sumMenu = sumMenu;
+
+
+        return receiptInfoRow;
     }
 
     @Override
@@ -119,10 +201,14 @@ public class StickyListAdapter extends BaseAdapter implements
         }
 
         // set header text as first char in name
-        //CharSequence headerChar = mCountries[position].subSequence(0, 1);
-        String header = mData.get(position)+ mOrderDate.get(0);
+        String header = mOrderDate.get(Integer.toString(position));
+
+        header = TimeUtil.getSoulBrownOrderDateInfo(header);
+
+        LOG.d("header "+ header);
+
         if(!TextUtils.isEmpty(header))
-            holder.text.setText("목요일, 12월 7일");
+            holder.text.setText(header);
 
         return convertView;
     }
@@ -136,7 +222,7 @@ public class StickyListAdapter extends BaseAdapter implements
         // return the first character of the country as ID because this is what
         // headers are based upon
         //return mCountries[position].subSequence(0, 1).charAt(0);
-        return mData.get(position).subSequence(0, 1).charAt(0);
+        return mData.get(position).index.subSequence(0, 1).charAt(0);
     }
 
     @Override
@@ -169,13 +255,13 @@ public class StickyListAdapter extends BaseAdapter implements
     }
 
     public void clear() {
-        mCountries = new String[0];
+
         mSectionIndices = new int[0];
         mSectionLetters = new Character[0];
         notifyDataSetChanged();
     }
 
-    public void restore(ArrayList<String> data) {
+    public void restore(ArrayList<ArrayOrderList> data) {
         mData = data;
         mSectionIndices = getSectionIndices();
         mSectionLetters = getSectionLetters();
@@ -187,7 +273,9 @@ public class StickyListAdapter extends BaseAdapter implements
     }
 
     class ViewHolder {
-        TextView text;
+        TextView tvMenu;
+        TextView tvTime;
+        TextView tvPrice;
     }
 
 }

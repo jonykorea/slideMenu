@@ -36,6 +36,7 @@ import com.tws.soul.soulbrown.data.Menu;
 import com.tws.soul.soulbrown.data.MenuDataManager;
 import com.tws.soul.soulbrown.lib.ConvertPrice;
 import com.tws.soul.soulbrown.lib.Notice;
+import com.tws.soul.soulbrown.pref.PrefOrderInfo;
 import com.tws.soul.soulbrown.pref.PrefUserInfo;
 
 import java.util.ArrayList;
@@ -103,6 +104,9 @@ public class ViewPagerFragment01 extends Fragment {
 
     private void showDialog(final List<Menu> ListMenu) {
 
+        if(orderDialog !=null && orderDialog.isShowing())
+            return;
+
         String orderMenuList = "";
         int sumPrice = 0;
 
@@ -126,6 +130,7 @@ public class ViewPagerFragment01 extends Fragment {
 
                 orderMenuList += "총 합계 : " + ConvertPrice.getPrice(sumPrice);
 
+
                 orderDialog = new OrderDialog(getActivity(), "주문", orderMenuList);
 
                 orderDialog.setOnAcceptButtonClickListener(new View.OnClickListener() {
@@ -133,8 +138,6 @@ public class ViewPagerFragment01 extends Fragment {
                     public void onClick(View view) {
 
                         String arriveTime = (String) ((TextView) orderDialog.getArriveTime()).getText();
-
-                        arriveTime = arriveTime.replace("분", "");
 
                         apiOrderMenu(StoreCode.CODE_HARU, ListMenu, arriveTime);
 
@@ -148,7 +151,17 @@ public class ViewPagerFragment01 extends Fragment {
                     }
                 });
 
+
                 orderDialog.show();
+
+                // get setting time S
+                PrefOrderInfo prefOrderInfo = new PrefOrderInfo(getActivity());
+
+                String settingTime = prefOrderInfo.getSettingTime();
+
+                orderDialog.setTvArriveTime(settingTime);
+
+                // get setting time E
 
                 orderDialog.getButtonAccept().setText("주문");
                 orderDialog.getButtonCancel().setText("취소");
@@ -161,17 +174,19 @@ public class ViewPagerFragment01 extends Fragment {
 
     }
 
-    private String getArriveTime(String arriveTime)
-    {
+    private String getArriveTime(String arriveTime) {
         LOG.d("requestOrder arriveTime : " + arriveTime);
+
+        arriveTime = arriveTime.replace("분", "");
+
         long time = Long.parseLong(arriveTime) * 60;
         LOG.d("requestOrder time : " + time);
 
-        long nowUnixTime =  System.currentTimeMillis();
+        long nowUnixTime = System.currentTimeMillis();
 
         LOG.d("requestOrder nowUnixTime : " + nowUnixTime);
 
-        long arriveUnixTime = nowUnixTime +  (time *1000);
+        long arriveUnixTime = nowUnixTime + (time * 1000);
 
         LOG.d("requestOrder arriveUnixTime : " + arriveUnixTime);
 
@@ -186,7 +201,7 @@ public class ViewPagerFragment01 extends Fragment {
     }
 
     // apiSetUserLoc
-    public void apiOrderMenu(String storeID, List<Menu> listMenu, String arriveTime) {
+    public void apiOrderMenu(String storeID, List<Menu> listMenu, final String arriveTime) {
 
         ApiAgent api = new ApiAgent();
 
@@ -196,15 +211,17 @@ public class ViewPagerFragment01 extends Fragment {
 
         String userID = prefUserInfo.getUserID();
 
-        LOG.d("apiOrderMenu userID "+ userID);
+        LOG.d("apiOrderMenu userID " + userID);
 
         if (api != null && !TextUtils.isEmpty(userID)) {
-            api.apiOrderMenu(getActivity(), userID, storeID, calcTime , listMenu, new Response.Listener<RetOrderMenu>() {
+            api.apiOrderMenu(getActivity(), userID, storeID, calcTime, listMenu, new Response.Listener<RetOrderMenu>() {
                 @Override
                 public void onResponse(RetOrderMenu retCode) {
 
                     LOG.d("retCode.result : " + retCode.result);
                     LOG.d("retCode.errormsg : " + retCode.errormsg);
+                    LOG.d("retCode.orderkey : " + retCode.orderkey);
+                    LOG.d("retCode.arrivaltime : " + retCode.arrivaltime);
 
                     if (retCode.result == ServerDefineCode.NET_RESULT_SUCC) {
 
@@ -213,10 +230,20 @@ public class ViewPagerFragment01 extends Fragment {
 
                         // 성공시 메뉴 리셋. > 알람 setting.
 
+                        // save setting time S
+                        PrefOrderInfo prefOrderInfo = new PrefOrderInfo(getActivity());
+
+                        prefOrderInfo.setSettingTime(arriveTime);
+                        // save setting time E
+
+                        setSchLocation(retCode);
+
 
                     } else {
                         // fail
-                        LOG.d("apiOrderMenu Fail "+retCode.result );
+                        LOG.d("apiOrderMenu Fail " + retCode.result);
+
+                        showToast("주문 오류 : "+ retCode.errormsg+"["+retCode.result+"]");
 
                     }
 
@@ -226,12 +253,44 @@ public class ViewPagerFragment01 extends Fragment {
                 public void onErrorResponse(VolleyError volleyError) {
 
 
-
                     LOG.d("apiOrderMenu VolleyError " + volleyError.getMessage());
+
+                    showToast("네트워크 오류 : "+ volleyError.getMessage());
 
                 }
             });
         }
+    }
+
+    private void setSchLocation(RetOrderMenu orderMenuInfo)
+    {
+
+        showToast("정상적으로 주문되었습니다.");
+
+        String time = orderMenuInfo.arrivaltime;
+
+        long arriveUnixTime = Long.parseLong(time);
+        LOG.d("setSchLocation arriveUnixTime : "+arriveUnixTime);
+
+        // save arriveTime
+        PrefOrderInfo prefOrderInfo = new PrefOrderInfo(getActivity());
+        prefOrderInfo.setArriveTime(arriveUnixTime * 1000);
+
+        long nowUnixTime = System.currentTimeMillis() / 1000;
+        LOG.d("setSchLocation nowUnixTime : "+nowUnixTime);
+
+        final long MIN_10 = 60 * 10;
+        long calcUnixTime = ( arriveUnixTime - nowUnixTime ) - MIN_10;
+        LOG.d("setSchLocation calcUnixTime : "+calcUnixTime);
+
+        if( calcUnixTime < 0)
+        {
+            calcUnixTime = 0;
+        }
+
+        AlarmManagerBroadcastReceiver alarmManagerBroadcastReceiver = new AlarmManagerBroadcastReceiver();
+        alarmManagerBroadcastReceiver.setOnetimeTimer(getActivity(),calcUnixTime);
+
     }
 
     private void showToast(int resID) {

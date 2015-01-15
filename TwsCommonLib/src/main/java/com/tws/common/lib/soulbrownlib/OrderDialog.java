@@ -145,7 +145,7 @@ public class OrderDialog
 
         int time = Integer.parseInt(textTime);
 
-        if (time > 0) {
+        if (time > 10) {
 
             time -= 10;
 
@@ -159,6 +159,10 @@ public class OrderDialog
 
     public TextView getArriveTime() {
         return tvArriveTime;
+    }
+
+    public void setTvArriveTime(String time){
+        tvArriveTime.setText(time);
     }
 
     @Override

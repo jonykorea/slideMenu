@@ -10,6 +10,7 @@ import com.app.AppController;
 import com.app.define.LOG;
 import com.tws.network.data.CoreGetPublicKey;
 import com.tws.network.data.RetCode;
+import com.tws.network.data.RetOrderList;
 import com.tws.network.data.RetOrderMenu;
 import com.tws.network.data.RetUserChecker;
 import com.tws.network.lib.AirGsonRequest;
@@ -48,6 +49,9 @@ public class ApiAgent {
 
     // order
     private static final String URL_ORDER_MENU = "/soulbrown/if/ordermenu";
+
+    // orderlist
+    private static final String URL_ORDER_LIST = "/soulbrown/if/getorderlist";
 
 
 
@@ -106,7 +110,7 @@ public class ApiAgent {
     }
 
     // setuserloc
-    public void apiUserLoc(Context context,String userid,String lon,String lat, Response.Listener<RetCode> succListener, Response.ErrorListener failListener) {
+    public void apiUserLoc(Context context,String userid, String lon,String lat, Response.Listener<RetCode> succListener, Response.ErrorListener failListener) {
 
         String url = URL_DOMAIN + URL_SETUSERLOC;
 
@@ -286,6 +290,72 @@ public class ApiAgent {
                 Request.Method.POST,
                 url,
                 RetOrderMenu.class, header, reqParams,
+                succListener, failListener
+
+        );
+
+        // request queue!
+        AppController.getInstance().addToRequestQueue(gsObjRequest);
+
+    }
+
+    // apiGetOrderList
+    public void apiGetOrderList(Context context, String source, String userid, String storeid, String selectFlag , Response.Listener<RetOrderList> succListener, Response.ErrorListener failListener) {
+
+        String url = URL_DOMAIN + URL_ORDER_LIST;
+
+        // set add header S
+        HashMap<String, String> header = new HashMap<String, String>();
+/*
+        String auth = DeviceInfo.getAuth(context);
+
+        if (!TextUtils.isEmpty(auth))
+            header.put("auth_key", auth);
+
+        header.put("mdn", DeviceInfo.getMDN(context));
+*/
+        // set add header E
+
+        // set params S
+        JSONObject jsonParams = new JSONObject();
+        JSONArray jsonArray = new JSONArray();
+        JSONObject jsonSubParams = null;
+
+        try {
+
+            jsonParams.put("source",source);
+
+            if(!TextUtils.isEmpty(userid))
+                jsonParams.put("userid",userid);
+
+            if(!TextUtils.isEmpty(storeid))
+                jsonParams.put("storeid",storeid);
+
+            jsonParams.put("selectflag",selectFlag);
+
+
+            //jsonParams = CommonParams.getCommonParams(context, jsonParams);
+
+        } catch (Exception e) {
+            LOG.d("apiGetOrderList error:" + e.getMessage());
+            jsonParams = null;
+        }
+
+        String reqParams = null;
+
+        if (jsonParams != null)
+            reqParams = jsonParams.toString();
+
+        LOG.d("reqParams " + reqParams);
+
+
+        // set params E
+
+        // request!
+        JsonGsonRequest<RetOrderList> gsObjRequest = new JsonGsonRequest<RetOrderList>(
+                Request.Method.POST,
+                url,
+                RetOrderList.class, header, reqParams,
                 succListener, failListener
 
         );
