@@ -1,14 +1,11 @@
-package com.tws.soul.soulbrown;
+package com.tws.soul.soulbrown.service;
 
-import android.app.IntentService;
+import android.app.Service;
 import android.content.Intent;
-import android.content.Context;
 import android.location.Location;
 import android.os.Handler;
 import android.os.IBinder;
-import android.os.Looper;
 import android.os.Message;
-import android.os.PowerManager;
 import android.text.TextUtils;
 import android.util.Log;
 
@@ -19,42 +16,42 @@ import com.tws.common.lib.gms.LocationDefines;
 import com.tws.common.lib.gms.LocationGMS;
 import com.tws.common.lib.mgr.WakeupMgr;
 import com.tws.common.lib.utils.FileLOG;
-import com.tws.network.data.CoreGetPublicKey;
 import com.tws.network.data.RetCode;
 import com.tws.network.data.ServerDefineCode;
 import com.tws.network.lib.ApiAgent;
 import com.tws.soul.soulbrown.pref.PrefUserInfo;
 
-/**
- * An {@link IntentService} subclass for handling asynchronous task requests in
- * a service on a separate handler thread.
- * <p/>
- * helper methods.
- */
-public class LocationIntentService extends IntentService {
-
+public class LocationService extends Service {
 
     private WakeupMgr wakeupMgr;
 
-    @Override
-    protected void onHandleIntent(Intent intent) {
+    public LocationService() {
+    }
 
-        FileLOG.writeLog("LocationIntentService : onHandleIntent");
+    @Override
+    public IBinder onBind(Intent intent) {
+        // TODO: Return the communication channel to the service.
+        throw new UnsupportedOperationException("Not yet implemented");
+    }
+
+    @Override
+    public int onStartCommand(Intent intent, int flags, int startId) {
+
+
+        FileLOG.writeLog("LocationService : onStartCommand");
 
         wakeupMgr.setPowerWakeUp(1);
 
         uploadLocation();
 
-    }
 
-    public LocationIntentService() {
-        super("LocationIntentService");
-    }
+        return Service.START_NOT_STICKY;
 
+    }
 
     private void uploadLocation() {
 
-        FileLOG.writeLog("LocationIntentService : uploadLocation");
+        FileLOG.writeLog("LocationService : uploadLocation");
 
         LocationGMS location = new LocationGMS(this,
                 LocationResultHandler);
@@ -66,7 +63,7 @@ public class LocationIntentService extends IntentService {
         @Override
         public void handleMessage(Message msg) {
 
-            FileLOG.writeLog("LocationIntentService : LocationResultHandler : "+msg.what);
+            FileLOG.writeLog("LocationService : LocationResultHandler : "+msg.what);
 
             switch (msg.what) {
 
@@ -117,7 +114,7 @@ public class LocationIntentService extends IntentService {
     // apiSetUserLoc
     public void apiSetUserLoc(Location location) {
 
-        FileLOG.writeLog("LocationIntentService : apiSetUserLoc");
+        FileLOG.writeLog("LocationService : apiSetUserLoc");
 
         ApiAgent api = new ApiAgent();
 
@@ -135,7 +132,7 @@ public class LocationIntentService extends IntentService {
                 @Override
                 public void onResponse(RetCode retCode) {
 
-                    FileLOG.writeLog("LocationIntentService : apiUserLoc retCode : "+retCode.result);
+                    FileLOG.writeLog("LocationService : apiUserLoc retCode : "+retCode.result);
 
                     LOG.d("r_public.result : " + retCode.result);
                     LOG.d("r_public.errormsg : " + retCode.errormsg);
@@ -160,7 +157,7 @@ public class LocationIntentService extends IntentService {
                 @Override
                 public void onErrorResponse(VolleyError volleyError) {
 
-                    FileLOG.writeLog("LocationIntentService : apiUserLoc volleyError.getMessage()");
+                    FileLOG.writeLog("LocationService : apiUserLoc volleyError.getMessage()");
 
                     wakeupMgr.releaseWifiManager();
 
@@ -174,9 +171,9 @@ public class LocationIntentService extends IntentService {
     @Override
     public void onCreate() {
         super.onCreate();
-        LOG.d("LocationIntentService onCreate ");
+        LOG.d("LocationService onCreate ");
 
-        FileLOG.writeLog("LocationIntentService : onCreate");
+        FileLOG.writeLog("LocationService : onCreate");
 
         wakeupMgr = new WakeupMgr(this);
 
@@ -184,23 +181,10 @@ public class LocationIntentService extends IntentService {
 
     @Override
     public void onDestroy() {
-        LOG.d("LocationIntentService onDestroy ");
+        LOG.d("LocationService onDestroy ");
 
-        FileLOG.writeLog("LocationIntentService : onDestroy");
+        FileLOG.writeLog("LocationService : onDestroy");
 
         super.onDestroy();
-    }
-
-    @Override
-    public int onStartCommand(Intent intent, int flags, int startId) {
-
-       FileLOG.writeLog("LocationIntentService : onStartCommand");
-
-        return super.onStartCommand(intent, flags, startId);
-    }
-
-    @Override
-    public IBinder onBind(Intent intent) {
-        return super.onBind(intent);
     }
 }

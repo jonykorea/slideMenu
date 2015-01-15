@@ -12,15 +12,17 @@ import android.os.PowerManager;
 import android.support.v4.content.WakefulBroadcastReceiver;
 import android.widget.Toast;
 
+import com.tws.common.lib.utils.FileLOG;
 import com.tws.soul.soulbrown.LocationIntentService;
 import com.tws.soul.soulbrown.gcm.GcmIntentService;
 import com.tws.soul.soulbrown.pref.PrefOrderInfo;
+import com.tws.soul.soulbrown.service.LocationService;
 
 import java.text.Format;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-public class AlarmManagerBroadcastReceiver extends WakefulBroadcastReceiver {
+public class AlarmManagerBroadcastReceiver extends BroadcastReceiver {
     public AlarmManagerBroadcastReceiver() {
     }
 
@@ -29,6 +31,8 @@ public class AlarmManagerBroadcastReceiver extends WakefulBroadcastReceiver {
 
     @Override
     public void onReceive(Context context, Intent intent) {
+
+        FileLOG.writeLog("AlarmManagerBroadcastReceiver : onReceive");
 
         //PowerManager pm = (PowerManager) context.getSystemService(Context.POWER_SERVICE);
         //PowerManager.WakeLock wl = pm.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "soulbrown");
@@ -58,13 +62,23 @@ public class AlarmManagerBroadcastReceiver extends WakefulBroadcastReceiver {
             setOnetimeTimer(context, 60);
 
             // test Service
+
+            Intent intentSvc = new Intent(context,LocationService.class);
+
+            context.startService(intentSvc);
+
             //Intent intentSvc = new Intent(context,LocationIntentService.class);
 
-            ComponentName comp = new ComponentName(context.getPackageName(),
-                    LocationIntentService.class.getName());
+            //ComponentName comp = new ComponentName(context.getPackageName(),
+             //       LocationIntentService.class.getName());
             // Start the service, keeping the device awake while it is launching.
-            startWakefulService(context, (intent.setComponent(comp)));
-            setResultCode(Activity.RESULT_OK);
+
+            FileLOG.writeLog("AlarmManagerBroadcastReceiver : startWakefulService");
+
+            //startWakefulService(context, (intent.setComponent(comp)));
+            //setResultCode(Activity.RESULT_OK);
+
+
 
         }
 
