@@ -27,7 +27,7 @@
             android:layout_height="match_parent"
             android:layout_weight="1">
 
-            <TextView
+            <com.tws.widget.CuzTextView
                 android:id="@+id/row_price"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
@@ -38,7 +38,7 @@
                 android:textSize="@dimen/size_16" />
 
 
-            <TextView
+            <com.tws.widget.CuzTextView
                 android:id="@+id/row_time"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
@@ -50,7 +50,7 @@
 
         </RelativeLayout>
 
-        <TextView
+        <com.tws.widget.CuzTextView
 
             android:id="@+id/row_menu"
             android:layout_width="match_parent"
