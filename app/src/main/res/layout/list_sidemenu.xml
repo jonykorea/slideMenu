@@ -13,7 +13,7 @@
         >
     </ImageView>
 
-    <TextView
+    <com.tws.widget.CuzTextView
         android:layout_marginLeft="@dimen/size_10"
         android:duplicateParentState="true"
         android:gravity="center_vertical"
@@ -23,6 +23,6 @@
         android:layout_height="match_parent"
 
         android:textSize="@dimen/size_25" >
-    </TextView>
+    </com.tws.widget.CuzTextView>
 
 </LinearLayout>

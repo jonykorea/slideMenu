@@ -1,21 +1,17 @@
 package com.tws.soul.soulbrown.broadcast;
 
-import android.app.Activity;
 import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
-import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.PowerManager;
-import android.support.v4.content.WakefulBroadcastReceiver;
+import android.text.TextUtils;
 import android.widget.Toast;
 
 import com.tws.common.lib.utils.FileLOG;
-import com.tws.soul.soulbrown.LocationIntentService;
-import com.tws.soul.soulbrown.gcm.GcmIntentService;
 import com.tws.soul.soulbrown.pref.PrefOrderInfo;
+import com.tws.soul.soulbrown.pref.PrefUserInfo;
 import com.tws.soul.soulbrown.service.LocationService;
 
 import java.text.Format;
@@ -58,6 +54,13 @@ public class AlarmManagerBroadcastReceiver extends BroadcastReceiver {
         long arriveUnixTime = prefOrderInfo.getArriveTime();
         long calcUnixTime = arriveUnixTime - System.currentTimeMillis();
         if (calcUnixTime >= 0) {
+
+            // check id
+            PrefUserInfo prefUserInfo = new PrefUserInfo(context);
+            String userID = prefUserInfo.getUserID();
+            if(TextUtils.isEmpty(userID))
+                return;
+
             //repeat 60 sec
             setOnetimeTimer(context, 60);
 

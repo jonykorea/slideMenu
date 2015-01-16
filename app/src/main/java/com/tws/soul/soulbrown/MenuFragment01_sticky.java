@@ -13,6 +13,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -21,6 +22,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.app.define.LOG;
 import com.tws.common.lib.soulbrownlib.OrderDialog;
+import com.tws.common.lib.utils.TimeUtil;
 import com.tws.common.listview.adapter.GenericAdapter;
 import com.tws.common.listview.adapter.StickyListAdapter;
 import com.tws.common.listview.domain.OrderList;
@@ -28,15 +30,16 @@ import com.tws.common.listview.viewmapping.OrderListView;
 import com.tws.network.data.ArrayOrderData;
 import com.tws.network.data.ArrayOrderList;
 import com.tws.network.data.CoreGetPublicKey;
+import com.tws.network.data.ReceiptInfoRow;
 import com.tws.network.data.RetOrderList;
 import com.tws.network.data.RetOrderMenu;
 import com.tws.network.data.ServerDefineCode;
-import com.tws.network.data.StoreCode;
 import com.tws.network.lib.ApiAgent;
 import com.tws.soul.soulbrown.broadcast.AlarmManagerBroadcastReceiver;
 import com.tws.soul.soulbrown.data.Menu;
 import com.tws.soul.soulbrown.lib.ConvertPrice;
 import com.tws.soul.soulbrown.lib.Notice;
+import com.tws.soul.soulbrown.lib.StoreInfo;
 import com.tws.soul.soulbrown.pref.PrefOrderInfo;
 import com.tws.soul.soulbrown.pref.PrefUserInfo;
 
@@ -60,6 +63,14 @@ public class MenuFragment01_sticky extends Fragment implements
     private LayoutInflater inflater;
 
     private RetOrderList mOrderListData;
+
+    private TextView tvHeaderPrice;
+    private TextView tvHeaderTime;
+    private TextView tvHeaderMenu;
+    private TextView tvHeaderStore;
+    private LinearLayout llHeaderStatusReady;
+    private LinearLayout llHeaderStatusIng;
+    private LinearLayout llHeaderStatusFinish;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -116,12 +127,25 @@ public class MenuFragment01_sticky extends Fragment implements
         stickyList.setOnHeaderClickListener(this);
         stickyList.setOnStickyHeaderChangedListener(this);
         stickyList.setOnStickyHeaderOffsetChangedListener(this);
-        stickyList.addHeaderView(inflater.inflate(R.layout.list_header, null));
+
+        // header content S
+        View vHeader = inflater.inflate(R.layout.list_header, null);
+        tvHeaderPrice = (TextView) vHeader.findViewById(R.id.header_recent_row_price);
+        tvHeaderTime = (TextView) vHeader.findViewById(R.id.header_recent_row_time);
+        tvHeaderMenu = (TextView) vHeader.findViewById(R.id.header_recent_row_menu);
+        tvHeaderStore = (TextView) vHeader.findViewById(R.id.header_recent_row_store);
+        llHeaderStatusReady = (LinearLayout) vHeader.findViewById(R.id.header_recent_row_status_ready);
+        llHeaderStatusIng = (LinearLayout) vHeader.findViewById(R.id.header_recent_row_status_ing);
+        llHeaderStatusFinish = (LinearLayout) vHeader.findViewById(R.id.header_recent_row_status_finish);
+        // header content E
+
+        stickyList.addHeaderView(vHeader);
         stickyList.addFooterView(inflater.inflate(R.layout.list_footer, null));
         stickyList.setEmptyView(view.findViewById(R.id.empty));
         stickyList.setDrawingListUnderStickyHeader(true);
         stickyList.setAreHeadersSticky(true);
         stickyList.setAdapter(listAapter);
+
 
         // option
         //stickyList.setStickyHeaderTopOffset(-10);
@@ -136,14 +160,88 @@ public class MenuFragment01_sticky extends Fragment implements
 
                 initData();
 
-
             }
         }, 300);
 
+
     }
 
-    private void initData()
+    private void setHeaderContent(ArrayOrderList recentOrderInfo)
     {
+        if( recentOrderInfo != null )
+        {
+
+            String status = recentOrderInfo.status;
+
+            ReceiptInfoRow info = getSumPrice(recentOrderInfo.orderdata);
+
+            tvHeaderStore.setText(StoreInfo.getStoreName(recentOrderInfo.storeid));
+            tvHeaderMenu.setText(info.sumMenu);
+            tvHeaderPrice.setText(info.sumPrice);
+
+            String date = TimeUtil.getSoulBrownOrderDateInfo(recentOrderInfo.regdate);
+
+            String regTime = TimeUtil.getNewSimpleDateFormat("a hh시 mm분", recentOrderInfo.regdate);
+
+            tvHeaderTime.setText(date + " " +regTime);
+
+            if(status.equals("3"))
+            {
+                llHeaderStatusReady.setBackgroundResource(R.drawable.icon_btn_bg_s);
+                llHeaderStatusIng.setBackgroundResource(R.drawable.icon_btn_bg_p);
+                llHeaderStatusFinish.setBackgroundResource(R.drawable.icon_btn_bg_p);
+
+            }else if(status.equals("2"))
+            {
+                llHeaderStatusReady.setBackgroundResource(R.drawable.icon_btn_bg_p);
+                llHeaderStatusIng.setBackgroundResource(R.drawable.icon_btn_bg_s);
+                llHeaderStatusFinish.setBackgroundResource(R.drawable.icon_btn_bg_p);
+
+            }else if(status.equals("1"))
+            {
+                llHeaderStatusReady.setBackgroundResource(R.drawable.icon_btn_bg_p);
+                llHeaderStatusIng.setBackgroundResource(R.drawable.icon_btn_bg_p);
+                llHeaderStatusFinish.setBackgroundResource(R.drawable.icon_btn_bg_s);
+
+            }
+
+
+        }
+
+    }
+
+    private ReceiptInfoRow getSumPrice(ArrayList<ArrayOrderData> orderData) {
+
+        ReceiptInfoRow receiptInfoRow = new ReceiptInfoRow();
+
+        int sum = 0;
+        String sumMenu = "";
+
+        if( orderData != null)
+        {
+
+
+            for(int i = 0 ; i< orderData.size() ; i++)
+            {
+                int count = orderData.get(i).count;
+                int price = Integer.parseInt(orderData.get(i).menuprice);
+
+                sum += count * price;
+
+                if( i == orderData.size() - 1)
+                    sumMenu += orderData.get(i).menuname +"x"+count;
+                else
+                    sumMenu += orderData.get(i).menuname +"x"+count+", ";
+
+            }
+        }
+
+        receiptInfoRow.sumPrice = ConvertPrice.getPrice(sum);
+        receiptInfoRow.sumMenu = sumMenu;
+
+        return receiptInfoRow;
+    }
+    private void initData() {
         PrefUserInfo prefUserInfo = new PrefUserInfo(getActivity());
 
         String userID = prefUserInfo.getUserID();
@@ -162,6 +260,8 @@ public class MenuFragment01_sticky extends Fragment implements
         listAapter = new StickyListAdapter(getActivity(), orderListData.orderlist);
 
         stickyList.setAdapter(listAapter);
+
+        setHeaderContent(orderListData.orderlist.get(0));
 
     }
 
@@ -182,9 +282,9 @@ public class MenuFragment01_sticky extends Fragment implements
                 @Override
                 public void onResponse(RetOrderList retCode) {
 
-                    if( refreshLayout != null ) {
+                    if (refreshLayout != null) {
 
-                        if( refreshLayout.isRefreshing())
+                        if (refreshLayout.isRefreshing())
                             refreshLayout.setRefreshing(false);
                     }
 
@@ -219,9 +319,9 @@ public class MenuFragment01_sticky extends Fragment implements
                 @Override
                 public void onErrorResponse(VolleyError volleyError) {
 
-                    if( refreshLayout != null ) {
+                    if (refreshLayout != null) {
 
-                        if( refreshLayout.isRefreshing())
+                        if (refreshLayout.isRefreshing())
                             refreshLayout.setRefreshing(false);
                     }
                     LOG.d("apiOrderList VolleyError " + volleyError.getMessage());
@@ -236,10 +336,20 @@ public class MenuFragment01_sticky extends Fragment implements
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
-        if (mOrderListData != null && mOrderListData.orderlist != null) {
+        LOG.d("onItemClick position : " + position);
+        if( position == 0 )
+        {
+            // header content
+        }
+        else {
 
-            setOrderMenu(mOrderListData.orderlist.get(position - 1));
+            if (mOrderListData != null && mOrderListData.orderlist != null) {
+                int select = position - 1;
 
+                if( select < mOrderListData.orderlist.size())
+                    setOrderMenu(mOrderListData.orderlist.get(position - 1));
+
+            }
         }
 
         //Toast.makeText(getActivity(), "Item " + position + " clicked!", Toast.LENGTH_SHORT).show();
@@ -275,8 +385,7 @@ public class MenuFragment01_sticky extends Fragment implements
 
         List<Menu> ListMenu = new ArrayList<Menu>();
 
-        for(int i = 0;i<orderData.size();i++)
-        {
+        for (int i = 0; i < orderData.size(); i++) {
             Menu menu = new Menu();
 
             menu.count = orderData.get(i).count;
@@ -319,8 +428,9 @@ public class MenuFragment01_sticky extends Fragment implements
 
                 orderMenuList += "총 합계 : " + ConvertPrice.getPrice(sumPrice);
 
+                String storeName = getResources().getString(StoreInfo.getStoreName(storeID));
 
-                orderDialog = new OrderDialog(getActivity(), "재주문", orderMenuList);
+                orderDialog = new OrderDialog(getActivity(), "재주문 ( " + storeName + " )", orderMenuList);
 
                 orderDialog.setOnAcceptButtonClickListener(new View.OnClickListener() {
                     @Override
@@ -351,6 +461,7 @@ public class MenuFragment01_sticky extends Fragment implements
                 orderDialog.setTvArriveTime(settingTime);
 
                 // get setting time E
+
 
                 orderDialog.getButtonAccept().setText("재주문");
                 orderDialog.getButtonCancel().setText("취소");

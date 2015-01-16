@@ -9,10 +9,13 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
+import com.tws.network.data.ArrayOrderList;
 import com.tws.soul.soulbrown.R;
 import com.tws.soul.soulbrown.data.Menu;
 import com.tws.soul.soulbrown.lib.ConvertPrice;
 
+import java.util.ArrayList;
 import java.util.List;
 /**
  * Created by Jony on 2015-01-11.
@@ -133,4 +136,5 @@ public class MenuListAdapter extends RecyclerView.Adapter<MenuListAdapter.ViewHo
         }
 
     }
+
 }

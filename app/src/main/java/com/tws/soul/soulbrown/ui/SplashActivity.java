@@ -7,6 +7,11 @@ import android.location.Location;
 import android.os.Bundle;
 import android.os.PersistableBundle;
 import android.text.TextUtils;
+import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.LinearLayout;
+import android.widget.Toast;
 
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
@@ -28,6 +33,11 @@ public class SplashActivity extends Activity {
 
     private static int ACT_RESULT_CODE = 100;
 
+    private LinearLayout llLoginLayout;
+    private EditText etLoginInput;
+    private Button btLoginID;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -36,20 +46,39 @@ public class SplashActivity extends Activity {
 
         context = getApplicationContext();
 
+        llLoginLayout = (LinearLayout) findViewById(R.id.splash_login_layout);
+        etLoginInput = (EditText) findViewById(R.id.splash_login_edit);
+        btLoginID = (Button) findViewById(R.id.splash_login_btn);
+
+        btLoginID.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+
+                if (etLoginInput.getText().toString().length() == 0) {
+                    Toast.makeText(SplashActivity.this, "ID 를 확인해 주세요.", Toast.LENGTH_SHORT).show();
+                } else {
+                    String userID = etLoginInput.getText().toString();
+
+                    apiUserChecker(userID);
+                }
+
+
+            }
+        });
+
         // pref 확인 > 로그인 처리.
 
         PrefUserInfo prefUserInfo = new PrefUserInfo(context);
 
         String userID = prefUserInfo.getUserID();
 
-        userID = "jony@thinkware.co.kr";
-
-        if(TextUtils.isEmpty(userID))
-        {
+        if (TextUtils.isEmpty(userID)) {
             // 없으면 입력창 노출.
-        }
-        else
-        {
+            llLoginLayout.setVisibility(View.VISIBLE);
+        } else {
+            llLoginLayout.setVisibility(View.GONE);
+
             // 있다면 api 호출.
             apiUserChecker(userID);
 
@@ -81,19 +110,26 @@ public class SplashActivity extends Activity {
 
                         // success
 
-                        LOG.d("apiSetUserLoc Succ");
+                        if (retCode.usertype.equals("user") || retCode.usertype.equals("owner")) {
 
-                        PrefUserInfo prefUserInfo = new PrefUserInfo(SplashActivity.this);
-                        prefUserInfo.setUserID(userID);
+                            LOG.d("apiSetUserLoc Succ");
 
-                        Intent intent = new Intent(context, SoulBrownMainActivity.class);
-                        intent.putExtra(ExtraType.USER_TYPE,retCode.usertype);
-                        startActivityForResult(intent,ACT_RESULT_CODE);
+                            PrefUserInfo prefUserInfo = new PrefUserInfo(SplashActivity.this);
+                            prefUserInfo.setUserID(userID);
+
+                            Intent intent = new Intent(context, SoulBrownMainActivity.class);
+                            intent.putExtra(ExtraType.USER_TYPE, retCode.usertype);
+                            startActivityForResult(intent, ACT_RESULT_CODE);
+                        } else {
+                            Toast.makeText(SplashActivity.this, "등록되지 않는 ID 입니다. 확인 부탁드립니다.", Toast.LENGTH_SHORT).show();
+                        }
 
 
                     } else {
                         // fail
                         LOG.d("apiSetUserLoc Fail " + retCode.result);
+
+                        Toast.makeText(SplashActivity.this, retCode.errormsg + "(" + retCode.result + ")", Toast.LENGTH_SHORT).show();
 
                     }
 
@@ -103,6 +139,7 @@ public class SplashActivity extends Activity {
                 public void onErrorResponse(VolleyError volleyError) {
 
                     LOG.d("apiSetUserLoc VolleyError " + volleyError.getMessage());
+                    Toast.makeText(SplashActivity.this, "네트워크 오류", Toast.LENGTH_SHORT).show();
 
                 }
             });
@@ -113,8 +150,7 @@ public class SplashActivity extends Activity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if( requestCode == ACT_RESULT_CODE )
-        {
+        if (requestCode == ACT_RESULT_CODE) {
             finish();
         }
     }

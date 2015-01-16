@@ -29,13 +29,13 @@ import com.tws.common.listview.adapter.MenuListAdapter;
 import com.tws.network.data.RetCode;
 import com.tws.network.data.RetOrderMenu;
 import com.tws.network.data.ServerDefineCode;
-import com.tws.network.data.StoreCode;
 import com.tws.network.lib.ApiAgent;
 import com.tws.soul.soulbrown.broadcast.AlarmManagerBroadcastReceiver;
 import com.tws.soul.soulbrown.data.Menu;
 import com.tws.soul.soulbrown.data.MenuDataManager;
 import com.tws.soul.soulbrown.lib.ConvertPrice;
 import com.tws.soul.soulbrown.lib.Notice;
+import com.tws.soul.soulbrown.lib.StoreInfo;
 import com.tws.soul.soulbrown.pref.PrefOrderInfo;
 import com.tws.soul.soulbrown.pref.PrefUserInfo;
 
@@ -44,6 +44,8 @@ import java.util.HashMap;
 import java.util.List;
 
 public class ViewPagerFragment01 extends Fragment {
+
+    final String storeID = StoreInfo.CODE_HARU;
 
     List<Menu> orderMenu;
     AnimatorSet animatorSet;
@@ -88,16 +90,9 @@ public class ViewPagerFragment01 extends Fragment {
 
         orderMenu = new ArrayList<Menu>();
 
-        mAdapter = new MenuListAdapter(MenuDataManager.getInstance().getMenuHARU(), R.layout.list_item_menu, getActivity(), new MenuListAdapter.CuzOnClickListener() {
-            @Override
-            public void onChangeItem(List<Menu> menu) {
+        List<Menu> resetMenu = MenuDataManager.getInstance().getMenuHARU();
 
-                getMenuItem(menu);
-
-            }
-        });
-
-        mRecyclerView.setAdapter(mAdapter);
+        initAdapter(resetMenu);
 
         return view;
     }
@@ -128,43 +123,51 @@ public class ViewPagerFragment01 extends Fragment {
 
                 }
 
-                orderMenuList += "총 합계 : " + ConvertPrice.getPrice(sumPrice);
+                if( sumPrice == 0 )
+                {
+                    showToast("주문 선택을 해주세요.");
+                }
+                else {
+
+                    orderMenuList += "총 합계 : " + ConvertPrice.getPrice(sumPrice);
+
+                    String storeName = getResources().getString(StoreInfo.getStoreName(storeID));
+
+                    orderDialog = new OrderDialog(getActivity(), "주문 ( " + storeName + " )", orderMenuList);
+
+                    orderDialog.setOnAcceptButtonClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+
+                            String arriveTime = (String) ((TextView) orderDialog.getArriveTime()).getText();
+
+                            apiOrderMenu(storeID, ListMenu, arriveTime);
+
+                        }
+                    });
+
+                    orderDialog.setOnCancelButtonClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+
+                        }
+                    });
 
 
-                orderDialog = new OrderDialog(getActivity(), "주문", orderMenuList);
+                    orderDialog.show();
 
-                orderDialog.setOnAcceptButtonClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
+                    // get setting time S
+                    PrefOrderInfo prefOrderInfo = new PrefOrderInfo(getActivity());
 
-                        String arriveTime = (String) ((TextView) orderDialog.getArriveTime()).getText();
+                    String settingTime = prefOrderInfo.getSettingTime();
 
-                        apiOrderMenu(StoreCode.CODE_HARU, ListMenu, arriveTime);
+                    orderDialog.setTvArriveTime(settingTime);
 
-                    }
-                });
+                    // get setting time E
 
-                orderDialog.setOnCancelButtonClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-
-                    }
-                });
-
-
-                orderDialog.show();
-
-                // get setting time S
-                PrefOrderInfo prefOrderInfo = new PrefOrderInfo(getActivity());
-
-                String settingTime = prefOrderInfo.getSettingTime();
-
-                orderDialog.setTvArriveTime(settingTime);
-
-                // get setting time E
-
-                orderDialog.getButtonAccept().setText("주문");
-                orderDialog.getButtonCancel().setText("취소");
+                    orderDialog.getButtonAccept().setText("주문");
+                    orderDialog.getButtonCancel().setText("취소");
+                }
 
             } else {
                 showToast("주문 선택을 해주세요.");
@@ -264,6 +267,11 @@ public class ViewPagerFragment01 extends Fragment {
 
     private void setSchLocation(RetOrderMenu orderMenuInfo)
     {
+        List<Menu> resetMenu = MenuDataManager.getInstance().getMenuHARU();
+
+        getMenuItem(resetMenu);
+
+        initAdapter(resetMenu);
 
         showToast("정상적으로 주문되었습니다.");
 
@@ -291,6 +299,21 @@ public class ViewPagerFragment01 extends Fragment {
         AlarmManagerBroadcastReceiver alarmManagerBroadcastReceiver = new AlarmManagerBroadcastReceiver();
         alarmManagerBroadcastReceiver.setOnetimeTimer(getActivity(),calcUnixTime);
 
+    }
+
+    private void initAdapter(List<Menu> resetMenu)
+    {
+
+        mAdapter = new MenuListAdapter(resetMenu, R.layout.list_item_menu, getActivity(), new MenuListAdapter.CuzOnClickListener() {
+            @Override
+            public void onChangeItem(List<Menu> menu) {
+
+                getMenuItem(menu);
+
+            }
+        });
+
+        mRecyclerView.setAdapter(mAdapter);
     }
 
     private void showToast(int resID) {

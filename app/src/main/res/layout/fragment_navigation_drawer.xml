@@ -23,12 +23,12 @@
 
         <ImageView
             android:layout_marginLeft="@dimen/size_10"
-            android:background="@drawable/icon_coffecup_white"
+            android:background="@drawable/icon_setting_gray"
             android:layout_gravity="center_vertical"
             android:layout_width="@dimen/size_29.5"
             android:layout_height="@dimen/size_29.5"/>
 
-        <Button
+        <com.tws.widget.CuzButton
             android:layout_marginLeft="@dimen/size_10"
             android:id="@+id/menu_btn_setting"
             android:layout_width="match_parent"

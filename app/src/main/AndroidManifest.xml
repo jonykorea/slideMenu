@@ -88,10 +88,6 @@
         </receiver>
 
         <service android:name=".gcm.GcmIntentService" />
-        <service
-            android:name=".LocationIntentService"
-            android:exported="false" >
-        </service>
 
         <receiver
             android:name=".broadcast.AlarmManagerBroadcastReceiver"
@@ -100,15 +96,16 @@
         </receiver>
 
         <service
-            android:name="com.tws.LocationService"
-            android:enabled="true"
-            android:exported="true" >
-        </service>
-        <service
             android:name=".service.LocationService"
             android:enabled="true"
             android:exported="true" >
         </service>
+
+        <activity
+            android:theme="@android:style/Theme.NoTitleBar.Fullscreen"
+            android:name=".ui.SettingActivity"
+            android:label="@string/title_activity_setting" >
+        </activity>
     </application>
 
 </manifest>

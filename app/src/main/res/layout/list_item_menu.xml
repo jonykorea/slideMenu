@@ -51,7 +51,7 @@
                 android:layout_alignParentBottom="true"
                 android:orientation="vertical">
 
-                <TextView
+                <com.tws.widget.CuzTextView
                     android:layout_weight="1"
                     android:id="@+id/item_menu_info_name"
                     android:layout_width="match_parent"
@@ -62,7 +62,7 @@
                     android:textSize="@dimen/size_14" />
 
 
-                <TextView
+                <com.tws.widget.CuzTextView
                     android:layout_weight="1"
                     android:textStyle="bold"
                     android:id="@+id/item_menu_info_price"
@@ -118,7 +118,7 @@
                     android:background="#C3C8CD"
                     android:orientation="horizontal"></LinearLayout>
 
-                <TextView
+                <com.tws.widget.CuzTextView
                     android:id="@+id/item_menu_control_count"
                     android:layout_width="@dimen/size_49"
                     android:layout_height="match_parent"

@@ -13,6 +13,7 @@ import android.widget.TextView;
 
 import com.tws.common.lib.utils.Utils;
 import com.tws.soul.twscommonlib.R;
+import com.tws.widget.InaviFont_Rixgo_B;
 
 /**
  * Created by jonychoi on 15. 1. 13..
@@ -51,7 +52,7 @@ public class ButtonFlat extends Button {
             textButton = new TextView(getContext());
             textButton.setText(text.toUpperCase());
             textButton.setTextColor(backgroundColor);
-            textButton.setTypeface(null, Typeface.BOLD);
+            textButton.setTypeface(InaviFont_Rixgo_B.getInstance(getContext()).getInaviFont(), Typeface.BOLD);
             RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT,RelativeLayout.LayoutParams.WRAP_CONTENT);
             params.addRule(RelativeLayout.CENTER_IN_PARENT, RelativeLayout.TRUE);
             textButton.setLayoutParams(params);

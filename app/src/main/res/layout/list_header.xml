@@ -1,13 +1,155 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent" >
-    
-    <com.tws.widget.CuzTextView android:text="최근 주문 내역"
-    android:layout_width="match_parent"
-    android:layout_height="100dp"
-    android:gravity="center"
-    android:layout_gravity="center"/>
-    
 
+    android:layout_height="wrap_content">
+
+    <LinearLayout
+        android:background="#F2F2F4"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:background="#ffffff"
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/size_8"></LinearLayout>
+
+        <TextView
+            android:id="@+id/header_recent_top"
+
+            android:text="최근 주문 내역"
+            android:layout_marginLeft="@dimen/size_15"
+
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/size_30"
+            android:gravity="center_vertical|left"
+            android:textColor="#F9872B"
+            android:textSize="@dimen/size_16"
+            android:textStyle="bold" />
+
+        <LinearLayout
+
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/size_130"
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="15dp"
+            android:orientation="vertical">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/size_30">
+
+                <TextView
+                    android:id="@+id/header_recent_row_store"
+                    android:layout_width="wrap_content"
+                    android:layout_height="@dimen/size_30"
+                    android:layout_alignParentLeft="true"
+                    android:gravity="center"
+                    android:text=""
+                    android:textColor="#3D454C"
+                    android:textSize="@dimen/size_16" />
+
+
+                <TextView
+                    android:id="@+id/header_recent_row_time"
+                    android:layout_width="wrap_content"
+                    android:layout_height="@dimen/size_30"
+                    android:layout_alignParentRight="true"
+                    android:gravity="center"
+                    android:text=""
+                    android:textColor="#3D454C"
+                    android:textSize="@dimen/size_16" />
+
+            </RelativeLayout>
+            <TextView
+
+                android:id="@+id/header_recent_row_price"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/size_25"
+                android:gravity="left|center_vertical"
+                android:text=""
+                android:textColor="#3D454C"
+                android:textSize="@dimen/size_16" />
+
+
+
+            <TextView
+
+                android:id="@+id/header_recent_row_menu"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/size_65"
+
+                android:gravity="left|center_vertical"
+                android:maxLines="3"
+                android:text=""
+                android:textColor="#3D454C"
+                android:textSize="@dimen/size_14" />
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:id="@+id/header_recent_bottom"
+
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <LinearLayout
+                android:id="@+id/header_recent_row_status_ready"
+                android:background="@drawable/icon_btn_bg_n"
+                android:layout_weight="1"
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="40dp">
+
+                <TextView
+                    android:text="주문 완료"
+                    android:textStyle="bold"
+                    android:layout_width="match_parent"
+                    android:layout_height="30dp"
+                    android:gravity="center"
+                    android:textColor="#ffffff"
+                    android:layout_gravity="center" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/header_recent_row_status_ing"
+                android:background="@drawable/icon_btn_bg_n"
+                android:layout_weight="1"
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="40dp">
+
+                <TextView
+                    android:text="만드는 중"
+                    android:textStyle="bold"
+                    android:layout_width="match_parent"
+                    android:layout_height="30dp"
+                    android:gravity="center"
+                    android:textColor="#ffffff"
+                    android:layout_gravity="center" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/header_recent_row_status_finish"
+                android:background="@drawable/icon_btn_bg_n"
+                android:layout_weight="1"
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="40dp">
+
+                <TextView
+                    android:text="완료"
+                    android:textStyle="bold"
+                    android:layout_width="match_parent"
+                    android:layout_height="30dp"
+                    android:gravity="center"
+                    android:textColor="#ffffff"
+                    android:layout_gravity="center" />
+            </LinearLayout>
+        </LinearLayout>
+
+    </LinearLayout>
 </FrameLayout>

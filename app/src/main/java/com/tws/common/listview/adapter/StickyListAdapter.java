@@ -2,6 +2,7 @@ package com.tws.common.listview.adapter;
 
 import android.content.Context;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -86,6 +87,7 @@ public class StickyListAdapter extends BaseAdapter implements
             else
             {
                 mData.get(i).index = Integer.toString(index);
+                mOrderDate.put(Integer.toString(i),mData.get(i).regdate);
             }
         }
         int[] sections = new int[sectionIndices.size()];
@@ -122,6 +124,8 @@ public class StickyListAdapter extends BaseAdapter implements
     public View getView(int position, View convertView, ViewGroup parent) {
         ViewHolder holder;
 
+        Log.i("jony", "getView position" + position);
+
         if (convertView == null) {
             holder = new ViewHolder();
             convertView = mInflater.inflate(R.layout.list_order_info, parent, false);
@@ -148,8 +152,6 @@ public class StickyListAdapter extends BaseAdapter implements
         holder.tvPrice.setText(receiptInfoRow.sumPrice);
 
         holder.tvMenu.setText(receiptInfoRow.sumMenu);
-
-
 
 
         return convertView;
@@ -187,6 +189,7 @@ public class StickyListAdapter extends BaseAdapter implements
         return receiptInfoRow;
     }
 
+
     @Override
     public View getHeaderView(int position, View convertView, ViewGroup parent) {
         HeaderViewHolder holder;
@@ -203,13 +206,13 @@ public class StickyListAdapter extends BaseAdapter implements
         // set header text as first char in name
         String header = mOrderDate.get(Integer.toString(position));
 
-        header = TimeUtil.getSoulBrownOrderDateInfo(header);
 
         LOG.d("header "+ header);
 
-        if(!TextUtils.isEmpty(header))
+        if(!TextUtils.isEmpty(header)) {
+            header = TimeUtil.getSoulBrownOrderDateInfo(header);
             holder.text.setText(header);
-
+        }
         return convertView;
     }
 

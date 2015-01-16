@@ -4,13 +4,13 @@
     android:layout_height="@dimen/size_49"
     android:background="#FFFFFF">
 
-    <TextView
+    <com.tws.widget.CuzTextView
         android:layout_marginLeft="@dimen/size_15"
         android:id="@+id/header_date"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:gravity="center_vertical|left"
-        android:textColor="#3D454C"
+        android:textColor="#349BCD"
         android:textSize="@dimen/size_16"
         android:textStyle="bold" />
 

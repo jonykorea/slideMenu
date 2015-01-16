@@ -9,5 +9,26 @@ import com.tws.soul.soulbrown.R;
  */
 public class StoreInfo {
 
+    public static String CODE_HARU = "PGA000001";
+    public static String CODE_1022 = "PGA000002";
+    public static String CODE_2FLAT = "PGA000003";
+
+    public static int getStoreName(String code)
+    {
+        if( code.equals(CODE_HARU))
+        {
+            return R.string.store_haru;
+        }
+        else if( code.equals(CODE_1022))
+        {
+            return R.string.store_1022;
+        }
+        else if( code.equals(CODE_2FLAT))
+        {
+            return R.string.store_2flat;
+        }
+
+        return -1;
+    }
 
 }

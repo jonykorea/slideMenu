@@ -205,7 +205,7 @@ public class SoulBrownMainActivity extends FragmentActivity
      * Substitute you own sender ID here. This is the project number you got
      * from the API Console, as described in "Getting Started."
      */
-    String SENDER_ID = "Your-Sender-ID";
+    String SENDER_ID = "137338214881";
 
     /**
      * Tag used on log messages.
@@ -221,6 +221,8 @@ public class SoulBrownMainActivity extends FragmentActivity
         if (checkPlayServices()) {
             gcm = GoogleCloudMessaging.getInstance(this);
             regid = getRegistrationId(context);
+
+            LOG.d("regid : "+ regid);
 
             if (regid.isEmpty()) {
                 registerInBackground();
