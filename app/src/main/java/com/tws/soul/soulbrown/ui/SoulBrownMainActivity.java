@@ -31,8 +31,8 @@ import com.tws.network.data.RetCode;
 import com.tws.network.lib.ApiAgent;
 import com.tws.soul.soulbrown.R;
 import com.tws.soul.soulbrown.pref.PrefUserInfo;
-import com.tws.soul.soulbrown.ui.owner.OwnerAllOrderListFragment;
-import com.tws.soul.soulbrown.ui.owner.OwnerOrderListFragment;
+import com.tws.soul.soulbrown.ui.own.OwnerAllOrderListFragment;
+import com.tws.soul.soulbrown.ui.own.OwnerOrderListFragment;
 import com.tws.soul.soulbrown.ui.user.UserOrderListFragment;
 import com.tws.soul.soulbrown.ui.user.UserStoreMenuFragment;
 
