@@ -5,27 +5,27 @@
     android:paddingTop="@dimen/size_5">
 
     <ImageView
-        android:layout_marginLeft="@dimen/size_15"
         android:id="@+id/row_store"
         android:layout_width="@dimen/size_35"
         android:layout_height="@dimen/size_35"
-        android:layout_centerVertical="true"
         android:layout_alignParentLeft="true"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="@dimen/size_15"
         android:background="@drawable/icon_owner_receipt" />
 
     <LinearLayout
-        android:layout_above="@+id/row_bottom_layout"
-        android:layout_marginBottom="@dimen/size_10"
-        android:layout_toRightOf="@id/row_store"
+        android:id="@+id/row_receipt"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/size_10"
         android:layout_marginLeft="10dp"
+        android:layout_toRightOf="@id/row_store"
         android:orientation="vertical">
 
-        <RelativeLayout
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="1">
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
 
             <TextView
                 android:id="@+id/row_name_layout"
@@ -40,20 +40,20 @@
 
             <TextView
                 android:id="@+id/row_name"
-                android:layout_toRightOf="@id/row_name_layout"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
+                android:layout_toRightOf="@id/row_name_layout"
                 android:gravity="center"
                 android:text=""
                 android:textColor="#3D454C"
                 android:textSize="@dimen/size_16" />
 
-        </RelativeLayout>
+        </LinearLayout>
 
-        <RelativeLayout
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="1">
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
 
             <TextView
                 android:id="@+id/row_time_layout"
@@ -68,20 +68,20 @@
 
             <TextView
                 android:id="@+id/row_time"
-                android:layout_toRightOf="@id/row_time_layout"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
+                android:layout_toRightOf="@id/row_time_layout"
                 android:gravity="center"
                 android:text=""
                 android:textColor="#3D454C"
                 android:textSize="@dimen/size_16" />
 
-        </RelativeLayout>
+        </LinearLayout>
 
-        <RelativeLayout
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="1">
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
 
             <TextView
                 android:id="@+id/row_arrive_time_layout"
@@ -96,20 +96,20 @@
 
             <TextView
                 android:id="@+id/row_arrive_time"
-                android:layout_toRightOf="@id/row_arrive_time_layout"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
+                android:layout_toRightOf="@id/row_arrive_time_layout"
                 android:gravity="center"
                 android:text=""
                 android:textColor="#3D454C"
                 android:textSize="@dimen/size_16" />
 
-        </RelativeLayout>
+        </LinearLayout>
 
-        <RelativeLayout
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="1">
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
 
             <TextView
                 android:id="@+id/row_distance_layout"
@@ -124,20 +124,20 @@
 
             <TextView
                 android:id="@+id/row_distance"
-                android:layout_toRightOf="@id/row_distance_layout"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
+                android:layout_toRightOf="@id/row_distance_layout"
                 android:gravity="center"
                 android:text=""
                 android:textColor="#3D454C"
                 android:textSize="@dimen/size_16" />
 
-        </RelativeLayout>
+        </LinearLayout>
 
-        <RelativeLayout
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="1">
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
 
             <TextView
                 android:id="@+id/row_price"
@@ -145,93 +145,78 @@
                 android:layout_height="match_parent"
                 android:layout_alignParentLeft="true"
                 android:gravity="center"
-                android:text=""
+                android:text="가격"
                 android:textColor="#3D454C"
                 android:textSize="@dimen/size_16" />
-
-
-            <TextView
-
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_alignParentRight="true"
-                android:gravity="center"
-                android:text=""
-                android:textColor="#3D454C"
-                android:textSize="@dimen/size_16" />
-
-        </RelativeLayout>
+        </LinearLayout>
 
         <TextView
-            android:layout_marginTop="@dimen/size_10"
-            android:layout_marginBottom="@dimen/size_10"
             android:id="@+id/row_menu"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/size_10"
+            android:layout_marginTop="@dimen/size_10"
             android:gravity="left|center_vertical"
             android:text="아메리카노, 까페라떼, 빙수"
             android:textColor="#3D454C"
             android:textSize="@dimen/size_16" />
 
-        <RelativeLayout
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="1">
+            android:layout_height="wrap_content">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal">
+
                 <LinearLayout
                     android:id="@+id/row_status_ing"
-                    android:background="@drawable/icon_btn_bg_n"
-                    android:layout_weight="1"
-                    android:orientation="horizontal"
                     android:layout_width="match_parent"
-                    android:layout_height="40dp">
+                    android:layout_height="40dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/icon_btn_bg_n"
+                    android:orientation="horizontal">
 
                     <TextView
-                        android:text="만들기"
-                        android:textStyle="bold"
                         android:layout_width="match_parent"
                         android:layout_height="30dp"
+                        android:layout_gravity="center"
                         android:gravity="center"
+                        android:text="만들기"
                         android:textColor="#349BCD"
-                        android:layout_gravity="center" />
+                        android:textStyle="bold" />
                 </LinearLayout>
 
                 <LinearLayout
                     android:id="@+id/row_status_finish"
-                    android:background="@drawable/icon_btn_bg_n"
-                    android:layout_weight="1"
-                    android:orientation="horizontal"
                     android:layout_width="match_parent"
-                    android:layout_height="40dp">
+                    android:layout_height="40dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/icon_btn_bg_n"
+                    android:orientation="horizontal">
 
                     <TextView
-                        android:text="준비완료"
-                        android:textStyle="bold"
                         android:layout_width="match_parent"
                         android:layout_height="30dp"
+                        android:layout_gravity="center"
                         android:gravity="center"
+                        android:text="준비완료"
                         android:textColor="#349BCD"
-                        android:layout_gravity="center" />
+                        android:textStyle="bold" />
                 </LinearLayout>
             </LinearLayout>
 
-        </RelativeLayout>
-
-
+        </LinearLayout>
     </LinearLayout>
 
     <LinearLayout
-        android:id="@+id/row_bottom_layout"
-        android:layout_marginLeft="@dimen/size_30"
-        android:layout_marginRight="@dimen/size_30"
         android:layout_width="match_parent"
         android:layout_height="@dimen/size_1"
-        android:layout_alignParentBottom="true"
+        android:layout_below="@id/row_receipt"
+        android:layout_marginLeft="@dimen/size_30"
+        android:layout_marginRight="@dimen/size_30"
         android:background="#C3C8CD"
         android:orientation="horizontal"></LinearLayout>
+
 </RelativeLayout>
