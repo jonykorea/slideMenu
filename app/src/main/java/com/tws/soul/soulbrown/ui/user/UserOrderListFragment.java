@@ -1,20 +1,17 @@
-package com.tws.soul.soulbrown;
+package com.tws.soul.soulbrown.ui.user;
 
 import android.annotation.TargetApi;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.LinearLayout;
-import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -23,21 +20,19 @@ import com.android.volley.VolleyError;
 import com.app.define.LOG;
 import com.tws.common.lib.soulbrownlib.OrderDialog;
 import com.tws.common.lib.utils.TimeUtil;
-import com.tws.common.listview.adapter.GenericAdapter;
 import com.tws.common.listview.adapter.StickyListAdapter;
-import com.tws.common.listview.domain.OrderList;
-import com.tws.common.listview.viewmapping.OrderListView;
 import com.tws.network.data.ArrayOrderData;
 import com.tws.network.data.ArrayOrderList;
-import com.tws.network.data.CoreGetPublicKey;
 import com.tws.network.data.ReceiptInfoRow;
 import com.tws.network.data.RetOrderList;
 import com.tws.network.data.RetOrderMenu;
 import com.tws.network.data.ServerDefineCode;
 import com.tws.network.lib.ApiAgent;
+import com.tws.soul.soulbrown.R;
+import com.tws.soul.soulbrown.base.BaseFragment;
 import com.tws.soul.soulbrown.broadcast.AlarmManagerBroadcastReceiver;
 import com.tws.soul.soulbrown.data.Menu;
-import com.tws.soul.soulbrown.lib.ConvertPrice;
+import com.tws.soul.soulbrown.lib.ConvertData;
 import com.tws.soul.soulbrown.lib.Notice;
 import com.tws.soul.soulbrown.lib.StoreInfo;
 import com.tws.soul.soulbrown.pref.PrefOrderInfo;
@@ -48,7 +43,7 @@ import java.util.List;
 
 import se.emilsjolander.stickylistheaders.StickyListHeadersListView;
 
-public class MenuFragment01_sticky extends Fragment implements
+public class UserOrderListFragment extends BaseFragment implements
         AdapterView.OnItemClickListener, StickyListHeadersListView.OnHeaderClickListener,
         StickyListHeadersListView.OnStickyHeaderOffsetChangedListener,
         StickyListHeadersListView.OnStickyHeaderChangedListener {
@@ -104,21 +99,12 @@ public class MenuFragment01_sticky extends Fragment implements
             public void onRefresh() {
 
                 //refresh
-                initData();
+                PrefUserInfo prefUserInfo = new PrefUserInfo(getActivity());
 
-                // refresh
-                //data.add("ATT");
+                String userID = prefUserInfo.getUserID();
 
-                //listAapter.restore(data);
+                apiOrderList("USERUI", userID, SELECT_FLAG_USER);
 
-                /*
-                new Handler().postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        refreshLayout.setRefreshing(false);
-                    }
-                }, 2000);
-                */
             }
         });
 
@@ -236,7 +222,7 @@ public class MenuFragment01_sticky extends Fragment implements
             }
         }
 
-        receiptInfoRow.sumPrice = ConvertPrice.getPrice(sum);
+        receiptInfoRow.sumPrice = ConvertData.getPrice(sum);
         receiptInfoRow.sumMenu = sumMenu;
 
         return receiptInfoRow;
@@ -246,8 +232,14 @@ public class MenuFragment01_sticky extends Fragment implements
 
         String userID = prefUserInfo.getUserID();
 
-        if (!TextUtils.isEmpty(userID))
+        if (!TextUtils.isEmpty(userID)) {
+
+            if( !mBaseProgressDialog.isShowing() )
+                mBaseProgressDialog.show();
+
             apiOrderList("USERUI", userID, SELECT_FLAG_USER);
+
+        }
         else {
 
         }
@@ -271,16 +263,14 @@ public class MenuFragment01_sticky extends Fragment implements
 
         ApiAgent api = new ApiAgent();
 
-        PrefUserInfo prefUserInfo = new PrefUserInfo(getActivity());
+        if (api != null && !TextUtils.isEmpty(userCode)) {
 
-        String userID = prefUserInfo.getUserID();
-
-        LOG.d("apiOrderList userID " + userID);
-
-        if (api != null && !TextUtils.isEmpty(userID)) {
             api.apiGetOrderList(getActivity(), source, userCode, null, selectFlag, new Response.Listener<RetOrderList>() {
                 @Override
                 public void onResponse(RetOrderList retCode) {
+
+                    if( mBaseProgressDialog.isShowing() )
+                        mBaseProgressDialog.dismiss();
 
                     if (refreshLayout != null) {
 
@@ -318,6 +308,9 @@ public class MenuFragment01_sticky extends Fragment implements
 
                 @Override
                 public void onErrorResponse(VolleyError volleyError) {
+
+                    if( mBaseProgressDialog.isShowing() )
+                        mBaseProgressDialog.dismiss();
 
                     if (refreshLayout != null) {
 
@@ -426,7 +419,7 @@ public class MenuFragment01_sticky extends Fragment implements
 
                 }
 
-                orderMenuList += "총 합계 : " + ConvertPrice.getPrice(sumPrice);
+                orderMenuList += "총 합계 : " + ConvertData.getPrice(sumPrice);
 
                 String storeName = getResources().getString(StoreInfo.getStoreName(storeID));
 

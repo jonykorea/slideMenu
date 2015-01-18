@@ -1,15 +1,10 @@
-package com.tws.soul.soulbrown;
+package com.tws.soul.soulbrown.ui;
 
-import android.app.Activity;
-
-import android.app.ActionBar;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
-import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
 import android.location.Location;
 import android.os.AsyncTask;
 import android.os.Handler;
@@ -19,14 +14,12 @@ import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentTransaction;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuItem;
-import android.view.View;
 import android.support.v4.widget.DrawerLayout;
-import android.widget.LinearLayout;
-import android.widget.TextView;
+import android.widget.Toast;
 
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.app.AppController;
 import com.app.define.LOG;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
@@ -34,17 +27,32 @@ import com.google.android.gms.gcm.GoogleCloudMessaging;
 import com.tws.common.lib.gms.LocationDefines;
 import com.tws.common.lib.gms.LocationGMS;
 import com.tws.network.data.ExtraType;
+import com.tws.network.data.RetCode;
+import com.tws.network.data.RetUserChecker;
+import com.tws.network.lib.ApiAgent;
+import com.tws.soul.soulbrown.R;
+import com.tws.soul.soulbrown.pref.PrefUserInfo;
+import com.tws.soul.soulbrown.ui.owner.OwnerAllOrderListFragment;
+import com.tws.soul.soulbrown.ui.owner.OwnerOrderListFragment;
+import com.tws.soul.soulbrown.ui.user.UserOrderListFragment;
+import com.tws.soul.soulbrown.ui.user.UserStoreMenuFragment;
 
 import java.io.IOException;
 import java.util.concurrent.atomic.AtomicInteger;
 
 
 public class SoulBrownMainActivity extends FragmentActivity
-        implements NavigationDrawerFragment.NavigationDrawerCallbacks , MenuFragment02.CustomOnClickListener{
+        implements NavigationDrawerFragment.NavigationDrawerCallbacks , UserStoreMenuFragment.CustomOnClickListener{
 
     // init fragment
-    Fragment orderListFragment = new MenuFragment01_sticky();
-    Fragment storeMenuFragment = new MenuFragment02();
+
+    // user
+    Fragment userOrderListFragment;
+    Fragment userStoreMenuFragment;
+
+    // owner
+    Fragment ownerOrderListFragment;
+    Fragment ownerAllOrderListFragment;
 
     Context context;
 
@@ -58,6 +66,23 @@ public class SoulBrownMainActivity extends FragmentActivity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        if(AppController.getInstance().getIsUser())
+        {
+            // user
+            userOrderListFragment = new UserOrderListFragment();
+            userStoreMenuFragment = new UserStoreMenuFragment();
+
+            initGCM();
+
+        }
+        else
+        {
+            // owner
+            ownerOrderListFragment = new OwnerOrderListFragment();
+            ownerAllOrderListFragment = new OwnerAllOrderListFragment();
+        }
+
         setContentView(R.layout.activity_soul_brown_main);
 
         context = getApplicationContext();
@@ -67,9 +92,6 @@ public class SoulBrownMainActivity extends FragmentActivity
         String userType = intent.getStringExtra(ExtraType.USER_TYPE);
 
         LOG.d("SoulBrownMainActivity : userType : " +userType);
-
-
-        initGCM();
 
         mNavigationDrawerFragment = (NavigationDrawerFragment)
                 getSupportFragmentManager().findFragmentById(R.id.navigation_drawer);
@@ -100,32 +122,53 @@ public class SoulBrownMainActivity extends FragmentActivity
 
     private void selectItem(int position) {
 
-
-
         FragmentTransaction ft;
 
         ft = getSupportFragmentManager().beginTransaction();
         // Locate Position
         switch (position) {
             case 0:
-                ft.replace(R.id.container, orderListFragment);
+
+                if(AppController.getInstance().getIsUser())
+                {
+                    ft.replace(R.id.container,  userOrderListFragment);
+                }
+                else
+                {
+                    ft.replace(R.id.container, ownerOrderListFragment);
+
+                }
+
                 break;
             case 1:
             case 2:
             case 3:
-                ft.replace(R.id.container, storeMenuFragment);
+
+                if(AppController.getInstance().getIsUser())
+                {
+
+                    ft.replace(R.id.container,  userStoreMenuFragment);
+                }
+                else
+                {
+                    ft.replace(R.id.container, ownerAllOrderListFragment);
+
+                }
+
                 break;
 
         }
 
         ft.commit();
 
-        if (position != 0 && storeMenuFragment != null) {
-            int movePos = position - 1;
+        if(AppController.getInstance().getIsUser())
+        {
+            if (position != 0 && userStoreMenuFragment != null) {
+                int movePos = position - 1;
 
-            ((MenuFragment02) storeMenuFragment).setPosition(movePos);
+                ((UserStoreMenuFragment) userStoreMenuFragment).setPosition(movePos);
+            }
         }
-
     }
 
     @Override
@@ -205,7 +248,7 @@ public class SoulBrownMainActivity extends FragmentActivity
      * Substitute you own sender ID here. This is the project number you got
      * from the API Console, as described in "Getting Started."
      */
-    String SENDER_ID = "137338214881";
+    public static final String SENDER_ID = "137338214881";
 
     /**
      * Tag used on log messages.
@@ -316,14 +359,13 @@ public class SoulBrownMainActivity extends FragmentActivity
 
                     // You should send the registration ID to your server over HTTP, so it
                     // can use GCM/HTTP or CCS to send messages to your app.
-                    sendRegistrationIdToBackend();
+                    sendRegistrationIdToBackend(regid);
 
                     // For this demo: we don't need to send it because the device will send
                     // upstream messages to a server that echo back the message using the
                     // 'from' address in the message.
 
-                    // Persist the regID - no need to register again.
-                    storeRegistrationId(context, regid);
+
                 } catch (IOException ex) {
                     msg = "Error :" + ex.getMessage();
                     // If there is an error, don't just keep trying to register.
@@ -401,11 +443,74 @@ public class SoulBrownMainActivity extends FragmentActivity
      * messages to your app. Not needed for this demo since the device sends upstream messages
      * to a server that echoes back the message using the 'from' address in the message.
      */
-    private void sendRegistrationIdToBackend() {
+    private void sendRegistrationIdToBackend(String regID) {
         // Your implementation here.
+
+        if(AppController.getInstance().getIsUser())
+        {
+            PrefUserInfo prefUserInfo = new PrefUserInfo(this);
+            String userID = prefUserInfo.getUserID();
+
+            // 사용자
+            apiSetPushKey("USERUI", userID, regID);
+
+        }
+        else
+        {
+            // 점주
+
+        }
+
+
+
+
+
     }
 
     // gcm E
+
+    // apiUserChecker
+    public void apiSetPushKey(String source, String userID, final String regID) {
+
+        ApiAgent api = new ApiAgent();
+
+        LOG.d("apiSetPushKey");
+
+        if (api != null) {
+            api.apiSetPushKey(this, source, userID, null, regID, null ,new Response.Listener<RetCode>() {
+
+                @Override
+                public void onResponse(RetCode retCode) {
+
+                    LOG.d("retCode.result : " + retCode.result);
+                    LOG.d("retCode.errormsg : " + retCode.errormsg);
+
+                    if (retCode.result == 1) {
+
+                        // success
+
+                        storeRegistrationId(context, regID);
+
+                    } else {
+                        // fail
+                        LOG.d("apiSetPushKey Fail " + retCode.result);
+
+                        Toast.makeText(SoulBrownMainActivity.this, retCode.errormsg + "(" + retCode.result + ")", Toast.LENGTH_SHORT).show();
+
+                    }
+
+                }
+            }, new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError volleyError) {
+
+                    LOG.d("apiSetPushKey VolleyError " + volleyError.getMessage());
+                    Toast.makeText(SoulBrownMainActivity.this, "네트워크 오류", Toast.LENGTH_SHORT).show();
+
+                }
+            });
+        }
+    }
 
 
     @Override
@@ -431,4 +536,6 @@ public class SoulBrownMainActivity extends FragmentActivity
 
         super.onBackPressed();
     }
+
+
 }

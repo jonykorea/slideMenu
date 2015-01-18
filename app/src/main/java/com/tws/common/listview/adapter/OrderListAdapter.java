@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.LinearLayout;
 import android.widget.SectionIndexer;
 import android.widget.TextView;
 
@@ -23,7 +24,7 @@ import java.util.HashMap;
 
 import se.emilsjolander.stickylistheaders.StickyListHeadersAdapter;
 
-public class StickyListAdapter extends BaseAdapter implements
+public class OrderListAdapter extends BaseAdapter implements
         StickyListHeadersAdapter, SectionIndexer {
 
     private final Context mContext;
@@ -36,7 +37,7 @@ public class StickyListAdapter extends BaseAdapter implements
 
     private final int INIT_INDEX = 0;
 
-    public StickyListAdapter(Context context, ArrayList<ArrayOrderList> data) {
+    public OrderListAdapter(Context context, ArrayList<ArrayOrderList> data) {
 
         mContext = context;
         mInflater = LayoutInflater.from(context);
@@ -126,14 +127,30 @@ public class StickyListAdapter extends BaseAdapter implements
 
         if (convertView == null) {
             holder = new ViewHolder();
-            convertView = mInflater.inflate(R.layout.list_order_info, parent, false);
+            convertView = mInflater.inflate(R.layout.list_owner_order_info, parent, false);
             holder.tvMenu = (TextView) convertView.findViewById(R.id.row_menu);
             holder.tvPrice = (TextView) convertView.findViewById(R.id.row_price);
             holder.tvTime = (TextView) convertView.findViewById(R.id.row_time);
+            holder.tvName = (TextView) convertView.findViewById(R.id.row_name);
+            holder.tvArriveTime = (TextView) convertView.findViewById(R.id.row_arrive_time);
+            holder.tvDistance = (TextView) convertView.findViewById(R.id.row_distance);
+            holder.llStatusIng = (LinearLayout) convertView.findViewById(R.id.row_status_ing);
+            holder.llStatusFinish = (LinearLayout) convertView.findViewById(R.id.row_status_finish);
+
             convertView.setTag(holder);
         } else {
             holder = (ViewHolder) convertView.getTag();
         }
+
+        final String orderKey =  mData.get(position).orderkey;
+        String status =  mData.get(position).status;
+
+        String name = mData.get(position).userid;
+        String distance = mData.get(position).distance;
+
+        String arriveUnixTime = mData.get(position).arrivaltime;
+
+        String arrivalTime = TimeUtil.getNewSimpleDateFormat("a hh시 mm분", arriveUnixTime);
 
         ReceiptInfoRow receiptInfoRow;
 
@@ -151,6 +168,25 @@ public class StickyListAdapter extends BaseAdapter implements
 
         holder.tvMenu.setText(receiptInfoRow.sumMenu);
 
+        holder.tvName.setText(name);
+        holder.tvArriveTime.setText(arrivalTime);
+        holder.tvDistance.setText(ConvertData.getDisance(distance));
+
+        holder.llStatusIng.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                Log.i("jony","llStatusIng orderKey "+ orderKey);
+            }
+        });
+
+        holder.llStatusFinish.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Log.i("jony","llStatusFinish orderKey "+ orderKey);
+
+            }
+        });
 
         return convertView;
     }
@@ -173,9 +209,9 @@ public class StickyListAdapter extends BaseAdapter implements
                 sum += count * price;
 
                 if( i == orderData.size() - 1)
-                    sumMenu += orderData.get(i).menuname ;
+                    sumMenu += orderData.get(i).menuname +"x"+count;
                 else
-                    sumMenu += orderData.get(i).menuname + ", ";
+                    sumMenu += orderData.get(i).menuname +"x"+count+", ";
 
             }
         }
@@ -277,6 +313,13 @@ public class StickyListAdapter extends BaseAdapter implements
         TextView tvMenu;
         TextView tvTime;
         TextView tvPrice;
+        TextView tvName;
+        TextView tvArriveTime;
+        TextView tvDistance;
+
+        LinearLayout llStatusIng;
+        LinearLayout llStatusFinish;
+
     }
 
 }

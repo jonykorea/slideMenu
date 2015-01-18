@@ -37,7 +37,6 @@ public class LocationService extends Service {
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
 
-
         FileLOG.writeLog("LocationService : onStartCommand");
 
         wakeupMgr.setPowerWakeUp(1);
@@ -59,11 +58,68 @@ public class LocationService extends Service {
         location.connect();
     }
 
+    // apiSetUserLoc
+    public void apiSetUserLoc(Location location) {
+
+        FileLOG.writeLog("LocationService : apiSetUserLoc");
+
+        ApiAgent api = new ApiAgent();
+
+        LOG.d("apiSetUserLoc");
+
+        String lon = Double.toString(location.getLongitude());
+        String lat = Double.toString(location.getLatitude());
+
+        PrefUserInfo prefUserInfo = new PrefUserInfo(this);
+
+        String userID = prefUserInfo.getUserID();
+
+        if (api != null && !TextUtils.isEmpty(userID)) {
+            api.apiUserLoc(this, userID, lon, lat, new Response.Listener<RetCode>() {
+                @Override
+                public void onResponse(RetCode retCode) {
+
+                    FileLOG.writeLog("LocationService : apiUserLoc retCode : " + retCode.result);
+
+                    LOG.d("r_public.result : " + retCode.result);
+                    LOG.d("r_public.errormsg : " + retCode.errormsg);
+
+                    if (retCode.result == ServerDefineCode.NET_RESULT_SUCC) {
+
+                        // success
+
+                        LOG.d("apiSetUserLoc Succ");
+
+
+                    } else {
+                        // fail
+                        LOG.d("apiSetUserLoc Fail " + retCode.result);
+
+                    }
+
+                    wakeupMgr.releaseWifiManager();
+
+                }
+            }, new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError volleyError) {
+
+                    FileLOG.writeLog("LocationService : apiUserLoc volleyError.getMessage()");
+
+                    wakeupMgr.releaseWifiManager();
+
+                    LOG.d("apiSetUserLoc VolleyError " + volleyError.getMessage());
+
+                }
+            });
+        }
+    }
+
     public Handler LocationResultHandler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
 
-            FileLOG.writeLog("LocationService : LocationResultHandler : "+msg.what);
+            FileLOG.writeLog("LocationService : LocationResultHandler : " + msg.what);
 
             switch (msg.what) {
 
@@ -110,63 +166,6 @@ public class LocationService extends Service {
 
         }
     };
-
-    // apiSetUserLoc
-    public void apiSetUserLoc(Location location) {
-
-        FileLOG.writeLog("LocationService : apiSetUserLoc");
-
-        ApiAgent api = new ApiAgent();
-
-        LOG.d("apiSetUserLoc");
-
-        String lon = Double.toString(location.getLongitude());
-        String lat = Double.toString(location.getLatitude());
-
-        PrefUserInfo prefUserInfo = new PrefUserInfo(this);
-
-        String userID = prefUserInfo.getUserID();
-
-        if (api != null && !TextUtils.isEmpty(userID)) {
-            api.apiUserLoc(this, userID, lon, lat, new Response.Listener<RetCode>() {
-                @Override
-                public void onResponse(RetCode retCode) {
-
-                    FileLOG.writeLog("LocationService : apiUserLoc retCode : "+retCode.result);
-
-                    LOG.d("r_public.result : " + retCode.result);
-                    LOG.d("r_public.errormsg : " + retCode.errormsg);
-
-                    if (retCode.result == ServerDefineCode.NET_RESULT_SUCC) {
-
-                        // success
-
-                        LOG.d("apiSetUserLoc Succ");
-
-
-                    } else {
-                        // fail
-                        LOG.d("apiSetUserLoc Fail "+retCode.result );
-
-                    }
-
-                    wakeupMgr.releaseWifiManager();
-
-                }
-            }, new Response.ErrorListener() {
-                @Override
-                public void onErrorResponse(VolleyError volleyError) {
-
-                    FileLOG.writeLog("LocationService : apiUserLoc volleyError.getMessage()");
-
-                    wakeupMgr.releaseWifiManager();
-
-                    LOG.d("apiSetUserLoc VolleyError " + volleyError.getMessage());
-
-                }
-            });
-        }
-    }
 
     @Override
     public void onCreate() {

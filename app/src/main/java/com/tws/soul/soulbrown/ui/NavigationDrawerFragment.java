@@ -1,36 +1,30 @@
-package com.tws.soul.soulbrown;
+package com.tws.soul.soulbrown.ui;
 
 
 import android.app.Activity;
 import android.app.ActionBar;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
-import android.content.SharedPreferences;
-import android.content.res.Configuration;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
-import android.view.DragEvent;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.ImageButton;
+import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
-import android.widget.Toast;
 
+import com.app.AppController;
 import com.tws.common.listview.adapter.GenericAdapter;
 import com.tws.common.listview.domain.SideMenu;
 import com.tws.common.listview.viewmapping.SideMenuView;
+import com.tws.soul.soulbrown.R;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -42,6 +36,8 @@ import java.util.List;
  */
 public class NavigationDrawerFragment extends Fragment {
 
+    public static int ACT_REQUSET_CODE_SETTING = 101;
+    public static int ACT_RESULT_CODE_SETTING = 102;
     /**
      * Remember the position of the selected item.
      */
@@ -61,6 +57,7 @@ public class NavigationDrawerFragment extends Fragment {
     private DrawerLayout mDrawerLayout;
     private ListView mDrawerListView;
     private View mFragmentContainerView;
+
 
     private int mCurrentSelectedPosition = SoulBrownMainActivity.INIT_MENU_POSITION;
     private boolean mFromSavedInstanceState;
@@ -113,18 +110,46 @@ public class NavigationDrawerFragment extends Fragment {
 
         List<SideMenuView> list = new ArrayList<SideMenuView>();
 
-        String[] menuTitle = getMenuTitle();
+        ArrayList<SideMenu> sideMenu = getSideMenu();
 
-        for (int i = 0; i < menuTitle.length; i++) {
-            SideMenuView mv = new SideMenuView(new SideMenu(menuTitle[i],
-                    R.xml.xml_icon_menu_list), R.layout.list_sidemenu);
+
+        for (int i = 0; i < sideMenu.size(); i++) {
+
+            SideMenuView mv = new SideMenuView(sideMenu.get(i), R.layout.list_sidemenu);
+
             list.add(mv);
         }
         mDrawerListView.setAdapter(new GenericAdapter(list, getActivity()));
 
         mDrawerListView.setItemChecked(mCurrentSelectedPosition, true);
 
+        // setting button
+        Button btnSetting = (Button)mRlRootLayout.findViewById(R.id.menu_btn_setting);
+
+        btnSetting.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                Intent intent = new Intent(getActivity(), SettingActivity.class);
+                startActivityForResult(intent, ACT_REQUSET_CODE_SETTING);
+            }
+        });
+
+
         return mRlRootLayout;
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == NavigationDrawerFragment.ACT_REQUSET_CODE_SETTING) {
+
+            if(resultCode == Activity.RESULT_OK) {
+                getActivity().setResult(NavigationDrawerFragment.ACT_RESULT_CODE_SETTING);
+                getActivity().finish();
+            }
+        }
     }
 
     public boolean isDrawerOpen() {
@@ -270,13 +295,37 @@ public class NavigationDrawerFragment extends Fragment {
         }
     }
 
-    private String[] getMenuTitle()
+    private ArrayList<SideMenu> getSideMenu()
     {
-        String[] MenuTitle = new String[] { getString(R.string.orderlist),
-                getString(R.string.store_haru),
-                getString(R.string.store_1022),
-                getString(R.string.store_2flat)};
+        ArrayList<SideMenu> sideMenuArrayList= new ArrayList<SideMenu>();
 
-        return MenuTitle;
+        if(AppController.getInstance().getIsUser()) {
+
+            // 사용자
+            sideMenuArrayList.add(  new SideMenu(getString(R.string.orderlist),
+                    R.xml.xml_icon_menu_list)) ;
+
+            sideMenuArrayList.add(  new SideMenu(getString(R.string.store_haru),
+                    R.xml.xml_icon_store)) ;
+
+            sideMenuArrayList.add(  new SideMenu(getString(R.string.store_1022),
+                    R.xml.xml_icon_store)) ;
+
+            sideMenuArrayList.add(  new SideMenu(getString(R.string.store_2flat),
+                    R.xml.xml_icon_store)) ;
+
+            return sideMenuArrayList;
+        }
+        else
+        {
+            // 점주
+            sideMenuArrayList.add(  new SideMenu(getString(R.string.orderlist),
+                    R.xml.xml_icon_menu_list)) ;
+
+            sideMenuArrayList.add(  new SideMenu(getString(R.string.store_all_list),
+                    R.xml.xml_icon_menu_list)) ;
+
+            return sideMenuArrayList;
+        }
     }
 }

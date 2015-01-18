@@ -1,10 +1,10 @@
-package com.tws.soul.soulbrown;
+package com.tws.soul.soulbrown.ui.viewpager;
 
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator;
-import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.os.Bundle;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -15,16 +15,16 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.tws.common.listview.adapter.MenuListAdapter;
+import com.tws.soul.soulbrown.R;
 import com.tws.soul.soulbrown.data.Menu;
 import com.tws.soul.soulbrown.data.MenuDataManager;
-import com.tws.soul.soulbrown.lib.ConvertPrice;
+import com.tws.soul.soulbrown.lib.ConvertData;
 import com.tws.soul.soulbrown.lib.Notice;
 
 import java.util.HashMap;
 import java.util.List;
 
-
-public class ViewPagerFragment03 extends Fragment {
+public class StoreFragment02 extends Fragment {
 
     private RecyclerView mRecyclerView;
     private MenuListAdapter mAdapter;
@@ -49,7 +49,7 @@ public class ViewPagerFragment03 extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        View view = inflater.inflate(R.layout.fragment_viewpager_03, container, false);
+        View view = inflater.inflate(R.layout.fragment_viewpager_02, container, false);
 
         mRecyclerView = (RecyclerView) view.findViewById(R.id.list);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
@@ -61,7 +61,7 @@ public class ViewPagerFragment03 extends Fragment {
 
         hashMap = new HashMap<String, String>();
 
-        mAdapter = new MenuListAdapter(MenuDataManager.getInstance().getMenu2FLAT(), R.layout.list_item_menu, getActivity(), new MenuListAdapter.CuzOnClickListener() {
+        mAdapter = new MenuListAdapter(MenuDataManager.getInstance().getMenu1022(), R.layout.list_item_menu, getActivity(), new MenuListAdapter.CuzOnClickListener() {
             @Override
             public void onChangeItem(List<Menu> menu) {
 
@@ -95,7 +95,7 @@ public class ViewPagerFragment03 extends Fragment {
         }
 
         tvItemSumCount.setText(Integer.toString(sumCount));
-        tvItemSumPrice.setText(ConvertPrice.getPrice(sumPrice));
+        tvItemSumPrice.setText(ConvertData.getPrice(sumPrice));
 
         aniZoomInOut();
     }

@@ -9,15 +9,17 @@ public class PrefUserInfo {
 
 	private final String PREF_KEY_USER_ID = "USER_ID"; // user id
 
+    private final String PREF_KEY_USER_TYPE = "USER_TYPE"; // user type 사용자/점주
+
 	private Context mContext = null;
-	private SharedPreferences mPrefFrame = null;
+	private SharedPreferences mPrefUserInfo = null;
 	private SharedPreferences.Editor mEditor = null;
 
 	public PrefUserInfo(Context context) {
 		mContext = context;
-		mPrefFrame = mContext.getSharedPreferences(PREF_USER_INFO,
+        mPrefUserInfo = mContext.getSharedPreferences(PREF_USER_INFO,
 				Context.MODE_WORLD_READABLE | Context.MODE_WORLD_WRITEABLE);
-		mEditor = mPrefFrame.edit();
+		mEditor = mPrefUserInfo.edit();
 	}
 
 	public void removeAll() { mEditor.clear(); mEditor.commit(); }
@@ -31,7 +33,18 @@ public class PrefUserInfo {
 	}
 
 	public String getUserID() {
-		return mPrefFrame.getString(PREF_KEY_USER_ID, "");
+		return mPrefUserInfo.getString(PREF_KEY_USER_ID, "");
 	}
+
+    public void setUserType(boolean userType) {
+
+        mEditor.putBoolean(PREF_KEY_USER_TYPE, userType);
+
+        mEditor.commit();
+    }
+
+    public boolean getUserType() {
+        return mPrefUserInfo.getBoolean(PREF_KEY_USER_TYPE, true);
+    }
 
 }

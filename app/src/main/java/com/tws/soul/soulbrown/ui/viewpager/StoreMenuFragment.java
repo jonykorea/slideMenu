@@ -1,12 +1,8 @@
-package com.tws.soul.soulbrown;
+package com.tws.soul.soulbrown.ui.viewpager;
 
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator;
-import android.app.AlarmManager;
-import android.content.Context;
-import android.content.Intent;
-import android.location.Location;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -23,29 +19,29 @@ import android.widget.Toast;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.app.define.LOG;
-import com.tws.common.lib.dialog.CuzDialog;
 import com.tws.common.lib.soulbrownlib.OrderDialog;
 import com.tws.common.listview.adapter.MenuListAdapter;
-import com.tws.network.data.RetCode;
 import com.tws.network.data.RetOrderMenu;
 import com.tws.network.data.ServerDefineCode;
 import com.tws.network.lib.ApiAgent;
+import com.tws.soul.soulbrown.R;
 import com.tws.soul.soulbrown.broadcast.AlarmManagerBroadcastReceiver;
 import com.tws.soul.soulbrown.data.Menu;
 import com.tws.soul.soulbrown.data.MenuDataManager;
-import com.tws.soul.soulbrown.lib.ConvertPrice;
+import com.tws.soul.soulbrown.lib.ConvertData;
 import com.tws.soul.soulbrown.lib.Notice;
 import com.tws.soul.soulbrown.lib.StoreInfo;
 import com.tws.soul.soulbrown.pref.PrefOrderInfo;
 import com.tws.soul.soulbrown.pref.PrefUserInfo;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
-public class ViewPagerFragment01 extends Fragment {
+public class StoreMenuFragment extends Fragment {
 
-    final String storeID = StoreInfo.CODE_HARU;
+    String mStoreID = null;
+    List<Menu> mMenuData = null;
+    String mStoreName = null;
 
     List<Menu> orderMenu;
     AnimatorSet animatorSet;
@@ -60,11 +56,32 @@ public class ViewPagerFragment01 extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        mStoreID = getArguments().getString("store");
+
         animatorSet = new AnimatorSet();
 
         Notice.toast = Toast.makeText(getActivity(), "", Toast.LENGTH_SHORT);
+
+        if (mStoreID == null) {
+            getActivity().finish();
+            return;
+        }
+        else
+            initMenuData();
     }
 
+    private void initMenuData() {
+        if (mStoreID.equals(StoreInfo.CODE_HARU)) {
+            mMenuData = MenuDataManager.getInstance().getMenuHARU();
+            mStoreName = getActivity().getResources().getString(R.string.store_haru);
+        } else if (mStoreID.equals(StoreInfo.CODE_1022)) {
+            mMenuData = MenuDataManager.getInstance().getMenu1022();
+            mStoreName = getActivity().getResources().getString(R.string.store_1022);
+        } else if (mStoreID.equals(StoreInfo.CODE_2FLAT)) {
+            mMenuData = MenuDataManager.getInstance().getMenu2FLAT();
+            mStoreName = getActivity().getResources().getString(R.string.store_2flat);
+        }
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -75,6 +92,9 @@ public class ViewPagerFragment01 extends Fragment {
         mRecyclerView = (RecyclerView) view.findViewById(R.id.list);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         mRecyclerView.setItemAnimator(new DefaultItemAnimator());
+
+        TextView tvStoreName = (TextView) view.findViewById(R.id.store_name_txt);
+        tvStoreName.setText(mStoreName);
 
         tvItemSumCount = (TextView) view.findViewById(R.id.store_item_sum_count);
         tvItemSumPrice = (TextView) view.findViewById(R.id.store_item_sum_price);
@@ -90,16 +110,14 @@ public class ViewPagerFragment01 extends Fragment {
 
         orderMenu = new ArrayList<Menu>();
 
-        List<Menu> resetMenu = MenuDataManager.getInstance().getMenuHARU();
-
-        initAdapter(resetMenu);
+        initAdapter(mMenuData);
 
         return view;
     }
 
     private void showDialog(final List<Menu> ListMenu) {
 
-        if(orderDialog !=null && orderDialog.isShowing())
+        if (orderDialog != null && orderDialog.isShowing())
             return;
 
         String orderMenuList = "";
@@ -123,15 +141,13 @@ public class ViewPagerFragment01 extends Fragment {
 
                 }
 
-                if( sumPrice == 0 )
-                {
+                if (sumPrice == 0) {
                     showToast("주문 선택을 해주세요.");
-                }
-                else {
+                } else {
 
-                    orderMenuList += "총 합계 : " + ConvertPrice.getPrice(sumPrice);
+                    orderMenuList += "총 합계 : " + ConvertData.getPrice(sumPrice);
 
-                    String storeName = getResources().getString(StoreInfo.getStoreName(storeID));
+                    String storeName = getResources().getString(StoreInfo.getStoreName(mStoreID));
 
                     orderDialog = new OrderDialog(getActivity(), "주문 ( " + storeName + " )", orderMenuList);
 
@@ -141,7 +157,7 @@ public class ViewPagerFragment01 extends Fragment {
 
                             String arriveTime = (String) ((TextView) orderDialog.getArriveTime()).getText();
 
-                            apiOrderMenu(storeID, ListMenu, arriveTime);
+                            apiOrderMenu(mStoreID, ListMenu, arriveTime);
 
                         }
                     });
@@ -246,7 +262,7 @@ public class ViewPagerFragment01 extends Fragment {
                         // fail
                         LOG.d("apiOrderMenu Fail " + retCode.result);
 
-                        showToast("주문 오류 : "+ retCode.errormsg+"["+retCode.result+"]");
+                        showToast("주문 오류 : " + retCode.errormsg + "[" + retCode.result + "]");
 
                     }
 
@@ -258,51 +274,49 @@ public class ViewPagerFragment01 extends Fragment {
 
                     LOG.d("apiOrderMenu VolleyError " + volleyError.getMessage());
 
-                    showToast("네트워크 오류 : "+ volleyError.getMessage());
+                    showToast("네트워크 오류 : " + volleyError.getMessage());
 
                 }
             });
         }
     }
 
-    private void setSchLocation(RetOrderMenu orderMenuInfo)
-    {
-        List<Menu> resetMenu = MenuDataManager.getInstance().getMenuHARU();
+    private void setSchLocation(RetOrderMenu orderMenuInfo) {
 
-        getMenuItem(resetMenu);
+        initMenuData();
 
-        initAdapter(resetMenu);
+        getMenuItem(mMenuData);
+
+        initAdapter(mMenuData);
 
         showToast("정상적으로 주문되었습니다.");
 
         String time = orderMenuInfo.arrivaltime;
 
         long arriveUnixTime = Long.parseLong(time);
-        LOG.d("setSchLocation arriveUnixTime : "+arriveUnixTime);
+        LOG.d("setSchLocation arriveUnixTime : " + arriveUnixTime);
 
         // save arriveTime
         PrefOrderInfo prefOrderInfo = new PrefOrderInfo(getActivity());
         prefOrderInfo.setArriveTime(arriveUnixTime * 1000);
 
         long nowUnixTime = System.currentTimeMillis() / 1000;
-        LOG.d("setSchLocation nowUnixTime : "+nowUnixTime);
+        LOG.d("setSchLocation nowUnixTime : " + nowUnixTime);
 
         final long MIN_10 = 60 * 10;
-        long calcUnixTime = ( arriveUnixTime - nowUnixTime ) - MIN_10;
-        LOG.d("setSchLocation calcUnixTime : "+calcUnixTime);
+        long calcUnixTime = (arriveUnixTime - nowUnixTime) - MIN_10;
+        LOG.d("setSchLocation calcUnixTime : " + calcUnixTime);
 
-        if( calcUnixTime < 0)
-        {
+        if (calcUnixTime < 0) {
             calcUnixTime = 0;
         }
 
         AlarmManagerBroadcastReceiver alarmManagerBroadcastReceiver = new AlarmManagerBroadcastReceiver();
-        alarmManagerBroadcastReceiver.setOnetimeTimer(getActivity(),calcUnixTime);
+        alarmManagerBroadcastReceiver.setOnetimeTimer(getActivity(), calcUnixTime);
 
     }
 
-    private void initAdapter(List<Menu> resetMenu)
-    {
+    private void initAdapter(List<Menu> resetMenu) {
 
         mAdapter = new MenuListAdapter(resetMenu, R.layout.list_item_menu, getActivity(), new MenuListAdapter.CuzOnClickListener() {
             @Override
@@ -355,7 +369,7 @@ public class ViewPagerFragment01 extends Fragment {
         }
 
         tvItemSumCount.setText(Integer.toString(sumCount));
-        tvItemSumPrice.setText(ConvertPrice.getPrice(sumPrice));
+        tvItemSumPrice.setText(ConvertData.getPrice(sumPrice));
 
         aniZoomInOut();
     }

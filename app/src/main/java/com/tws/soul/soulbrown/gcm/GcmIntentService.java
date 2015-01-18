@@ -18,7 +18,7 @@ package com.tws.soul.soulbrown.gcm;
 
 import com.google.android.gms.gcm.GoogleCloudMessaging;
 import com.tws.soul.soulbrown.R;
-import com.tws.soul.soulbrown.SoulBrownMainActivity;
+import com.tws.soul.soulbrown.ui.SoulBrownMainActivity;
 
 import android.app.IntentService;
 import android.app.NotificationManager;

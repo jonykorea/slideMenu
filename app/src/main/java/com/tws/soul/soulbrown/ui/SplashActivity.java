@@ -3,9 +3,8 @@ package com.tws.soul.soulbrown.ui;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.location.Location;
+import android.graphics.Color;
 import android.os.Bundle;
-import android.os.PersistableBundle;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
@@ -15,19 +14,21 @@ import android.widget.Toast;
 
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.app.AppController;
 import com.app.define.LOG;
 import com.tws.network.data.ExtraType;
-import com.tws.network.data.RetCode;
 import com.tws.network.data.RetUserChecker;
 import com.tws.network.lib.ApiAgent;
 import com.tws.soul.soulbrown.R;
-import com.tws.soul.soulbrown.SoulBrownMainActivity;
+import com.tws.soul.soulbrown.base.BaseActivity;
 import com.tws.soul.soulbrown.pref.PrefUserInfo;
+
+import cn.pedant.SweetAlert.SweetAlertDialog;
 
 /**
  * Created by jonychoi on 15. 1. 14..
  */
-public class SplashActivity extends Activity {
+public class SplashActivity extends BaseActivity {
 
     private Context context;
 
@@ -36,7 +37,6 @@ public class SplashActivity extends Activity {
     private LinearLayout llLoginLayout;
     private EditText etLoginInput;
     private Button btLoginID;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -87,7 +87,6 @@ public class SplashActivity extends Activity {
 
     }
 
-
     // apiUserChecker
     public void apiUserChecker(final String userID) {
 
@@ -96,10 +95,14 @@ public class SplashActivity extends Activity {
         LOG.d("apiUserChecker");
 
         if (api != null) {
+
             api.apiUserChecker(this, userID, new Response.Listener<RetUserChecker>() {
 
                 @Override
                 public void onResponse(RetUserChecker retCode) {
+
+                    if( mBaseProgressDialog.isShowing() )
+                        mBaseProgressDialog.dismiss();
 
                     LOG.d("retCode.result : " + retCode.result);
                     LOG.d("retCode.errormsg : " + retCode.errormsg);
@@ -115,7 +118,17 @@ public class SplashActivity extends Activity {
                             LOG.d("apiSetUserLoc Succ");
 
                             PrefUserInfo prefUserInfo = new PrefUserInfo(SplashActivity.this);
+
                             prefUserInfo.setUserID(userID);
+
+                            if (retCode.usertype.equals("user"))
+                            {
+                                prefUserInfo.setUserType(true);
+                            }
+                            else
+                            {
+                                prefUserInfo.setUserType(false);
+                            }
 
                             Intent intent = new Intent(context, SoulBrownMainActivity.class);
                             intent.putExtra(ExtraType.USER_TYPE, retCode.usertype);
@@ -138,6 +151,9 @@ public class SplashActivity extends Activity {
                 @Override
                 public void onErrorResponse(VolleyError volleyError) {
 
+                    if( mBaseProgressDialog.isShowing() )
+                        mBaseProgressDialog.dismiss();
+
                     LOG.d("apiSetUserLoc VolleyError " + volleyError.getMessage());
                     Toast.makeText(SplashActivity.this, "네트워크 오류", Toast.LENGTH_SHORT).show();
 
@@ -151,7 +167,13 @@ public class SplashActivity extends Activity {
         super.onActivityResult(requestCode, resultCode, data);
 
         if (requestCode == ACT_RESULT_CODE) {
-            finish();
+            if( resultCode == NavigationDrawerFragment.ACT_RESULT_CODE_SETTING )
+            {
+                // logout 경우.//입력창 노출.
+                llLoginLayout.setVisibility(View.VISIBLE);
+            }
+            else
+                finish();
         }
     }
 

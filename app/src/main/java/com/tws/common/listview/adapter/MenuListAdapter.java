@@ -6,16 +6,14 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.tws.network.data.ArrayOrderList;
 import com.tws.soul.soulbrown.R;
 import com.tws.soul.soulbrown.data.Menu;
-import com.tws.soul.soulbrown.lib.ConvertPrice;
+import com.tws.soul.soulbrown.lib.ConvertData;
 
-import java.util.ArrayList;
 import java.util.List;
 /**
  * Created by Jony on 2015-01-11.
@@ -54,8 +52,9 @@ public class MenuListAdapter extends RecyclerView.Adapter<MenuListAdapter.ViewHo
     public void onBindViewHolder(ViewHolder viewHolder, int i) {
         Menu menu = listMenu.get(i);
         viewHolder.menuName.setText(menu.name);
-        viewHolder.menuPrice.setText(ConvertPrice.getPrice(menu.price));
+        viewHolder.menuPrice.setText(ConvertData.getPrice(menu.price));
         viewHolder.menuImage.setBackgroundResource(menu.image);
+        viewHolder.menuCount.setText(Integer.toString(menu.count));
 
         final TextView cntView = viewHolder.menuCount;
         final int price = menu.price;
@@ -119,8 +118,8 @@ public class MenuListAdapter extends RecyclerView.Adapter<MenuListAdapter.ViewHo
         public ImageView menuImage;
         public TextView menuPrice;
         public TextView menuCount;
-        public LinearLayout menuAdd;
-        public LinearLayout menuRemove;
+        public ImageButton menuAdd;
+        public ImageButton menuRemove;
 
 
         public ViewHolder(View itemView) {
@@ -129,8 +128,8 @@ public class MenuListAdapter extends RecyclerView.Adapter<MenuListAdapter.ViewHo
             menuPrice = (TextView) itemView.findViewById(R.id.item_menu_info_price);
             menuImage = (ImageView)itemView.findViewById(R.id.item_menu_info_image);
 
-            menuAdd = (LinearLayout) itemView.findViewById(R.id.item_menu_control_add);
-            menuRemove = (LinearLayout) itemView.findViewById(R.id.item_menu_control_remove);
+            menuAdd = (ImageButton) itemView.findViewById(R.id.item_menu_control_add_btn);
+            menuRemove = (ImageButton) itemView.findViewById(R.id.item_menu_control_remove_btn);
 
             menuCount = (TextView) itemView.findViewById(R.id.item_menu_control_count);
         }

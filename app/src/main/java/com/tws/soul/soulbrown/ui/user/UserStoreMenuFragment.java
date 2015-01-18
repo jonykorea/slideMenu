@@ -1,4 +1,4 @@
-package com.tws.soul.soulbrown;
+package com.tws.soul.soulbrown.ui.user;
 
 import java.lang.reflect.Field;
 
@@ -13,7 +13,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-public class MenuFragment02 extends Fragment {
+import com.tws.soul.soulbrown.R;
+import com.tws.soul.soulbrown.ui.viewpager.ViewPagerAdapter;
+
+public class UserStoreMenuFragment extends Fragment {
 
     // Activity 로 데이터를 전달할 커스텀 리스너
     private CustomOnClickListener customListener;

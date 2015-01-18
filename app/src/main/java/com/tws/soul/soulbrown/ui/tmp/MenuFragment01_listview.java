@@ -1,4 +1,4 @@
-package com.tws.soul.soulbrown;
+package com.tws.soul.soulbrown.ui.tmp;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -16,6 +16,7 @@ import com.tws.common.listview.domain.OrderList;
 import com.tws.common.listview.viewmapping.OrderListView;
 import com.tws.network.data.CoreGetPublicKey;
 import com.tws.network.lib.ApiAgent;
+import com.tws.soul.soulbrown.R;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -11,6 +11,7 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.integration.volley.VolleyUrlLoader;
 import com.bumptech.glide.load.model.GlideUrl;
 import com.tws.network.lib.LruBitmapCache;
+import com.tws.soul.soulbrown.pref.PrefUserInfo;
 
 import java.io.InputStream;
 
@@ -21,6 +22,8 @@ public class AppController extends Application {
 
     private RequestQueue mRequestQueue;
     private ImageLoader mImageLoader;
+
+    private boolean isUser = false;
 
     private static AppController mInstance;
 
@@ -78,5 +81,13 @@ public class AppController extends Application {
         // Glide setting
         Glide.get(this).register(GlideUrl.class, InputStream.class,
                 new VolleyUrlLoader.Factory(mRequestQueue));
+    }
+
+    // soulbrown
+    public boolean getIsUser()
+    {
+        PrefUserInfo prefUserInfo = new PrefUserInfo(this);
+
+        return prefUserInfo.getUserType();
     }
 }

@@ -13,14 +13,14 @@ public class PrefOrderInfo {
 
 
     private Context mContext = null;
-	private SharedPreferences mPrefFrame = null;
+	private SharedPreferences mPrefOrderInfo = null;
 	private SharedPreferences.Editor mEditor = null;
 
 	public PrefOrderInfo(Context context) {
 		mContext = context;
-		mPrefFrame = mContext.getSharedPreferences(PREF_ORDER_INFO,
+        mPrefOrderInfo = mContext.getSharedPreferences(PREF_ORDER_INFO,
 				Context.MODE_WORLD_READABLE | Context.MODE_WORLD_WRITEABLE);
-		mEditor = mPrefFrame.edit();
+		mEditor = mPrefOrderInfo.edit();
 	}
 
 	public void removeAll() { mEditor.clear(); mEditor.commit(); }
@@ -34,7 +34,7 @@ public class PrefOrderInfo {
 	}
 
 	public long getArriveTime() {
-		return mPrefFrame.getLong(PREF_KEY_ARRIVE_TIME, -1);
+		return mPrefOrderInfo.getLong(PREF_KEY_ARRIVE_TIME, -1);
 	}
 
     public void setSettingTime(String time) {
@@ -45,7 +45,7 @@ public class PrefOrderInfo {
     }
 
     public String getSettingTime() {
-        return mPrefFrame.getString(PREF_KEY_SETTING_TIME, "30분");
+        return mPrefOrderInfo.getString(PREF_KEY_SETTING_TIME, "30분");
     }
 
 }

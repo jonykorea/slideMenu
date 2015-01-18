@@ -53,6 +53,14 @@ public class ApiAgent {
     // orderlist
     private static final String URL_ORDER_LIST = "/soulbrown/if/getorderlist";
 
+    // push key user
+    private static final String URL_PUSHKEY_USER = "/soulbrown/if/reguserkey";
+    // push key owner
+    private static final String URL_PUSHKEY_OWNER = "/soulbrown/if/setstoreon";
+
+
+
+
 
 
     // 없으면 입력창 노출.
@@ -106,6 +114,8 @@ public class ApiAgent {
 
         // request queue!
         AppController.getInstance().addToRequestQueue(gsObjRequest);
+
+
 
     }
 
@@ -362,9 +372,77 @@ public class ApiAgent {
 
         // request queue!
         AppController.getInstance().addToRequestQueue(gsObjRequest);
-
     }
 
+
+    // apiGetOrderList
+    public void apiSetPushKey(Context context, String source, String userid, String storeid, String pushKey, String flag , Response.Listener<RetCode> succListener, Response.ErrorListener failListener) {
+
+        String url = URL_DOMAIN + URL_PUSHKEY_USER;
+
+        // set add header S
+        HashMap<String, String> header = new HashMap<String, String>();
+/*
+        String auth = DeviceInfo.getAuth(context);
+
+        if (!TextUtils.isEmpty(auth))
+            header.put("auth_key", auth);
+
+        header.put("mdn", DeviceInfo.getMDN(context));
+*/
+        // set add header E
+
+        // set params S
+        JSONObject jsonParams = new JSONObject();
+        JSONArray jsonArray = new JSONArray();
+        JSONObject jsonSubParams = null;
+
+        try {
+
+            jsonParams.put("source",source);
+            jsonParams.put("pushkey",pushKey);
+
+            if(!TextUtils.isEmpty(userid)) {
+                jsonParams.put("userid", userid);
+            }
+
+            if(!TextUtils.isEmpty(storeid)) {
+                url = URL_DOMAIN + URL_PUSHKEY_OWNER;
+                jsonParams.put("storeid", storeid);
+                jsonParams.put("onoffflag",flag);
+            }
+
+            //jsonParams = CommonParams.getCommonParams(context, jsonParams);
+
+        } catch (Exception e) {
+            LOG.d("apiSetPushKey error:" + e.getMessage());
+            jsonParams = null;
+        }
+
+        String reqParams = null;
+
+        if (jsonParams != null)
+            reqParams = jsonParams.toString();
+
+        LOG.d("url :" + url);
+        LOG.d("reqParams " + reqParams);
+
+
+        // set params E
+
+        // request!
+        JsonGsonRequest<RetCode> gsObjRequest = new JsonGsonRequest<RetCode>(
+                Request.Method.POST,
+                url,
+                RetCode.class, header, reqParams,
+                succListener, failListener
+
+        );
+
+        // request queue!
+        AppController.getInstance().addToRequestQueue(gsObjRequest);
+
+    }
 
     // ui Api E
 

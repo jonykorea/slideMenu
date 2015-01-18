@@ -22,27 +22,24 @@
         android:background="#1F2226">
 
         <ImageView
-            android:layout_marginLeft="@dimen/size_10"
-            android:background="@drawable/icon_setting_gray"
-            android:layout_gravity="center_vertical"
             android:layout_width="@dimen/size_29.5"
-            android:layout_height="@dimen/size_29.5"/>
+            android:layout_height="@dimen/size_29.5"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="@dimen/size_10"
+            android:background="@drawable/icon_setting_gray" />
 
         <com.tws.widget.CuzButton
-            android:layout_marginLeft="@dimen/size_10"
             android:id="@+id/menu_btn_setting"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:layout_marginLeft="@dimen/size_10"
             android:background="#1F2226"
-            android:textColor="#909AA1"
-            android:textSize="@dimen/size_25"
             android:gravity="left|center_vertical"
-            android:text="Settings" />
+            android:text="설정"
+            android:textColor="#909AA1"
+            android:textSize="@dimen/size_25" />
 
     </LinearLayout>
-
-
-
 
 
 </RelativeLayout>
