@@ -28,12 +28,11 @@ import com.tws.common.lib.gms.LocationDefines;
 import com.tws.common.lib.gms.LocationGMS;
 import com.tws.network.data.ExtraType;
 import com.tws.network.data.RetCode;
-import com.tws.network.data.RetUserChecker;
 import com.tws.network.lib.ApiAgent;
 import com.tws.soul.soulbrown.R;
 import com.tws.soul.soulbrown.pref.PrefUserInfo;
-import com.tws.soul.soulbrown.ui.owner.OwnerAllOrderListFragment;
-import com.tws.soul.soulbrown.ui.owner.OwnerOrderListFragment;
+import com.tws.soul.soulbrown.ui.tmptmp.OwnerAllOrderListFragment;
+import com.tws.soul.soulbrown.ui.tmptmp.OwnerOrderListFragment;
 import com.tws.soul.soulbrown.ui.user.UserOrderListFragment;
 import com.tws.soul.soulbrown.ui.user.UserStoreMenuFragment;
 
