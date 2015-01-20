@@ -25,7 +25,7 @@ public class BaseActivity extends Activity {
     {
         mBaseProgressDialog  = new SweetAlertDialog(this, SweetAlertDialog.PROGRESS_TYPE);
         mBaseProgressDialog.getProgressHelper().setBarColor(Color.parseColor("#2996CC"));
-        mBaseProgressDialog.setTitleText("데이터를 불러오고 있습니다.");
+        mBaseProgressDialog.setTitleText("Loading");
         mBaseProgressDialog.setCancelable(false);
 
     }

@@ -40,7 +40,7 @@
             android:layout_marginTop="10dp"
             android:background="@drawable/icon_refresh"
             android:visibility="visible" />
-        <TextView
+        <com.tws.widget.CuzTextView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_marginTop="10dp"
@@ -60,7 +60,7 @@
             android:background="@drawable/icon_nodata"
             android:visibility="visible" />
 
-        <TextView
+        <com.tws.widget.CuzTextView
             android:layout_marginBottom="100dp"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"

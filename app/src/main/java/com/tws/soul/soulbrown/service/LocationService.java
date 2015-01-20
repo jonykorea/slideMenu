@@ -13,7 +13,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.app.define.LOG;
 import com.tws.common.lib.gms.LocationDefines;
-import com.tws.common.lib.gms.LocationGMS;
+import com.tws.common.lib.gms.LocationGmsClient;
 import com.tws.common.lib.mgr.WakeupMgr;
 import com.tws.common.lib.utils.FileLOG;
 import com.tws.network.data.RetCode;
@@ -52,7 +52,7 @@ public class LocationService extends Service {
 
         FileLOG.writeLog("LocationService : uploadLocation");
 
-        LocationGMS location = new LocationGMS(this,
+        LocationGmsClient location = new LocationGmsClient(this,
                 LocationResultHandler);
 
         location.connect();

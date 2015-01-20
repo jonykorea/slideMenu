@@ -55,8 +55,12 @@ public class ApiAgent {
 
     // push key user
     private static final String URL_PUSHKEY_USER = "/soulbrown/if/reguserkey";
+
     // push key owner
     private static final String URL_PUSHKEY_OWNER = "/soulbrown/if/setstoreon";
+
+    // chg status order menu
+    private static final String URL_STATUS_ORDER_MENU = "/soulbrown/if/chgorderstatus";
 
 
 
@@ -376,7 +380,7 @@ public class ApiAgent {
 
 
     // apiGetOrderList
-    public void apiSetPushKey(Context context, String source, String userid, String storeid, String pushKey, String flag , Response.Listener<RetCode> succListener, Response.ErrorListener failListener) {
+    public void apiSetPushKey(Context context, String source, String userid, String storeid, String pushKey, Response.Listener<RetCode> succListener, Response.ErrorListener failListener) {
 
         String url = URL_DOMAIN + URL_PUSHKEY_USER;
 
@@ -409,7 +413,6 @@ public class ApiAgent {
             if(!TextUtils.isEmpty(storeid)) {
                 url = URL_DOMAIN + URL_PUSHKEY_OWNER;
                 jsonParams.put("storeid", storeid);
-                jsonParams.put("onoffflag",flag);
             }
 
             //jsonParams = CommonParams.getCommonParams(context, jsonParams);
@@ -444,6 +447,65 @@ public class ApiAgent {
 
     }
 
+    // apiChgOrderMenu
+    public void apiChgOrderMenu(Context context,String storeID, String orderKey, String status, Response.Listener<RetCode> succListener, Response.ErrorListener failListener) {
+
+        String url = URL_DOMAIN + URL_STATUS_ORDER_MENU;
+
+        // set add header S
+        HashMap<String, String> header = new HashMap<String, String>();
+/*
+        String auth = DeviceInfo.getAuth(context);
+
+        if (!TextUtils.isEmpty(auth))
+            header.put("auth_key", auth);
+
+        header.put("mdn", DeviceInfo.getMDN(context));
+*/
+        // set add header E
+
+        // set params S
+        JSONObject jsonParams = new JSONObject();
+        try {
+
+            jsonParams.put("source","STARTUI");
+
+            jsonParams.put("storeid",storeID);
+
+            jsonParams.put("orderkey",orderKey);
+
+            jsonParams.put("status",status);
+
+            //jsonParams = CommonParams.getCommonParams(context, jsonParams);
+
+        } catch (Exception e) {
+            LOG.d("apiChgOrderMenu error:" + e.getMessage());
+            jsonParams = null;
+        }
+
+        String reqParams = null;
+
+        if (jsonParams != null)
+            reqParams = jsonParams.toString();
+
+        LOG.d("reqParams " + reqParams);
+
+
+        // set params E
+
+        // request!
+        JsonGsonRequest<RetCode> gsObjRequest = new JsonGsonRequest<RetCode>(
+                Request.Method.POST,
+                url,
+                RetCode.class, header, reqParams,
+                succListener, failListener
+
+        );
+
+        // request queue!
+        AppController.getInstance().addToRequestQueue(gsObjRequest);
+
+    }
     // ui Api E
 
 

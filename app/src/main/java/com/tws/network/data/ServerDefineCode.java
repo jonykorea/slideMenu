@@ -6,4 +6,5 @@ package com.tws.network.data;
 public class ServerDefineCode {
 
     public static int NET_RESULT_SUCC = 1;
+    public static int NET_RESULT_ALREADY = 105;
 }

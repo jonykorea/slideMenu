@@ -7,6 +7,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+
+import com.tws.common.lib.dialog.CuzDialog;
 import com.tws.soul.soulbrown.R;
 import android.support.v4.app.Fragment;
 import cn.pedant.SweetAlert.SweetAlertDialog;
@@ -17,6 +19,8 @@ import cn.pedant.SweetAlert.SweetAlertDialog;
 public class BaseFragment extends Fragment {
 
     public SweetAlertDialog mBaseProgressDialog;
+
+    public CuzDialog mBaseDialog;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -33,7 +37,7 @@ public class BaseFragment extends Fragment {
     {
         mBaseProgressDialog  = new SweetAlertDialog(getActivity(), SweetAlertDialog.PROGRESS_TYPE);
         mBaseProgressDialog.getProgressHelper().setBarColor(Color.parseColor("#2996CC"));
-        mBaseProgressDialog.setTitleText("데이터를 불러오고 있습니다.");
+        mBaseProgressDialog.setTitleText("Loading");
         mBaseProgressDialog.setCancelable(false);
 
     }

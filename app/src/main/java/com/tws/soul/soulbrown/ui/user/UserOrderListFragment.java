@@ -1,12 +1,20 @@
 package com.tws.soul.soulbrown.ui.user;
 
 import android.annotation.TargetApi;
+import android.app.Activity;
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Message;
 import android.support.annotation.Nullable;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,6 +26,8 @@ import android.widget.Toast;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.app.define.LOG;
+import com.tws.common.lib.dialog.CuzDialog;
+import com.tws.common.lib.gms.LocationDefines;
 import com.tws.common.lib.soulbrownlib.OrderDialog;
 import com.tws.common.lib.utils.TimeUtil;
 import com.tws.common.listview.adapter.StickyListAdapter;
@@ -32,6 +42,8 @@ import com.tws.soul.soulbrown.R;
 import com.tws.soul.soulbrown.base.BaseFragment;
 import com.tws.soul.soulbrown.broadcast.AlarmManagerBroadcastReceiver;
 import com.tws.soul.soulbrown.data.Menu;
+import com.tws.soul.soulbrown.gcm.GcmIntentService;
+import com.tws.soul.soulbrown.geofence.GeofenceClient;
 import com.tws.soul.soulbrown.lib.ConvertData;
 import com.tws.soul.soulbrown.lib.Notice;
 import com.tws.soul.soulbrown.lib.StoreInfo;
@@ -49,6 +61,7 @@ public class UserOrderListFragment extends BaseFragment implements
         StickyListHeadersListView.OnStickyHeaderChangedListener {
 
     private final String SELECT_FLAG_USER = "user-all";
+    private Context context;
 
     private StickyListAdapter listAapter;
     private boolean fadeHeader = true;
@@ -63,6 +76,7 @@ public class UserOrderListFragment extends BaseFragment implements
     private TextView tvHeaderTime;
     private TextView tvHeaderMenu;
     private TextView tvHeaderStore;
+    private TextView tvHeaderKey;
     private LinearLayout llHeaderStatusReady;
     private LinearLayout llHeaderStatusIng;
     private LinearLayout llHeaderStatusFinish;
@@ -77,7 +91,14 @@ public class UserOrderListFragment extends BaseFragment implements
         mAdapter.notifyDataSetChanged();
         mAdapter.clear();
         */
-        Notice.toast = Toast.makeText(getActivity(), "", Toast.LENGTH_SHORT);
+        Notice.toast = Toast.makeText(context, "", Toast.LENGTH_SHORT);
+    }
+
+    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+
+        context = getActivity();
     }
 
     @Override
@@ -99,7 +120,7 @@ public class UserOrderListFragment extends BaseFragment implements
             public void onRefresh() {
 
                 //refresh
-                PrefUserInfo prefUserInfo = new PrefUserInfo(getActivity());
+                PrefUserInfo prefUserInfo = new PrefUserInfo(context);
 
                 String userID = prefUserInfo.getUserID();
 
@@ -118,6 +139,7 @@ public class UserOrderListFragment extends BaseFragment implements
         View vHeader = inflater.inflate(R.layout.list_header, null);
         tvHeaderPrice = (TextView) vHeader.findViewById(R.id.header_recent_row_price);
         tvHeaderTime = (TextView) vHeader.findViewById(R.id.header_recent_row_time);
+        tvHeaderKey = (TextView) vHeader.findViewById(R.id.header_recent_row_key);
         tvHeaderMenu = (TextView) vHeader.findViewById(R.id.header_recent_row_menu);
         tvHeaderStore = (TextView) vHeader.findViewById(R.id.header_recent_row_store);
         llHeaderStatusReady = (LinearLayout) vHeader.findViewById(R.id.header_recent_row_status_ready);
@@ -161,9 +183,10 @@ public class UserOrderListFragment extends BaseFragment implements
 
             ReceiptInfoRow info = getSumPrice(recentOrderInfo.orderdata);
 
+            tvHeaderKey.setText("주문번호 : "+recentOrderInfo.orderkey);
             tvHeaderStore.setText(StoreInfo.getStoreName(recentOrderInfo.storeid));
             tvHeaderMenu.setText(info.sumMenu);
-            tvHeaderPrice.setText(info.sumPrice);
+            tvHeaderPrice.setText("총 금액 : "+info.sumPrice);
 
             String date = TimeUtil.getSoulBrownOrderDateInfo(recentOrderInfo.regdate);
 
@@ -228,7 +251,7 @@ public class UserOrderListFragment extends BaseFragment implements
         return receiptInfoRow;
     }
     private void initData() {
-        PrefUserInfo prefUserInfo = new PrefUserInfo(getActivity());
+        PrefUserInfo prefUserInfo = new PrefUserInfo(context);
 
         String userID = prefUserInfo.getUserID();
 
@@ -249,7 +272,7 @@ public class UserOrderListFragment extends BaseFragment implements
 
         mOrderListData = orderListData;
 
-        listAapter = new StickyListAdapter(getActivity(), orderListData.orderlist);
+        listAapter = new StickyListAdapter(context, orderListData.orderlist);
 
         stickyList.setAdapter(listAapter);
 
@@ -265,7 +288,10 @@ public class UserOrderListFragment extends BaseFragment implements
 
         if (api != null && !TextUtils.isEmpty(userCode)) {
 
-            api.apiGetOrderList(getActivity(), source, userCode, null, selectFlag, new Response.Listener<RetOrderList>() {
+            if( !mBaseProgressDialog.isShowing() )
+                mBaseProgressDialog.show();
+
+            api.apiGetOrderList(context, source, userCode, null, selectFlag, new Response.Listener<RetOrderList>() {
                 @Override
                 public void onResponse(RetOrderList retCode) {
 
@@ -423,7 +449,7 @@ public class UserOrderListFragment extends BaseFragment implements
 
                 String storeName = getResources().getString(StoreInfo.getStoreName(storeID));
 
-                orderDialog = new OrderDialog(getActivity(), "재주문 ( " + storeName + " )", orderMenuList);
+                orderDialog = new OrderDialog(context, "재주문 ( " + storeName + " )", orderMenuList);
 
                 orderDialog.setOnAcceptButtonClickListener(new View.OnClickListener() {
                     @Override
@@ -447,7 +473,7 @@ public class UserOrderListFragment extends BaseFragment implements
                 orderDialog.show();
 
                 // get setting time S
-                PrefOrderInfo prefOrderInfo = new PrefOrderInfo(getActivity());
+                PrefOrderInfo prefOrderInfo = new PrefOrderInfo(context);
 
                 String settingTime = prefOrderInfo.getSettingTime();
 
@@ -500,16 +526,23 @@ public class UserOrderListFragment extends BaseFragment implements
 
         String calcTime = getArriveTime(arriveTime);
 
-        PrefUserInfo prefUserInfo = new PrefUserInfo(getActivity());
+        PrefUserInfo prefUserInfo = new PrefUserInfo(context);
 
         String userID = prefUserInfo.getUserID();
 
         LOG.d("apiOrderMenu userID " + userID);
 
         if (api != null && !TextUtils.isEmpty(userID)) {
-            api.apiOrderMenu(getActivity(), userID, storeID, calcTime, listMenu, new Response.Listener<RetOrderMenu>() {
+
+            if( !mBaseProgressDialog.isShowing() )
+                mBaseProgressDialog.show();
+
+            api.apiOrderMenu(context, userID, storeID, calcTime, listMenu, new Response.Listener<RetOrderMenu>() {
                 @Override
                 public void onResponse(RetOrderMenu retCode) {
+
+                    if( mBaseProgressDialog.isShowing() )
+                        mBaseProgressDialog.dismiss();
 
                     LOG.d("retCode.result : " + retCode.result);
                     LOG.d("retCode.errormsg : " + retCode.errormsg);
@@ -524,7 +557,7 @@ public class UserOrderListFragment extends BaseFragment implements
                         // 성공시 메뉴 리셋. > 알람 setting.
 
                         // save setting time S
-                        PrefOrderInfo prefOrderInfo = new PrefOrderInfo(getActivity());
+                        PrefOrderInfo prefOrderInfo = new PrefOrderInfo(context);
 
                         prefOrderInfo.setSettingTime(arriveTime);
                         // save setting time E
@@ -532,7 +565,26 @@ public class UserOrderListFragment extends BaseFragment implements
                         setSchLocation(retCode);
 
 
-                    } else {
+                    }else if( retCode.result == ServerDefineCode.NET_RESULT_ALREADY)
+                    {
+
+                        if( mBaseDialog == null || !mBaseDialog.isShowing()) {
+                            mBaseDialog = new CuzDialog(context,
+                                    "확인", "이미 주문된 내역이 있습니다.\n주문내역에서 확인하세요.");
+
+                            mBaseDialog.show();
+
+                            mBaseDialog.setCancelable(true);
+
+                            mBaseDialog.getButtonAccept().setText("확인");
+
+                            mBaseDialog.getButtonCancel().setVisibility(View.INVISIBLE);
+
+
+
+                        }
+                    }
+                    else {
                         // fail
                         LOG.d("apiOrderMenu Fail " + retCode.result);
 
@@ -545,6 +597,8 @@ public class UserOrderListFragment extends BaseFragment implements
                 @Override
                 public void onErrorResponse(VolleyError volleyError) {
 
+                    if( mBaseProgressDialog.isShowing() )
+                        mBaseProgressDialog.dismiss();
 
                     LOG.d("apiOrderMenu VolleyError " + volleyError.getMessage());
 
@@ -567,7 +621,7 @@ public class UserOrderListFragment extends BaseFragment implements
         LOG.d("setSchLocation arriveUnixTime : " + arriveUnixTime);
 
         // save arriveTime
-        PrefOrderInfo prefOrderInfo = new PrefOrderInfo(getActivity());
+        PrefOrderInfo prefOrderInfo = new PrefOrderInfo(context);
         prefOrderInfo.setArriveTime(arriveUnixTime * 1000);
 
         long nowUnixTime = System.currentTimeMillis() / 1000;
@@ -582,9 +636,63 @@ public class UserOrderListFragment extends BaseFragment implements
         }
 
         AlarmManagerBroadcastReceiver alarmManagerBroadcastReceiver = new AlarmManagerBroadcastReceiver();
-        alarmManagerBroadcastReceiver.setOnetimeTimer(getActivity(), calcUnixTime);
+        alarmManagerBroadcastReceiver.setRepeatTimer(context, calcUnixTime);
+
+        geofenceHanlder.sendEmptyMessage(GeofenceClient.SET_GEOFENCE);
 
     }
+
+    GeofenceClient geofenceClient;
+
+    Handler geofenceHanlder = new Handler(){
+        @Override
+        public void handleMessage(Message msg) {
+
+            if( msg.what == GeofenceClient.SET_GEOFENCE)
+            {
+                geofenceClient = new GeofenceClient(context, GeofenceResultHandler);
+
+                geofenceClient.connect();
+
+            }
+
+
+        }
+    };
+
+    public Handler GeofenceResultHandler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+
+            switch (msg.what) {
+
+                case LocationDefines.GMS_CONNECT_SUCC:
+                    Log.i("LocationResultHandler", "GMS_CONNECT_SUCC");
+
+                    if( geofenceClient != null)
+                        geofenceClient.startGeofence();
+
+
+                    break;
+                case LocationDefines.GMS_CONNECT_FAIL:
+                    Log.i("LocationResultHandler", "GMS_CONNECT_FAIL");
+
+                    break;
+                case LocationDefines.GMS_DISCONNECT_SUCC:
+                    Log.i("LocationResultHandler", "GMS_DISCONNECT_SUCC");
+                    break;
+                case LocationDefines.GMS_LOCATION_NEED_SETTING:
+                    Log.i("LocationResultHandler", "GMS_LOCATION_NEED_SETTING");
+                    break;
+
+                case LocationDefines.GMS_LOCATION_FAIL:
+                    Log.i("LocationResultHandler", "GMS_LOCATION_FAIL");
+                    break;
+
+            }
+
+        }
+    };
 
     private void showToast(int resID) {
         if (Notice.toast != null) {
@@ -599,6 +707,31 @@ public class UserOrderListFragment extends BaseFragment implements
             Notice.toast.show();
         }
     }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        LocalBroadcastManager.getInstance(context).registerReceiver(GcmMsgRefreshSync, new IntentFilter(GcmIntentService.GCM_BROADCAST));
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        LocalBroadcastManager.getInstance(context).unregisterReceiver(GcmMsgRefreshSync);
+    }
+
+    private BroadcastReceiver GcmMsgRefreshSync = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+
+            String msg = intent.getStringExtra("msg");
+
+            showToast(msg);
+
+            initData();
+
+        }
+    };
 
 
 }

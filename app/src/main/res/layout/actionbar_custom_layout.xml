@@ -10,16 +10,32 @@
         android:orientation="horizontal"
         android:background="@drawable/selector_f2f4f5_d9dbdc"
         android:gravity="center"
-        android:layout_width="@dimen/size_48.5"
+        android:layout_width="wrap_content"
         android:layout_height="@dimen/size_48.5">
 
         <ImageButton
-
+            android:layout_marginLeft="@dimen/size_10"
             android:duplicateParentState="true"
             android:layout_width="@dimen/size_20"
             android:layout_height="@dimen/size_12.5"
             android:background="@drawable/icon_widget_navy" />
 
+        <com.tws.widget.CuzTextView
+            android:layout_marginLeft="@dimen/size_20"
+            android:id="@+id/title_store_name"
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/size_48.5"
+            android:text=""
+            android:textStyle="bold"
+            android:textSize="@dimen/size_18"
+            android:gravity="center"
+            android:layout_centerInParent="true"
+            android:layout_marginRight="@dimen/size_20"
+            />
+
     </LinearLayout>
+
+
+
 
 </RelativeLayout>

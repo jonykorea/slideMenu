@@ -30,18 +30,18 @@
             android:hint="ID"
             android:singleLine="true"
             android:id="@+id/splash_login_edit"
-            android:layout_width="220dp"
+            android:layout_width="@dimen/size_220"
             android:textSize="@dimen/size_18"
-            android:layout_height="50dp" />
+            android:layout_height="@dimen/size_50" />
 
         <com.tws.widget.CuzButton
             android:id="@+id/splash_login_btn"
             android:background="@xml/xml_icon_btn_bg"
             android:text="Login"
             android:textColor="#349BCD"
-            android:layout_width="220dp"
+            android:layout_width="@dimen/size_220"
             android:textSize="@dimen/size_18"
-            android:layout_height="50dp" />
+            android:layout_height="@dimen/size_50" />
 
     </LinearLayout>
 

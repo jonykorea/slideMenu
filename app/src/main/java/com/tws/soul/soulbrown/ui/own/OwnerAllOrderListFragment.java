@@ -1,52 +1,50 @@
 package com.tws.soul.soulbrown.ui.own;
 
 import android.annotation.TargetApi;
+import android.app.Activity;
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.LinearLayout;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.app.define.LOG;
-import com.tws.common.lib.soulbrownlib.OrderDialog;
-import com.tws.common.lib.utils.TimeUtil;
 import com.tws.common.listview.adapter.OrderListAdapter;
 import com.tws.network.data.ArrayOrderData;
-import com.tws.network.data.ArrayOrderList;
 import com.tws.network.data.ReceiptInfoRow;
 import com.tws.network.data.RetOrderList;
-import com.tws.network.data.RetOrderMenu;
 import com.tws.network.data.ServerDefineCode;
 import com.tws.network.lib.ApiAgent;
 import com.tws.soul.soulbrown.R;
-import com.tws.soul.soulbrown.broadcast.AlarmManagerBroadcastReceiver;
-import com.tws.soul.soulbrown.data.Menu;
+import com.tws.soul.soulbrown.base.BaseFragment;
+import com.tws.soul.soulbrown.gcm.GcmIntentService;
 import com.tws.soul.soulbrown.lib.ConvertData;
 import com.tws.soul.soulbrown.lib.Notice;
-import com.tws.soul.soulbrown.lib.StoreInfo;
-import com.tws.soul.soulbrown.pref.PrefOrderInfo;
 import com.tws.soul.soulbrown.pref.PrefUserInfo;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import se.emilsjolander.stickylistheaders.StickyListHeadersListView;
 
-public class OwnerAllOrderListFragment extends Fragment implements
+public class OwnerAllOrderListFragment extends BaseFragment implements
         AdapterView.OnItemClickListener, StickyListHeadersListView.OnHeaderClickListener,
         StickyListHeadersListView.OnStickyHeaderOffsetChangedListener,
-        StickyListHeadersListView.OnStickyHeaderChangedListener {
+        StickyListHeadersListView.OnStickyHeaderChangedListener , OrderListAdapter.onChangeStatusListener {
 
     private final String SELECT_FLAG_USER = "store-complete";
 
@@ -59,13 +57,14 @@ public class OwnerAllOrderListFragment extends Fragment implements
 
     private RetOrderList mOrderListData;
 
-    private TextView tvHeaderPrice;
-    private TextView tvHeaderTime;
-    private TextView tvHeaderMenu;
-    private TextView tvHeaderStore;
-    private LinearLayout llHeaderStatusReady;
-    private LinearLayout llHeaderStatusIng;
-    private LinearLayout llHeaderStatusFinish;
+    private Context context;
+
+    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+
+        context = getActivity();
+    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -77,7 +76,7 @@ public class OwnerAllOrderListFragment extends Fragment implements
         mAdapter.notifyDataSetChanged();
         mAdapter.clear();
         */
-        Notice.toast = Toast.makeText(getActivity(), "", Toast.LENGTH_SHORT);
+        Notice.toast = Toast.makeText(context, "", Toast.LENGTH_SHORT);
     }
 
     @Override
@@ -101,37 +100,20 @@ public class OwnerAllOrderListFragment extends Fragment implements
                 //refresh
                 initData();
 
-                // refresh
-                //data.add("ATT");
-
-                //listAapter.restore(data);
-
-                /*
-                new Handler().postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        refreshLayout.setRefreshing(false);
-                    }
-                }, 2000);
-                */
             }
         });
 
         stickyList = (StickyListHeadersListView) view.findViewById(R.id.list);
-        stickyList.setOnItemClickListener(this);
+        //stickyList.setOnItemClickListener(this);
         stickyList.setOnHeaderClickListener(this);
         stickyList.setOnStickyHeaderChangedListener(this);
         stickyList.setOnStickyHeaderOffsetChangedListener(this);
 
+        stickyList.setSelector(new ColorDrawable(0x0));
+
         // header content S
-        View vHeader = inflater.inflate(R.layout.list_header, null);
-        tvHeaderPrice = (TextView) vHeader.findViewById(R.id.header_recent_row_price);
-        tvHeaderTime = (TextView) vHeader.findViewById(R.id.header_recent_row_time);
-        tvHeaderMenu = (TextView) vHeader.findViewById(R.id.header_recent_row_menu);
-        tvHeaderStore = (TextView) vHeader.findViewById(R.id.header_recent_row_store);
-        llHeaderStatusReady = (LinearLayout) vHeader.findViewById(R.id.header_recent_row_status_ready);
-        llHeaderStatusIng = (LinearLayout) vHeader.findViewById(R.id.header_recent_row_status_ing);
-        llHeaderStatusFinish = (LinearLayout) vHeader.findViewById(R.id.header_recent_row_status_finish);
+        View vHeader = inflater.inflate(R.layout.list_owner_header_all, null);
+
         // header content E
 
         stickyList.addHeaderView(vHeader);
@@ -158,45 +140,6 @@ public class OwnerAllOrderListFragment extends Fragment implements
             }
         }, 300);
 
-
-    }
-
-    private void setHeaderContent(ArrayOrderList recentOrderInfo) {
-        if (recentOrderInfo != null) {
-
-            String status = recentOrderInfo.status;
-
-            ReceiptInfoRow info = getSumPrice(recentOrderInfo.orderdata);
-
-            tvHeaderStore.setText(StoreInfo.getStoreName(recentOrderInfo.storeid));
-            tvHeaderMenu.setText(info.sumMenu);
-            tvHeaderPrice.setText(info.sumPrice);
-
-            String date = TimeUtil.getSoulBrownOrderDateInfo(recentOrderInfo.regdate);
-
-            String regTime = TimeUtil.getNewSimpleDateFormat("a hh시 mm분", recentOrderInfo.regdate);
-
-            tvHeaderTime.setText(date + " " + regTime);
-
-            if (status.equals("3")) {
-                llHeaderStatusReady.setBackgroundResource(R.drawable.icon_btn_bg_s);
-                llHeaderStatusIng.setBackgroundResource(R.drawable.icon_btn_bg_p);
-                llHeaderStatusFinish.setBackgroundResource(R.drawable.icon_btn_bg_p);
-
-            } else if (status.equals("2")) {
-                llHeaderStatusReady.setBackgroundResource(R.drawable.icon_btn_bg_p);
-                llHeaderStatusIng.setBackgroundResource(R.drawable.icon_btn_bg_s);
-                llHeaderStatusFinish.setBackgroundResource(R.drawable.icon_btn_bg_p);
-
-            } else if (status.equals("1")) {
-                llHeaderStatusReady.setBackgroundResource(R.drawable.icon_btn_bg_p);
-                llHeaderStatusIng.setBackgroundResource(R.drawable.icon_btn_bg_p);
-                llHeaderStatusFinish.setBackgroundResource(R.drawable.icon_btn_bg_s);
-
-            }
-
-
-        }
 
     }
 
@@ -232,7 +175,7 @@ public class OwnerAllOrderListFragment extends Fragment implements
 
     private void initData() {
 
-        PrefUserInfo prefUserInfo = new PrefUserInfo(getActivity());
+        PrefUserInfo prefUserInfo = new PrefUserInfo(context);
 
         String userID = prefUserInfo.getUserID();
 
@@ -247,11 +190,9 @@ public class OwnerAllOrderListFragment extends Fragment implements
 
         mOrderListData = orderListData;
 
-        listAapter = new OrderListAdapter(getActivity(), orderListData.orderlist);
+        listAapter = new OrderListAdapter(context, mOrderListData.orderlist, this);
 
         stickyList.setAdapter(listAapter);
-
-        setHeaderContent(orderListData.orderlist.get(0));
 
     }
 
@@ -264,9 +205,16 @@ public class OwnerAllOrderListFragment extends Fragment implements
         LOG.d("apiOrderList userCode " + userCode);
 
         if (api != null && !TextUtils.isEmpty(userCode)) {
-            api.apiGetOrderList(getActivity(), source, null, userCode, selectFlag, new Response.Listener<RetOrderList>() {
+
+            if( !mBaseProgressDialog.isShowing() )
+                mBaseProgressDialog.show();
+
+            api.apiGetOrderList(context, source, null, userCode, selectFlag, new Response.Listener<RetOrderList>() {
                 @Override
                 public void onResponse(RetOrderList retCode) {
+
+                    if( mBaseProgressDialog.isShowing() )
+                        mBaseProgressDialog.dismiss();
 
                     if (refreshLayout != null) {
 
@@ -287,6 +235,8 @@ public class OwnerAllOrderListFragment extends Fragment implements
                             refreshDataSet(retCode);
                         else {
                             // 주문 내역이 없다.
+
+
                         }
 
 
@@ -304,6 +254,9 @@ public class OwnerAllOrderListFragment extends Fragment implements
 
                 @Override
                 public void onErrorResponse(VolleyError volleyError) {
+
+                    if( mBaseProgressDialog.isShowing() )
+                        mBaseProgressDialog.dismiss();
 
                     if (refreshLayout != null) {
 
@@ -323,25 +276,31 @@ public class OwnerAllOrderListFragment extends Fragment implements
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
         LOG.d("onItemClick position : " + position);
-        if (position == 0) {
+
+
+        /*
+        if( position == 0 )
+        {
             // header content
-        } else {
+        }
+        else {
 
             if (mOrderListData != null && mOrderListData.orderlist != null) {
                 int select = position - 1;
 
-                if (select < mOrderListData.orderlist.size())
+                if( select < mOrderListData.orderlist.size())
                     setOrderMenu(mOrderListData.orderlist.get(position - 1));
 
             }
         }
+        */
 
-        //Toast.makeText(getActivity(), "Item " + position + " clicked!", Toast.LENGTH_SHORT).show();
+        //Toast.makeText(context, "Item " + position + " clicked!", Toast.LENGTH_SHORT).show();
     }
 
     @Override
     public void onHeaderClick(StickyListHeadersListView l, View header, int itemPosition, long headerId, boolean currentlySticky) {
-        //Toast.makeText(getActivity(), "Header " + headerId + " currentlySticky ? " + currentlySticky, Toast.LENGTH_SHORT).show();
+        Toast.makeText(context, "Header " + headerId + " currentlySticky ? " + currentlySticky, Toast.LENGTH_SHORT).show();
 
 
     }
@@ -358,103 +317,6 @@ public class OwnerAllOrderListFragment extends Fragment implements
     @TargetApi(Build.VERSION_CODES.HONEYCOMB)
     public void onStickyHeaderChanged(StickyListHeadersListView l, View header, int itemPosition, long headerId) {
         header.setAlpha(1);
-
-    }
-
-    public void setOrderMenu(ArrayOrderList orderMenu) {
-
-        String storeID = orderMenu.storeid;
-        ArrayList<ArrayOrderData> orderData = orderMenu.orderdata;
-
-
-        List<Menu> ListMenu = new ArrayList<Menu>();
-
-        for (int i = 0; i < orderData.size(); i++) {
-            Menu menu = new Menu();
-
-            menu.count = orderData.get(i).count;
-            menu.price = Integer.parseInt(orderData.get(i).menuprice);
-            menu.name = orderData.get(i).menuname;
-
-            ListMenu.add(menu);
-        }
-
-        showDialog(storeID, ListMenu);
-    }
-
-    private OrderDialog orderDialog;
-
-    private void showDialog(final String storeID, final List<Menu> ListMenu) {
-
-        if (orderDialog != null && orderDialog.isShowing())
-            return;
-
-        String orderMenuList = "";
-        int sumPrice = 0;
-
-        if (ListMenu != null) {
-            if (ListMenu.size() > 0) {
-
-
-                for (int i = 0; i < ListMenu.size(); i++) {
-                    int cnt = ListMenu.get(i).count;
-                    String name = ListMenu.get(i).name;
-                    int price = ListMenu.get(i).price;
-
-                    sumPrice += price * cnt;
-
-                    if (ListMenu.get(i).count != 0) {
-                        orderMenuList += name + " : " + cnt + "개\n";
-                        //orderMenuList += ConvertPrice.getPrice(price * cnt)+"\n";
-                    }
-
-                }
-
-                orderMenuList += "총 합계 : " + ConvertData.getPrice(sumPrice);
-
-                String storeName = getResources().getString(StoreInfo.getStoreName(storeID));
-
-                orderDialog = new OrderDialog(getActivity(), "재주문 ( " + storeName + " )", orderMenuList);
-
-                orderDialog.setOnAcceptButtonClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-
-                        String arriveTime = (String) ((TextView) orderDialog.getArriveTime()).getText();
-
-                        apiOrderMenu(storeID, ListMenu, arriveTime);
-
-                    }
-                });
-
-                orderDialog.setOnCancelButtonClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-
-                    }
-                });
-
-
-                orderDialog.show();
-
-                // get setting time S
-                PrefOrderInfo prefOrderInfo = new PrefOrderInfo(getActivity());
-
-                String settingTime = prefOrderInfo.getSettingTime();
-
-                orderDialog.setTvArriveTime(settingTime);
-
-                // get setting time E
-
-
-                orderDialog.getButtonAccept().setText("재주문");
-                orderDialog.getButtonCancel().setText("취소");
-
-            } else {
-                showToast("주문 선택을 해주세요.");
-            }
-        }
-
 
     }
 
@@ -484,96 +346,9 @@ public class OwnerAllOrderListFragment extends Fragment implements
 
     }
 
-    // apiSetUserLoc
-    public void apiOrderMenu(String storeID, List<Menu> listMenu, final String arriveTime) {
+    @Override
+    public void onChangeStatus(String orderKey, int position,  String status) {
 
-        ApiAgent api = new ApiAgent();
-
-        String calcTime = getArriveTime(arriveTime);
-
-        PrefUserInfo prefUserInfo = new PrefUserInfo(getActivity());
-
-        String userID = prefUserInfo.getUserID();
-
-        LOG.d("apiOrderMenu userID " + userID);
-
-        if (api != null && !TextUtils.isEmpty(userID)) {
-            api.apiOrderMenu(getActivity(), userID, storeID, calcTime, listMenu, new Response.Listener<RetOrderMenu>() {
-                @Override
-                public void onResponse(RetOrderMenu retCode) {
-
-                    LOG.d("retCode.result : " + retCode.result);
-                    LOG.d("retCode.errormsg : " + retCode.errormsg);
-                    LOG.d("retCode.orderkey : " + retCode.orderkey);
-                    LOG.d("retCode.arrivaltime : " + retCode.arrivaltime);
-
-                    if (retCode.result == ServerDefineCode.NET_RESULT_SUCC) {
-
-                        // success
-                        LOG.d("apiOrderMenu Succ");
-
-                        // 성공시 메뉴 리셋. > 알람 setting.
-
-                        // save setting time S
-                        PrefOrderInfo prefOrderInfo = new PrefOrderInfo(getActivity());
-
-                        prefOrderInfo.setSettingTime(arriveTime);
-                        // save setting time E
-
-                        setSchLocation(retCode);
-
-
-                    } else {
-                        // fail
-                        LOG.d("apiOrderMenu Fail " + retCode.result);
-
-                        showToast("주문 오류 : " + retCode.errormsg + "[" + retCode.result + "]");
-
-                    }
-
-                }
-            }, new Response.ErrorListener() {
-                @Override
-                public void onErrorResponse(VolleyError volleyError) {
-
-
-                    LOG.d("apiOrderMenu VolleyError " + volleyError.getMessage());
-
-                    showToast("네트워크 오류 : " + volleyError.getMessage());
-
-                }
-            });
-        }
-    }
-
-    private void setSchLocation(RetOrderMenu orderMenuInfo) {
-
-        initData();
-
-        showToast("정상적으로 재주문되었습니다.");
-
-        String time = orderMenuInfo.arrivaltime;
-
-        long arriveUnixTime = Long.parseLong(time);
-        LOG.d("setSchLocation arriveUnixTime : " + arriveUnixTime);
-
-        // save arriveTime
-        PrefOrderInfo prefOrderInfo = new PrefOrderInfo(getActivity());
-        prefOrderInfo.setArriveTime(arriveUnixTime * 1000);
-
-        long nowUnixTime = System.currentTimeMillis() / 1000;
-        LOG.d("setSchLocation nowUnixTime : " + nowUnixTime);
-
-        final long MIN_10 = 60 * 10;
-        long calcUnixTime = (arriveUnixTime - nowUnixTime) - MIN_10;
-        LOG.d("setSchLocation calcUnixTime : " + calcUnixTime);
-
-        if (calcUnixTime < 0) {
-            calcUnixTime = 0;
-        }
-
-        AlarmManagerBroadcastReceiver alarmManagerBroadcastReceiver = new AlarmManagerBroadcastReceiver();
-        alarmManagerBroadcastReceiver.setOnetimeTimer(getActivity(), calcUnixTime);
 
     }
 
@@ -591,5 +366,28 @@ public class OwnerAllOrderListFragment extends Fragment implements
         }
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        LocalBroadcastManager.getInstance(context).registerReceiver(GcmMsgRefreshSync, new IntentFilter(GcmIntentService.GCM_BROADCAST));
+    }
 
+    @Override
+    public void onPause() {
+        super.onPause();
+        LocalBroadcastManager.getInstance(context).unregisterReceiver(GcmMsgRefreshSync);
+    }
+
+    private BroadcastReceiver GcmMsgRefreshSync = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+
+            String msg = intent.getStringExtra("msg");
+
+            showToast(msg);
+
+            initData();
+
+        }
+    };
 }

@@ -16,7 +16,7 @@
             android:layout_width="match_parent"
             android:layout_height="@dimen/size_8"></LinearLayout>
 
-        <TextView
+        <com.tws.widget.CuzTextView
             android:id="@+id/header_recent_top"
 
             android:text="최근 주문 내역"
@@ -41,7 +41,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/size_30">
 
-                <TextView
+                <com.tws.widget.CuzTextView
                     android:id="@+id/header_recent_row_store"
                     android:layout_width="wrap_content"
                     android:layout_height="@dimen/size_30"
@@ -52,7 +52,7 @@
                     android:textSize="@dimen/size_16" />
 
 
-                <TextView
+                <com.tws.widget.CuzTextView
                     android:id="@+id/header_recent_row_time"
                     android:layout_width="wrap_content"
                     android:layout_height="@dimen/size_30"
@@ -63,7 +63,17 @@
                     android:textSize="@dimen/size_16" />
 
             </RelativeLayout>
-            <TextView
+            <com.tws.widget.CuzTextView
+
+                android:id="@+id/header_recent_row_key"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/size_25"
+                android:gravity="left|center_vertical"
+                android:text=""
+                android:textColor="#3D454C"
+                android:textSize="@dimen/size_16" />
+
+            <com.tws.widget.CuzTextView
 
                 android:id="@+id/header_recent_row_price"
                 android:layout_width="match_parent"
@@ -75,7 +85,7 @@
 
 
 
-            <TextView
+            <com.tws.widget.CuzTextView
 
                 android:id="@+id/header_recent_row_menu"
                 android:layout_width="match_parent"
@@ -104,7 +114,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="40dp">
 
-                <TextView
+                <com.tws.widget.CuzTextView
                     android:text="주문 완료"
                     android:textStyle="bold"
                     android:layout_width="match_parent"
@@ -122,7 +132,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="40dp">
 
-                <TextView
+                <com.tws.widget.CuzTextView
                     android:text="만드는 중"
                     android:textStyle="bold"
                     android:layout_width="match_parent"
@@ -140,7 +150,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="40dp">
 
-                <TextView
+                <com.tws.widget.CuzTextView
                     android:text="완료"
                     android:textStyle="bold"
                     android:layout_width="match_parent"

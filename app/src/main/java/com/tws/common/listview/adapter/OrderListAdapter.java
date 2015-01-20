@@ -11,11 +11,17 @@ import android.widget.LinearLayout;
 import android.widget.SectionIndexer;
 import android.widget.TextView;
 
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
 import com.app.define.LOG;
 import com.tws.common.lib.utils.TimeUtil;
 import com.tws.network.data.ArrayOrderData;
 import com.tws.network.data.ArrayOrderList;
 import com.tws.network.data.ReceiptInfoRow;
+import com.tws.network.data.RetCode;
+import com.tws.network.data.RetOrderList;
+import com.tws.network.data.ServerDefineCode;
+import com.tws.network.lib.ApiAgent;
 import com.tws.soul.soulbrown.R;
 import com.tws.soul.soulbrown.lib.ConvertData;
 
@@ -27,7 +33,15 @@ import se.emilsjolander.stickylistheaders.StickyListHeadersAdapter;
 public class OrderListAdapter extends BaseAdapter implements
         StickyListHeadersAdapter, SectionIndexer {
 
-    private final Context mContext;
+    // 커스텀 리스너
+    private onChangeStatusListener customListener;
+
+    // 커스텀 리스너의 인터페이스
+    public interface onChangeStatusListener {
+        public void onChangeStatus(String orderKey,int position, String status);
+    }
+
+    private Context context;
     private int[] mSectionIndices;
     private Character[] mSectionLetters;
     private LayoutInflater mInflater;
@@ -37,9 +51,10 @@ public class OrderListAdapter extends BaseAdapter implements
 
     private final int INIT_INDEX = 0;
 
-    public OrderListAdapter(Context context, ArrayList<ArrayOrderList> data) {
+    public OrderListAdapter(Context context, ArrayList<ArrayOrderList> data, onChangeStatusListener listener) {
 
-        mContext = context;
+        this.context = context;
+        this.customListener = listener;
         mInflater = LayoutInflater.from(context);
 
         mData = data;
@@ -120,7 +135,7 @@ public class OrderListAdapter extends BaseAdapter implements
     }
 
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
+    public View getView(final int position, View convertView, ViewGroup parent) {
         ViewHolder holder;
 
         Log.i("jony", "getView position" + position);
@@ -128,6 +143,7 @@ public class OrderListAdapter extends BaseAdapter implements
         if (convertView == null) {
             holder = new ViewHolder();
             convertView = mInflater.inflate(R.layout.list_owner_order_info, parent, false);
+            holder.tvOrderKey = (TextView) convertView.findViewById(R.id.row_key);
             holder.tvMenu = (TextView) convertView.findViewById(R.id.row_menu);
             holder.tvPrice = (TextView) convertView.findViewById(R.id.row_price);
             holder.tvTime = (TextView) convertView.findViewById(R.id.row_time);
@@ -136,14 +152,13 @@ public class OrderListAdapter extends BaseAdapter implements
             holder.tvDistance = (TextView) convertView.findViewById(R.id.row_distance);
             holder.llStatusIng = (LinearLayout) convertView.findViewById(R.id.row_status_ing);
             holder.llStatusFinish = (LinearLayout) convertView.findViewById(R.id.row_status_finish);
+            holder.llStatusLayout = (LinearLayout) convertView.findViewById(R.id.row_status_layout);
 
             convertView.setTag(holder);
         } else {
             holder = (ViewHolder) convertView.getTag();
         }
 
-        final String orderKey =  mData.get(position).orderkey;
-        String status =  mData.get(position).status;
 
         String name = mData.get(position).userid;
         String distance = mData.get(position).distance;
@@ -172,11 +187,39 @@ public class OrderListAdapter extends BaseAdapter implements
         holder.tvArriveTime.setText(arrivalTime);
         holder.tvDistance.setText(ConvertData.getDisance(distance));
 
+        final String storeID = mData.get(position).storeid;
+        final String orderKey =  mData.get(position).orderkey;
+        final String status =  mData.get(position).status;
+
+        if(status.equals("3"))
+        {
+            holder.llStatusIng.setBackgroundResource(R.drawable.icon_btn_bg_s);
+            holder.llStatusFinish.setBackgroundResource(R.drawable.icon_btn_bg_p);
+
+        }else if(status.equals("2"))
+        {
+            holder.llStatusIng.setBackgroundResource(R.drawable.icon_btn_bg_p);
+            holder.llStatusFinish.setBackgroundResource(R.drawable.icon_btn_bg_s);
+        }else
+        {
+            holder.llStatusLayout.setVisibility(View.GONE);
+        }
+
+        final int pos = position;
+
+        holder.tvOrderKey.setText(orderKey);
+
+
         holder.llStatusIng.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
                 Log.i("jony","llStatusIng orderKey "+ orderKey);
+
+                if( status.equals("3") ) {
+                    apiChgOrderMenu(storeID, orderKey, "2", pos);
+
+                }
             }
         });
 
@@ -184,6 +227,9 @@ public class OrderListAdapter extends BaseAdapter implements
             @Override
             public void onClick(View view) {
                 Log.i("jony","llStatusFinish orderKey "+ orderKey);
+
+                if( status.equals("2") )
+                    apiChgOrderMenu(storeID, orderKey, "1" , pos);
 
             }
         });
@@ -310,6 +356,7 @@ public class OrderListAdapter extends BaseAdapter implements
     }
 
     class ViewHolder {
+        TextView tvOrderKey;
         TextView tvMenu;
         TextView tvTime;
         TextView tvPrice;
@@ -319,7 +366,79 @@ public class OrderListAdapter extends BaseAdapter implements
 
         LinearLayout llStatusIng;
         LinearLayout llStatusFinish;
+        LinearLayout llStatusLayout;
 
     }
+
+/*
+    private void changeStatusOrderMenu(String orderKey, int position, String status)
+    {
+
+        if( orderKey.equals(mData.get(position).orderkey)) {
+            mData.get(position).status = status;
+
+            if( status.equals("1"))
+                mData.remove(position);
+
+            notifyDataSetChanged();
+        }
+
+    }
+    */
+    // apiOrderList
+    public void apiChgOrderMenu(String storeID, final String orderKey, final String status, final int position) {
+
+        ApiAgent api = new ApiAgent();
+
+        LOG.d("apiChgOrderMenu orderKey " + orderKey);
+
+        if (api != null && !TextUtils.isEmpty(orderKey)) {
+            api.apiChgOrderMenu(context,storeID, orderKey, status, new Response.Listener<RetCode>() {
+                @Override
+                public void onResponse(RetCode retCode) {
+
+
+                    LOG.d("retCode.result : " + retCode.result);
+                    LOG.d("retCode.errormsg : " + retCode.errormsg);
+
+
+                    if (retCode.result == ServerDefineCode.NET_RESULT_SUCC) {
+
+                        // success
+                        LOG.d("apiChgOrderMenu Succ");
+
+                        //changeStatusOrderMenu(orderKey, position, status);
+
+                        //if( position == 0 )
+                        customListener.onChangeStatus(orderKey,position,status);
+
+
+
+
+                    } else {
+                        // fail
+                        LOG.d("apiChgOrderMenu Fail " + retCode.result);
+
+                        //showToast("주문 이력 오류 : "+ retCode.errormsg+"["+retCode.result+"]");
+
+                    }
+
+                }
+            }, new Response.ErrorListener() {
+
+
+                @Override
+                public void onErrorResponse(VolleyError volleyError) {
+
+
+                    LOG.d("apiChgOrderMenu VolleyError " + volleyError.getMessage());
+
+                    //showToast("네트워크 오류 : "+ volleyError.getMessage());
+
+                }
+            });
+        }
+    }
+
 
 }

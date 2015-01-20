@@ -38,7 +38,7 @@ public class MenuFragment01_listview extends Fragment {
                              Bundle savedInstanceState) {
 
         // 네트워크 테스트 S
-        apiGetPublicKey();
+        //apiGetPublicKey();
         // 네트워크 테스트 E
 
         // Get the view from fragment_viewpager_01.xml

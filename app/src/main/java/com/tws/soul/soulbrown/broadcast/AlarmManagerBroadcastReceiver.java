@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.text.TextUtils;
 import android.widget.Toast;
 
+import com.app.define.LOG;
 import com.tws.common.lib.utils.FileLOG;
 import com.tws.soul.soulbrown.pref.PrefOrderInfo;
 import com.tws.soul.soulbrown.pref.PrefUserInfo;
@@ -22,7 +23,7 @@ public class AlarmManagerBroadcastReceiver extends BroadcastReceiver {
     public AlarmManagerBroadcastReceiver() {
     }
 
-    final public static String ONE_TIME = "onetime";
+    final public static String ALARM_REPEAT = "repeat";
 
 
     @Override
@@ -37,50 +38,55 @@ public class AlarmManagerBroadcastReceiver extends BroadcastReceiver {
 
         //You can do the processing here.
         Bundle extras = intent.getExtras();
-        StringBuilder msgStr = new StringBuilder();
 
-        if (extras != null && extras.getBoolean(ONE_TIME, Boolean.FALSE)) {
+        boolean isRepeat = true;
+
+        if (extras != null) {
             //Make sure this intent has been sent by the one-time timer button.
-            msgStr.append("One time Timer : ");
-        }
 
-        Format formatter = new SimpleDateFormat("hh:mm:ss a");
-        msgStr.append(formatter.format(new Date()));
+            //isRepeat = extras.getBoolean(ALARM_REPEAT, Boolean.FALSE);
 
-        Toast.makeText(context, msgStr, Toast.LENGTH_LONG).show();
+            LOG.d("onReceive isRepeat : "+ isRepeat);
 
-        // check pref!
-        PrefOrderInfo prefOrderInfo = new PrefOrderInfo(context);
-        long arriveUnixTime = prefOrderInfo.getArriveTime();
-        long calcUnixTime = arriveUnixTime - System.currentTimeMillis();
-        if (calcUnixTime >= 0) {
 
-            // check id
-            PrefUserInfo prefUserInfo = new PrefUserInfo(context);
-            String userID = prefUserInfo.getUserID();
-            if(TextUtils.isEmpty(userID))
-                return;
+            // check pref!
+            PrefOrderInfo prefOrderInfo = new PrefOrderInfo(context);
+            long arriveUnixTime = prefOrderInfo.getArriveTime();
+            long calcUnixTime = arriveUnixTime - System.currentTimeMillis();
+            if (calcUnixTime >= 0) {
 
-            //repeat 60 sec
-            setOnetimeTimer(context, 60);
+                // check id
+                PrefUserInfo prefUserInfo = new PrefUserInfo(context);
+                String userID = prefUserInfo.getUserID();
+                if (TextUtils.isEmpty(userID))
+                    return;
 
-            // test Service
+                //repeat 60 sec
+                if (isRepeat) {
+                    setRepeatTimer(context, 60);
+                }
 
-            Intent intentSvc = new Intent(context,LocationService.class);
+                // test Service
 
-            context.startService(intentSvc);
+                Intent intentSvc = new Intent(context, LocationService.class);
 
-            //Intent intentSvc = new Intent(context,LocationIntentService.class);
+                context.startService(intentSvc);
 
-            //ComponentName comp = new ComponentName(context.getPackageName(),
-             //       LocationIntentService.class.getName());
-            // Start the service, keeping the device awake while it is launching.
+                //Intent intentSvc = new Intent(context,LocationIntentService.class);
 
-            FileLOG.writeLog("AlarmManagerBroadcastReceiver : startWakefulService");
+                //ComponentName comp = new ComponentName(context.getPackageName(),
+                //       LocationIntentService.class.getName());
+                // Start the service, keeping the device awake while it is launching.
 
-            //startWakefulService(context, (intent.setComponent(comp)));
-            //setResultCode(Activity.RESULT_OK);
+                FileLOG.writeLog("AlarmManagerBroadcastReceiver : startWakefulService");
 
+                //startWakefulService(context, (intent.setComponent(comp)));
+                //setResultCode(Activity.RESULT_OK);
+            }
+            else
+            {
+
+            }
 
 
         }
@@ -92,7 +98,7 @@ public class AlarmManagerBroadcastReceiver extends BroadcastReceiver {
     public void setAlarm(Context context) {
         AlarmManager am = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
         Intent intent = new Intent(context, AlarmManagerBroadcastReceiver.class);
-        intent.putExtra(ONE_TIME, Boolean.FALSE);
+        intent.putExtra(ALARM_REPEAT, Boolean.FALSE);
         PendingIntent pi = PendingIntent.getBroadcast(context, 0, intent, 0);
         //After after 60 * 20seconds
         am.setRepeating(AlarmManager.RTC_WAKEUP, System.currentTimeMillis(), 1000 * 60 * 20, pi);
@@ -105,11 +111,29 @@ public class AlarmManagerBroadcastReceiver extends BroadcastReceiver {
         alarmManager.cancel(sender);
     }
 
-    public void setOnetimeTimer(Context context, long time) {
+
+    public void setRepeatTimer(Context context, long time) {
+
+        LOG.d("setRepeatTimer time : "+ time);
+
         AlarmManager am = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
         Intent intent = new Intent(context, AlarmManagerBroadcastReceiver.class);
-        intent.putExtra(ONE_TIME, Boolean.TRUE);
+        intent.putExtra(ALARM_REPEAT, Boolean.TRUE);
         PendingIntent pi = PendingIntent.getBroadcast(context, 0, intent, 0);
         am.set(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() + 1000 * time, pi);
+
     }
+
+    /*
+    public void setFirstTimer(Context context, long time) {
+
+        LOG.d("setFirstTimer time : "+ time);
+
+        AlarmManager am = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+        Intent intent = new Intent(context, AlarmManagerBroadcastReceiver.class);
+        intent.putExtra(ALARM_REPEAT, Boolean.FALSE);
+        PendingIntent pi = PendingIntent.getBroadcast(context, 1004, intent, 0);
+        am.set(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() + 1000 * time, pi);
+    }
+    */
 }

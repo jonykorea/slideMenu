@@ -17,6 +17,7 @@
         android:id="@+id/row_receipt"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/size_10"
         android:layout_marginBottom="@dimen/size_10"
         android:layout_marginLeft="10dp"
         android:layout_toRightOf="@id/row_store"
@@ -27,8 +28,36 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal">
 
-            <TextView
-                android:id="@+id/row_name_layout"
+            <com.tws.widget.CuzTextView
+
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_alignParentLeft="true"
+                android:gravity="center"
+                android:text="주문번호 : "
+                android:textColor="#3D454C"
+                android:textSize="@dimen/size_16" />
+
+
+            <com.tws.widget.CuzTextView
+                android:id="@+id/row_key"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+
+                android:gravity="center"
+                android:text=""
+                android:textColor="#3D454C"
+                android:textSize="@dimen/size_16" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <com.tws.widget.CuzTextView
+
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_alignParentLeft="true"
@@ -38,11 +67,11 @@
                 android:textSize="@dimen/size_16" />
 
 
-            <TextView
+            <com.tws.widget.CuzTextView
                 android:id="@+id/row_name"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:layout_toRightOf="@id/row_name_layout"
+
                 android:gravity="center"
                 android:text=""
                 android:textColor="#3D454C"
@@ -55,8 +84,8 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal">
 
-            <TextView
-                android:id="@+id/row_time_layout"
+            <com.tws.widget.CuzTextView
+
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_alignParentLeft="true"
@@ -66,11 +95,11 @@
                 android:textSize="@dimen/size_16" />
 
 
-            <TextView
+            <com.tws.widget.CuzTextView
                 android:id="@+id/row_time"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:layout_toRightOf="@id/row_time_layout"
+
                 android:gravity="center"
                 android:text=""
                 android:textColor="#3D454C"
@@ -83,8 +112,8 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal">
 
-            <TextView
-                android:id="@+id/row_arrive_time_layout"
+            <com.tws.widget.CuzTextView
+
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_alignParentLeft="true"
@@ -94,11 +123,11 @@
                 android:textSize="@dimen/size_16" />
 
 
-            <TextView
+            <com.tws.widget.CuzTextView
                 android:id="@+id/row_arrive_time"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:layout_toRightOf="@id/row_arrive_time_layout"
+
                 android:gravity="center"
                 android:text=""
                 android:textColor="#3D454C"
@@ -111,8 +140,8 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal">
 
-            <TextView
-                android:id="@+id/row_distance_layout"
+            <com.tws.widget.CuzTextView
+
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_alignParentLeft="true"
@@ -122,11 +151,11 @@
                 android:textSize="@dimen/size_16" />
 
 
-            <TextView
+            <com.tws.widget.CuzTextView
                 android:id="@+id/row_distance"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:layout_toRightOf="@id/row_distance_layout"
+
                 android:gravity="center"
                 android:text=""
                 android:textColor="#3D454C"
@@ -139,18 +168,30 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal">
 
-            <TextView
-                android:id="@+id/row_price"
+            <com.tws.widget.CuzTextView
+
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_alignParentLeft="true"
                 android:gravity="center"
-                android:text="가격"
+                android:text="총 금액 : "
                 android:textColor="#3D454C"
                 android:textSize="@dimen/size_16" />
+
+
+            <com.tws.widget.CuzTextView
+                android:id="@+id/row_price"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+
+                android:gravity="center"
+                android:text=""
+                android:textColor="#3D454C"
+                android:textSize="@dimen/size_16" />
+
         </LinearLayout>
 
-        <TextView
+        <com.tws.widget.CuzTextView
             android:id="@+id/row_menu"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -162,6 +203,7 @@
             android:textSize="@dimen/size_16" />
 
         <LinearLayout
+            android:id="@+id/row_status_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
@@ -178,13 +220,13 @@
                     android:background="@drawable/icon_btn_bg_n"
                     android:orientation="horizontal">
 
-                    <TextView
+                    <com.tws.widget.CuzTextView
                         android:layout_width="match_parent"
                         android:layout_height="30dp"
                         android:layout_gravity="center"
                         android:gravity="center"
                         android:text="만들기"
-                        android:textColor="#349BCD"
+                        android:textColor="#ffffff"
                         android:textStyle="bold" />
                 </LinearLayout>
 
@@ -196,13 +238,13 @@
                     android:background="@drawable/icon_btn_bg_n"
                     android:orientation="horizontal">
 
-                    <TextView
+                    <com.tws.widget.CuzTextView
                         android:layout_width="match_parent"
                         android:layout_height="30dp"
                         android:layout_gravity="center"
                         android:gravity="center"
                         android:text="준비완료"
-                        android:textColor="#349BCD"
+                        android:textColor="#ffffff"
                         android:textStyle="bold" />
                 </LinearLayout>
             </LinearLayout>

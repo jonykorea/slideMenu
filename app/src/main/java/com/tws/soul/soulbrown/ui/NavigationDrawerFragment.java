@@ -19,12 +19,15 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import com.app.AppController;
 import com.tws.common.listview.adapter.GenericAdapter;
 import com.tws.common.listview.domain.SideMenu;
 import com.tws.common.listview.viewmapping.SideMenuView;
 import com.tws.soul.soulbrown.R;
+import com.tws.soul.soulbrown.lib.StoreInfo;
+import com.tws.soul.soulbrown.pref.PrefUserInfo;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -197,6 +200,21 @@ public class NavigationDrawerFragment extends Fragment {
 
             }
         });
+
+        TextView tvMenuTitle = (TextView) actionBarView.findViewById(R.id.title_store_name);
+
+        PrefUserInfo prefUserInfo = new PrefUserInfo(getActivity());
+        String userID = prefUserInfo.getUserID();
+
+        if( StoreInfo.getStoreName(userID) > 0)
+        {
+            tvMenuTitle.setText(StoreInfo.getStoreName(userID));
+        }
+        else
+        {
+            tvMenuTitle.setText(userID);
+        }
+
 
 
         mDrawerLayout.setDrawerListener(new DrawerLayout.DrawerListener() {

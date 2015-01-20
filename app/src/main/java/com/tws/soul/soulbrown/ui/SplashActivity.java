@@ -96,6 +96,9 @@ public class SplashActivity extends BaseActivity {
 
         if (api != null) {
 
+            if( !mBaseProgressDialog.isShowing() )
+                mBaseProgressDialog.show();
+
             api.apiUserChecker(this, userID, new Response.Listener<RetUserChecker>() {
 
                 @Override

@@ -6,6 +6,7 @@
       <module fileurl="file://$PROJECT_DIR$/TwsCommonLib/TwsCommonLib.iml" filepath="$PROJECT_DIR$/TwsCommonLib/TwsCommonLib.iml" />
       <module fileurl="file://$PROJECT_DIR$/TwsNetworkLib/TwsNetworkLib.iml" filepath="$PROJECT_DIR$/TwsNetworkLib/TwsNetworkLib.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/googleapiclient/googleapiclient.iml" filepath="$PROJECT_DIR$/googleapiclient/googleapiclient.iml" />
       <module fileurl="file://$PROJECT_DIR$/slideMenu.iml" filepath="$PROJECT_DIR$/slideMenu.iml" />
       <module fileurl="file://$PROJECT_DIR$/stickylistviewdemo/stickylistviewdemo.iml" filepath="$PROJECT_DIR$/stickylistviewdemo/stickylistviewdemo.iml" />
       <module fileurl="file://$PROJECT_DIR$/stickylistviewlib/stickylistviewlib.iml" filepath="$PROJECT_DIR$/stickylistviewlib/stickylistviewlib.iml" />

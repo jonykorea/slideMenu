@@ -3,6 +3,8 @@ package com.tws.soul.soulbrown.ui.viewpager;
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator;
+import android.app.Activity;
+import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -19,12 +21,14 @@ import android.widget.Toast;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.app.define.LOG;
+import com.tws.common.lib.dialog.CuzDialog;
 import com.tws.common.lib.soulbrownlib.OrderDialog;
 import com.tws.common.listview.adapter.MenuListAdapter;
 import com.tws.network.data.RetOrderMenu;
 import com.tws.network.data.ServerDefineCode;
 import com.tws.network.lib.ApiAgent;
 import com.tws.soul.soulbrown.R;
+import com.tws.soul.soulbrown.base.BaseFragment;
 import com.tws.soul.soulbrown.broadcast.AlarmManagerBroadcastReceiver;
 import com.tws.soul.soulbrown.data.Menu;
 import com.tws.soul.soulbrown.data.MenuDataManager;
@@ -37,7 +41,7 @@ import com.tws.soul.soulbrown.pref.PrefUserInfo;
 import java.util.ArrayList;
 import java.util.List;
 
-public class StoreMenuFragment extends Fragment {
+public class StoreMenuFragment extends BaseFragment {
 
     String mStoreID = null;
     List<Menu> mMenuData = null;
@@ -52,6 +56,14 @@ public class StoreMenuFragment extends Fragment {
     private TextView tvItemSumPrice;
     private RelativeLayout rlItemBtn;
 
+    private Context context;
+
+    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+
+        context = getActivity();
+    }
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -60,7 +72,7 @@ public class StoreMenuFragment extends Fragment {
 
         animatorSet = new AnimatorSet();
 
-        Notice.toast = Toast.makeText(getActivity(), "", Toast.LENGTH_SHORT);
+        Notice.toast = Toast.makeText(context, "", Toast.LENGTH_SHORT);
 
         if (mStoreID == null) {
             getActivity().finish();
@@ -73,13 +85,13 @@ public class StoreMenuFragment extends Fragment {
     private void initMenuData() {
         if (mStoreID.equals(StoreInfo.CODE_HARU)) {
             mMenuData = MenuDataManager.getInstance().getMenuHARU();
-            mStoreName = getActivity().getResources().getString(R.string.store_haru);
+            mStoreName = context.getResources().getString(R.string.store_haru);
         } else if (mStoreID.equals(StoreInfo.CODE_1022)) {
             mMenuData = MenuDataManager.getInstance().getMenu1022();
-            mStoreName = getActivity().getResources().getString(R.string.store_1022);
+            mStoreName = context.getResources().getString(R.string.store_1022);
         } else if (mStoreID.equals(StoreInfo.CODE_2FLAT)) {
             mMenuData = MenuDataManager.getInstance().getMenu2FLAT();
-            mStoreName = getActivity().getResources().getString(R.string.store_2flat);
+            mStoreName = context.getResources().getString(R.string.store_2flat);
         }
     }
 
@@ -87,10 +99,10 @@ public class StoreMenuFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        View view = inflater.inflate(R.layout.fragment_viewpager_01, container, false);
+        View view = inflater.inflate(R.layout.fragment_viewpager_menu, container, false);
 
         mRecyclerView = (RecyclerView) view.findViewById(R.id.list);
-        mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        mRecyclerView.setLayoutManager(new LinearLayoutManager(context));
         mRecyclerView.setItemAnimator(new DefaultItemAnimator());
 
         TextView tvStoreName = (TextView) view.findViewById(R.id.store_name_txt);
@@ -149,7 +161,7 @@ public class StoreMenuFragment extends Fragment {
 
                     String storeName = getResources().getString(StoreInfo.getStoreName(mStoreID));
 
-                    orderDialog = new OrderDialog(getActivity(), "주문 ( " + storeName + " )", orderMenuList);
+                    orderDialog = new OrderDialog(context, "주문 ( " + storeName + " )", orderMenuList);
 
                     orderDialog.setOnAcceptButtonClickListener(new View.OnClickListener() {
                         @Override
@@ -173,7 +185,7 @@ public class StoreMenuFragment extends Fragment {
                     orderDialog.show();
 
                     // get setting time S
-                    PrefOrderInfo prefOrderInfo = new PrefOrderInfo(getActivity());
+                    PrefOrderInfo prefOrderInfo = new PrefOrderInfo(context);
 
                     String settingTime = prefOrderInfo.getSettingTime();
 
@@ -226,16 +238,23 @@ public class StoreMenuFragment extends Fragment {
 
         String calcTime = getArriveTime(arriveTime);
 
-        PrefUserInfo prefUserInfo = new PrefUserInfo(getActivity());
+        PrefUserInfo prefUserInfo = new PrefUserInfo(context);
 
         String userID = prefUserInfo.getUserID();
 
         LOG.d("apiOrderMenu userID " + userID);
 
         if (api != null && !TextUtils.isEmpty(userID)) {
-            api.apiOrderMenu(getActivity(), userID, storeID, calcTime, listMenu, new Response.Listener<RetOrderMenu>() {
+
+            if( !mBaseProgressDialog.isShowing() )
+                mBaseProgressDialog.show();
+
+            api.apiOrderMenu(context, userID, storeID, calcTime, listMenu, new Response.Listener<RetOrderMenu>() {
                 @Override
                 public void onResponse(RetOrderMenu retCode) {
+
+                    if( mBaseProgressDialog.isShowing() )
+                        mBaseProgressDialog.dismiss();
 
                     LOG.d("retCode.result : " + retCode.result);
                     LOG.d("retCode.errormsg : " + retCode.errormsg);
@@ -250,7 +269,7 @@ public class StoreMenuFragment extends Fragment {
                         // 성공시 메뉴 리셋. > 알람 setting.
 
                         // save setting time S
-                        PrefOrderInfo prefOrderInfo = new PrefOrderInfo(getActivity());
+                        PrefOrderInfo prefOrderInfo = new PrefOrderInfo(context);
 
                         prefOrderInfo.setSettingTime(arriveTime);
                         // save setting time E
@@ -258,7 +277,27 @@ public class StoreMenuFragment extends Fragment {
                         setSchLocation(retCode);
 
 
-                    } else {
+                    } else if(retCode.result == ServerDefineCode.NET_RESULT_ALREADY) {
+
+                        if( mBaseDialog == null || !mBaseDialog.isShowing()) {
+                            mBaseDialog = new CuzDialog(context,
+                                    "확인", "이미 주문된 내역이 있습니다.\n주문내역에서 확인하세요.");
+
+                            mBaseDialog.show();
+
+                            mBaseDialog.setCancelable(true);
+
+                            mBaseDialog.getButtonAccept().setText("확인");
+
+                            mBaseDialog.getButtonCancel().setVisibility(View.INVISIBLE);
+
+
+
+                        }
+
+                    }
+                    else
+                    {
                         // fail
                         LOG.d("apiOrderMenu Fail " + retCode.result);
 
@@ -271,6 +310,8 @@ public class StoreMenuFragment extends Fragment {
                 @Override
                 public void onErrorResponse(VolleyError volleyError) {
 
+                    if( mBaseProgressDialog.isShowing() )
+                        mBaseProgressDialog.dismiss();
 
                     LOG.d("apiOrderMenu VolleyError " + volleyError.getMessage());
 
@@ -297,7 +338,7 @@ public class StoreMenuFragment extends Fragment {
         LOG.d("setSchLocation arriveUnixTime : " + arriveUnixTime);
 
         // save arriveTime
-        PrefOrderInfo prefOrderInfo = new PrefOrderInfo(getActivity());
+        PrefOrderInfo prefOrderInfo = new PrefOrderInfo(context);
         prefOrderInfo.setArriveTime(arriveUnixTime * 1000);
 
         long nowUnixTime = System.currentTimeMillis() / 1000;
@@ -312,13 +353,13 @@ public class StoreMenuFragment extends Fragment {
         }
 
         AlarmManagerBroadcastReceiver alarmManagerBroadcastReceiver = new AlarmManagerBroadcastReceiver();
-        alarmManagerBroadcastReceiver.setOnetimeTimer(getActivity(), calcUnixTime);
+        alarmManagerBroadcastReceiver.setRepeatTimer(context, calcUnixTime);
 
     }
 
     private void initAdapter(List<Menu> resetMenu) {
 
-        mAdapter = new MenuListAdapter(resetMenu, R.layout.list_item_menu, getActivity(), new MenuListAdapter.CuzOnClickListener() {
+        mAdapter = new MenuListAdapter(resetMenu, R.layout.list_item_menu, context, new MenuListAdapter.CuzOnClickListener() {
             @Override
             public void onChangeItem(List<Menu> menu) {
 

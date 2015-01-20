@@ -1,14 +1,21 @@
 package com.tws.soul.soulbrown.ui.own;
 
 import android.annotation.TargetApi;
+import android.app.Activity;
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,13 +33,16 @@ import com.tws.common.listview.adapter.OrderListAdapter;
 import com.tws.network.data.ArrayOrderData;
 import com.tws.network.data.ArrayOrderList;
 import com.tws.network.data.ReceiptInfoRow;
+import com.tws.network.data.RetCode;
 import com.tws.network.data.RetOrderList;
 import com.tws.network.data.RetOrderMenu;
 import com.tws.network.data.ServerDefineCode;
 import com.tws.network.lib.ApiAgent;
 import com.tws.soul.soulbrown.R;
+import com.tws.soul.soulbrown.base.BaseFragment;
 import com.tws.soul.soulbrown.broadcast.AlarmManagerBroadcastReceiver;
 import com.tws.soul.soulbrown.data.Menu;
+import com.tws.soul.soulbrown.gcm.GcmIntentService;
 import com.tws.soul.soulbrown.lib.ConvertData;
 import com.tws.soul.soulbrown.lib.Notice;
 import com.tws.soul.soulbrown.lib.StoreInfo;
@@ -44,10 +54,10 @@ import java.util.List;
 
 import se.emilsjolander.stickylistheaders.StickyListHeadersListView;
 
-public class OwnerOrderListFragment extends Fragment implements
+public class OwnerOrderListFragment extends BaseFragment implements
         AdapterView.OnItemClickListener, StickyListHeadersListView.OnHeaderClickListener,
         StickyListHeadersListView.OnStickyHeaderOffsetChangedListener,
-        StickyListHeadersListView.OnStickyHeaderChangedListener {
+        StickyListHeadersListView.OnStickyHeaderChangedListener, OrderListAdapter.onChangeStatusListener {
 
     private final String SELECT_FLAG_USER = "store-incomplete";
 
@@ -60,13 +70,25 @@ public class OwnerOrderListFragment extends Fragment implements
 
     private RetOrderList mOrderListData;
 
+    private TextView tvHeaderKey;
+    private TextView tvHeaderName;
+    private TextView tvHeaderArriveTime;
+    private TextView tvHeaderDistance;
     private TextView tvHeaderPrice;
     private TextView tvHeaderTime;
     private TextView tvHeaderMenu;
-    private TextView tvHeaderStore;
-    private LinearLayout llHeaderStatusReady;
+
     private LinearLayout llHeaderStatusIng;
     private LinearLayout llHeaderStatusFinish;
+
+    private Context context;
+
+    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+
+        context = getActivity();
+    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -78,7 +100,7 @@ public class OwnerOrderListFragment extends Fragment implements
         mAdapter.notifyDataSetChanged();
         mAdapter.clear();
         */
-        Notice.toast = Toast.makeText(getActivity(), "", Toast.LENGTH_SHORT);
+        Notice.toast = Toast.makeText(context, "", Toast.LENGTH_SHORT);
     }
 
     @Override
@@ -114,12 +136,16 @@ public class OwnerOrderListFragment extends Fragment implements
         stickyList.setSelector(new ColorDrawable(0x0));
 
         // header content S
-        View vHeader = inflater.inflate(R.layout.list_header, null);
+        View vHeader = inflater.inflate(R.layout.list_owner_header_order, null);
         tvHeaderPrice = (TextView) vHeader.findViewById(R.id.header_recent_row_price);
         tvHeaderTime = (TextView) vHeader.findViewById(R.id.header_recent_row_time);
         tvHeaderMenu = (TextView) vHeader.findViewById(R.id.header_recent_row_menu);
-        tvHeaderStore = (TextView) vHeader.findViewById(R.id.header_recent_row_store);
-        llHeaderStatusReady = (LinearLayout) vHeader.findViewById(R.id.header_recent_row_status_ready);
+
+        tvHeaderKey = (TextView) vHeader.findViewById(R.id.header_recent_row_key);
+        tvHeaderName = (TextView) vHeader.findViewById(R.id.header_recent_row_name);
+        tvHeaderArriveTime = (TextView) vHeader.findViewById(R.id.header_recent_row_arrive_time);
+        tvHeaderDistance = (TextView) vHeader.findViewById(R.id.header_recent_row_distance);
+
         llHeaderStatusIng = (LinearLayout) vHeader.findViewById(R.id.header_recent_row_status_ing);
         llHeaderStatusFinish = (LinearLayout) vHeader.findViewById(R.id.header_recent_row_status_finish);
         // header content E
@@ -156,11 +182,19 @@ public class OwnerOrderListFragment extends Fragment implements
 
             String status = recentOrderInfo.status;
 
+            final String storeID = recentOrderInfo.storeid;
+            final String orderKey = recentOrderInfo.orderkey;
+
+            tvHeaderKey.setText(orderKey);
+            tvHeaderName.setText(recentOrderInfo.userid);
+            tvHeaderArriveTime.setText(TimeUtil.getNewSimpleDateFormat("a hh시 mm분", recentOrderInfo.arrivaltime));
+            tvHeaderDistance.setText(ConvertData.getDisance(recentOrderInfo.distance));
+
             ReceiptInfoRow info = getSumPrice(recentOrderInfo.orderdata);
 
-            tvHeaderStore.setText(StoreInfo.getStoreName(recentOrderInfo.storeid));
             tvHeaderMenu.setText(info.sumMenu);
             tvHeaderPrice.setText(info.sumPrice);
+
 
             String date = TimeUtil.getSoulBrownOrderDateInfo(recentOrderInfo.regdate);
 
@@ -168,22 +202,45 @@ public class OwnerOrderListFragment extends Fragment implements
 
             tvHeaderTime.setText(date + " " + regTime);
 
-            if (status.equals("3")) {
-                llHeaderStatusReady.setBackgroundResource(R.drawable.icon_btn_bg_s);
-                llHeaderStatusIng.setBackgroundResource(R.drawable.icon_btn_bg_p);
-                llHeaderStatusFinish.setBackgroundResource(R.drawable.icon_btn_bg_p);
 
-            } else if (status.equals("2")) {
-                llHeaderStatusReady.setBackgroundResource(R.drawable.icon_btn_bg_p);
+            Log.i("jony", "setHeaderContent : "+ status);
+
+            if (status.equals("3")) {
+
                 llHeaderStatusIng.setBackgroundResource(R.drawable.icon_btn_bg_s);
                 llHeaderStatusFinish.setBackgroundResource(R.drawable.icon_btn_bg_p);
 
-            } else if (status.equals("1")) {
-                llHeaderStatusReady.setBackgroundResource(R.drawable.icon_btn_bg_p);
+                llHeaderStatusIng.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+
+                        apiChgOrderMenu(storeID, orderKey, "2" , 0);
+
+
+                    }
+                });
+                llHeaderStatusFinish.setOnClickListener(null);
+
+
+            } else if (status.equals("2")) {
+
                 llHeaderStatusIng.setBackgroundResource(R.drawable.icon_btn_bg_p);
                 llHeaderStatusFinish.setBackgroundResource(R.drawable.icon_btn_bg_s);
 
+                llHeaderStatusIng.setOnClickListener(null);
+
+                llHeaderStatusFinish.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+
+                        apiChgOrderMenu(storeID, orderKey, "1" , 0);
+
+                    }
+                });
+
             }
+
+
 
 
         }
@@ -222,7 +279,7 @@ public class OwnerOrderListFragment extends Fragment implements
 
     private void initData() {
 
-        PrefUserInfo prefUserInfo = new PrefUserInfo(getActivity());
+        PrefUserInfo prefUserInfo = new PrefUserInfo(context);
 
         String userID = prefUserInfo.getUserID();
 
@@ -237,11 +294,11 @@ public class OwnerOrderListFragment extends Fragment implements
 
         mOrderListData = orderListData;
 
-        listAapter = new OrderListAdapter(getActivity(), orderListData.orderlist);
+        listAapter = new OrderListAdapter(context, mOrderListData.orderlist, this);
 
         stickyList.setAdapter(listAapter);
 
-        setHeaderContent(orderListData.orderlist.get(0));
+        setHeaderContent(mOrderListData.orderlist.get(0));
 
     }
 
@@ -254,9 +311,16 @@ public class OwnerOrderListFragment extends Fragment implements
         LOG.d("apiOrderList userCode " + userCode);
 
         if (api != null && !TextUtils.isEmpty(userCode)) {
-            api.apiGetOrderList(getActivity(), source, null, userCode, selectFlag, new Response.Listener<RetOrderList>() {
+
+            if( !mBaseProgressDialog.isShowing() )
+                mBaseProgressDialog.show();
+
+            api.apiGetOrderList(context, source, null, userCode, selectFlag, new Response.Listener<RetOrderList>() {
                 @Override
                 public void onResponse(RetOrderList retCode) {
+
+                    if( mBaseProgressDialog.isShowing() )
+                        mBaseProgressDialog.dismiss();
 
                     if (refreshLayout != null) {
 
@@ -277,6 +341,8 @@ public class OwnerOrderListFragment extends Fragment implements
                             refreshDataSet(retCode);
                         else {
                             // 주문 내역이 없다.
+
+
                         }
 
 
@@ -294,6 +360,9 @@ public class OwnerOrderListFragment extends Fragment implements
 
                 @Override
                 public void onErrorResponse(VolleyError volleyError) {
+
+                    if( mBaseProgressDialog.isShowing() )
+                        mBaseProgressDialog.dismiss();
 
                     if (refreshLayout != null) {
 
@@ -332,12 +401,12 @@ public class OwnerOrderListFragment extends Fragment implements
         }
         */
 
-        //Toast.makeText(getActivity(), "Item " + position + " clicked!", Toast.LENGTH_SHORT).show();
+        //Toast.makeText(context, "Item " + position + " clicked!", Toast.LENGTH_SHORT).show();
     }
 
     @Override
     public void onHeaderClick(StickyListHeadersListView l, View header, int itemPosition, long headerId, boolean currentlySticky) {
-        //Toast.makeText(getActivity(), "Header " + headerId + " currentlySticky ? " + currentlySticky, Toast.LENGTH_SHORT).show();
+        //Toast.makeText(context, "Header " + headerId + " currentlySticky ? " + currentlySticky, Toast.LENGTH_SHORT).show();
 
 
     }
@@ -410,7 +479,7 @@ public class OwnerOrderListFragment extends Fragment implements
 
                 String storeName = getResources().getString(StoreInfo.getStoreName(storeID));
 
-                orderDialog = new OrderDialog(getActivity(), "재주문 ( " + storeName + " )", orderMenuList);
+                orderDialog = new OrderDialog(context, "재주문 ( " + storeName + " )", orderMenuList);
 
                 orderDialog.setOnAcceptButtonClickListener(new View.OnClickListener() {
                     @Override
@@ -434,7 +503,7 @@ public class OwnerOrderListFragment extends Fragment implements
                 orderDialog.show();
 
                 // get setting time S
-                PrefOrderInfo prefOrderInfo = new PrefOrderInfo(getActivity());
+                PrefOrderInfo prefOrderInfo = new PrefOrderInfo(context);
 
                 String settingTime = prefOrderInfo.getSettingTime();
 
@@ -487,16 +556,23 @@ public class OwnerOrderListFragment extends Fragment implements
 
         String calcTime = getArriveTime(arriveTime);
 
-        PrefUserInfo prefUserInfo = new PrefUserInfo(getActivity());
+        PrefUserInfo prefUserInfo = new PrefUserInfo(context);
 
         String userID = prefUserInfo.getUserID();
 
         LOG.d("apiOrderMenu userID " + userID);
 
         if (api != null && !TextUtils.isEmpty(userID)) {
-            api.apiOrderMenu(getActivity(), userID, storeID, calcTime, listMenu, new Response.Listener<RetOrderMenu>() {
+
+            if( !mBaseProgressDialog.isShowing() )
+                mBaseProgressDialog.show();
+
+            api.apiOrderMenu(context, userID, storeID, calcTime, listMenu, new Response.Listener<RetOrderMenu>() {
                 @Override
                 public void onResponse(RetOrderMenu retCode) {
+
+                    if( mBaseProgressDialog.isShowing() )
+                        mBaseProgressDialog.dismiss();
 
                     LOG.d("retCode.result : " + retCode.result);
                     LOG.d("retCode.errormsg : " + retCode.errormsg);
@@ -511,7 +587,7 @@ public class OwnerOrderListFragment extends Fragment implements
                         // 성공시 메뉴 리셋. > 알람 setting.
 
                         // save setting time S
-                        PrefOrderInfo prefOrderInfo = new PrefOrderInfo(getActivity());
+                        PrefOrderInfo prefOrderInfo = new PrefOrderInfo(context);
 
                         prefOrderInfo.setSettingTime(arriveTime);
                         // save setting time E
@@ -532,6 +608,8 @@ public class OwnerOrderListFragment extends Fragment implements
                 @Override
                 public void onErrorResponse(VolleyError volleyError) {
 
+                    if( mBaseProgressDialog.isShowing() )
+                        mBaseProgressDialog.dismiss();
 
                     LOG.d("apiOrderMenu VolleyError " + volleyError.getMessage());
 
@@ -541,6 +619,96 @@ public class OwnerOrderListFragment extends Fragment implements
             });
         }
     }
+
+    // apiOrderList
+    public void apiChgOrderMenu(String storeID, final String orderKey, final String status, final int position) {
+
+        ApiAgent api = new ApiAgent();
+
+        LOG.d("apiChgOrderMenu orderKey " + orderKey);
+
+        if (api != null && !TextUtils.isEmpty(orderKey)) {
+
+            if( !mBaseProgressDialog.isShowing() )
+                mBaseProgressDialog.show();
+
+            api.apiChgOrderMenu(context,storeID, orderKey, status, new Response.Listener<RetCode>() {
+                @Override
+                public void onResponse(RetCode retCode) {
+
+
+                    if( mBaseProgressDialog.isShowing() )
+                        mBaseProgressDialog.dismiss();
+
+                    LOG.d("retCode.result : " + retCode.result);
+                    LOG.d("retCode.errormsg : " + retCode.errormsg);
+
+
+                    if (retCode.result == ServerDefineCode.NET_RESULT_SUCC) {
+
+                        // success
+                        LOG.d("apiChgOrderMenu Succ");
+
+                        changeStatusOrderMenu(orderKey, position, status);
+
+
+
+
+                    } else {
+                        // fail
+                        LOG.d("apiChgOrderMenu Fail " + retCode.result);
+
+                        //showToast("주문 이력 오류 : "+ retCode.errormsg+"["+retCode.result+"]");
+
+                    }
+
+                }
+            }, new Response.ErrorListener() {
+
+
+                @Override
+                public void onErrorResponse(VolleyError volleyError) {
+
+                    if( mBaseProgressDialog.isShowing() )
+                        mBaseProgressDialog.dismiss();
+
+                    LOG.d("apiChgOrderMenu VolleyError " + volleyError.getMessage());
+
+                    //showToast("네트워크 오류 : "+ volleyError.getMessage());
+
+                }
+            });
+        }
+    }
+
+    @Override
+    public void onChangeStatus(String orderKey, int position,  String status) {
+
+        changeStatusOrderMenu(orderKey,  position, status);
+    }
+
+    private void changeStatusOrderMenu(String orderKey, int position, String status)
+    {
+
+        if( orderKey.equals(mOrderListData.orderlist.get(position).orderkey)) {
+            mOrderListData.orderlist.get(position).status = status;
+
+            if( status.equals("1")) {
+
+                mOrderListData.orderlist.clear();
+                listAapter.notifyDataSetChanged();
+                initData();
+
+            }
+            else {
+
+                setHeaderContent(mOrderListData.orderlist.get(0));
+                listAapter.notifyDataSetChanged();
+            }
+        }
+
+    }
+
 
     private void setSchLocation(RetOrderMenu orderMenuInfo) {
 
@@ -554,7 +722,7 @@ public class OwnerOrderListFragment extends Fragment implements
         LOG.d("setSchLocation arriveUnixTime : " + arriveUnixTime);
 
         // save arriveTime
-        PrefOrderInfo prefOrderInfo = new PrefOrderInfo(getActivity());
+        PrefOrderInfo prefOrderInfo = new PrefOrderInfo(context);
         prefOrderInfo.setArriveTime(arriveUnixTime * 1000);
 
         long nowUnixTime = System.currentTimeMillis() / 1000;
@@ -569,7 +737,7 @@ public class OwnerOrderListFragment extends Fragment implements
         }
 
         AlarmManagerBroadcastReceiver alarmManagerBroadcastReceiver = new AlarmManagerBroadcastReceiver();
-        alarmManagerBroadcastReceiver.setOnetimeTimer(getActivity(), calcUnixTime);
+        alarmManagerBroadcastReceiver.setRepeatTimer(context, calcUnixTime);
 
     }
 
@@ -586,6 +754,31 @@ public class OwnerOrderListFragment extends Fragment implements
             Notice.toast.show();
         }
     }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        LocalBroadcastManager.getInstance(context).registerReceiver(GcmMsgRefreshSync, new IntentFilter(GcmIntentService.GCM_BROADCAST));
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        LocalBroadcastManager.getInstance(context).unregisterReceiver(GcmMsgRefreshSync);
+    }
+
+    private BroadcastReceiver GcmMsgRefreshSync = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+
+            String msg = intent.getStringExtra("msg");
+
+            showToast(msg);
+
+            initData();
+
+        }
+    };
 
 
 }

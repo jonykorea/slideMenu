@@ -1,16 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:card_view="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="@dimen/size_250"
     android:layout_centerInParent="true"
-    android:background="#F2F4F5"
-    android:layout_marginBottom="@dimen/size_8"
+    android:background="@drawable/bg_card"
+    android:layout_marginBottom="@dimen/size_4"
     android:layout_marginLeft="@dimen/size_15"
     android:layout_marginRight="@dimen/size_15"
-    android:layout_marginTop="@dimen/size_8"
-    card_view:cardCornerRadius="@dimen/size_12"
-    card_view:cardElevation="@dimen/size_5"
+    android:layout_marginTop="@dimen/size_4"
+
     android:layout_alignParentTop="true"
     android:layout_alignParentLeft="true">
     >
@@ -52,7 +51,7 @@
                 android:textStyle="bold" />
 
 
-            <TextView
+            <com.tws.widget.CuzTextView
                 android:id="@+id/item_menu_info_price"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -102,7 +101,7 @@
             </LinearLayout>
 
 
-            <TextView
+            <com.tws.widget.CuzTextView
                 android:id="@+id/item_menu_control_count"
                 android:layout_width="@dimen/size_49"
                 android:layout_height="match_parent"
@@ -136,5 +135,5 @@
 
     </RelativeLayout>
 
-</android.support.v7.widget.CardView>
+</RelativeLayout>
 
