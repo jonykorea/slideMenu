@@ -32,14 +32,15 @@
         <LinearLayout
 
             android:layout_width="match_parent"
-            android:layout_height="@dimen/size_130"
+            android:layout_height="wrap_content"
             android:layout_marginLeft="15dp"
             android:layout_marginRight="15dp"
+
             android:orientation="vertical">
 
             <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/size_30">
+                android:layout_height="wrap_content">
 
                 <com.tws.widget.CuzTextView
                     android:id="@+id/header_recent_row_store"
@@ -86,16 +87,17 @@
 
 
             <com.tws.widget.CuzTextView
-
+                android:layout_marginTop="5dp"
+                android:layout_marginBottom="5dp"
                 android:id="@+id/header_recent_row_menu"
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/size_65"
+                android:layout_height="wrap_content"
 
                 android:gravity="left|center_vertical"
-                android:maxLines="3"
+
                 android:text=""
                 android:textColor="#3D454C"
-                android:textSize="@dimen/size_14" />
+                android:textSize="@dimen/size_16" />
         </LinearLayout>
 
 
