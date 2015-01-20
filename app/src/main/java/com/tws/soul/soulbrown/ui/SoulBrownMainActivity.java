@@ -325,6 +325,7 @@ public class SoulBrownMainActivity extends FragmentActivity
         }
         else
         {
+            setResult(RESULT_OK);
             finish();
         }
 

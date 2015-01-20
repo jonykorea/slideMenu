@@ -127,9 +127,9 @@ public class NavigationDrawerFragment extends Fragment {
         mDrawerListView.setItemChecked(mCurrentSelectedPosition, true);
 
         // setting button
-        Button btnSetting = (Button)mRlRootLayout.findViewById(R.id.menu_btn_setting);
+        LinearLayout llSetting = (LinearLayout)mRlRootLayout.findViewById(R.id.menu_setting);
 
-        btnSetting.setOnClickListener(new View.OnClickListener() {
+        llSetting.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 

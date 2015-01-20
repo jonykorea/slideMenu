@@ -52,7 +52,6 @@
         android:theme="@style/AppTheme" >
         <activity
             android:screenOrientation="portrait"
-            android:launchMode="singleTask"
             android:name=".ui.SplashActivity"
             android:label="Soul Brown"
             android:theme="@android:style/Theme.NoTitleBar" >
