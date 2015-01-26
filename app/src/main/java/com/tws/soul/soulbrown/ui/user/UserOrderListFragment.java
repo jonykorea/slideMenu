@@ -176,6 +176,8 @@ public class UserOrderListFragment extends BaseFragment implements
 
     private void setHeaderContent(ArrayOrderList recentOrderInfo)
     {
+        Log.i("jony","setHeaderContent");
+
         if( recentOrderInfo != null )
         {
 
@@ -193,6 +195,8 @@ public class UserOrderListFragment extends BaseFragment implements
             String regTime = TimeUtil.getNewSimpleDateFormat("a hh시 mm분", recentOrderInfo.regdate);
 
             tvHeaderTime.setText(date + " " +regTime);
+
+            Log.i("jony","setHeaderContent status : "+ status);
 
             if(status.equals("3"))
             {
@@ -270,13 +274,13 @@ public class UserOrderListFragment extends BaseFragment implements
 
     private void refreshDataSet(RetOrderList orderListData) {
 
+        setHeaderContent(orderListData.orderlist.get(0));
+
         mOrderListData = orderListData;
 
         listAapter = new StickyListAdapter(context, orderListData.orderlist);
 
         stickyList.setAdapter(listAapter);
-
-        setHeaderContent(orderListData.orderlist.get(0));
 
     }
 

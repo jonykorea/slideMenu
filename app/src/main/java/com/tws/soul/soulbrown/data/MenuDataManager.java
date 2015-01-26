@@ -11,7 +11,7 @@ import java.util.List;
 
 public class MenuDataManager {
 
-    private static String[] arrayMenu_HARU = {"아메리카노(Hot)", "레몬꿀차(Hot)", "구운 고구마 라떼(Hot)", "카페라떼(Hot)", "자몽주스(Hot)", "하루다크초크(Hot)"};
+    private static String[] arrayMenu_HARU = {"아메리카노(Hot)", "레몬꿀차(Hot)", "구운 고구마 라떼(Hot)", "카페라떼(Hot)", "자몽주스(Hot)", "하루다크초코(Hot)"};
     private static int[] arrayPrice_HARU = {2800,4800,4800,3300,4800,5000};
     private static int[] arrayImage_HARU = {R.drawable.haru_01,R.drawable.haru_02,R.drawable.haru_03,R.drawable.haru_04,R.drawable.haru_05,R.drawable.haru_06};
 

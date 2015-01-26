@@ -292,13 +292,13 @@ public class OwnerOrderListFragment extends BaseFragment implements
 
     private void refreshDataSet(RetOrderList orderListData) {
 
+        setHeaderContent(orderListData.orderlist.get(0));
+
         mOrderListData = orderListData;
 
-        listAapter = new OrderListAdapter(context, mOrderListData.orderlist, this);
+        listAapter = new OrderListAdapter(context, orderListData.orderlist, this);
 
         stickyList.setAdapter(listAapter);
-
-        setHeaderContent(mOrderListData.orderlist.get(0));
 
     }
 

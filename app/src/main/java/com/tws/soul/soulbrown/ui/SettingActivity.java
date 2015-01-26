@@ -110,6 +110,11 @@ public class SettingActivity extends BaseActivity {
                 else
                 {
 
+                    if( mBaseProgressDialog.isShowing() )
+                        mBaseProgressDialog.dismiss();
+
+                    //Toast.makeText(SettingActivity.this,"Google Play Store Error : "+ msg,Toast.LENGTH_SHORT).show();
+                    //finish();
                 }
 
             }

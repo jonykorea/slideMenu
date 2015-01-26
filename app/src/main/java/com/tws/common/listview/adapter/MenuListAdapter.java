@@ -53,7 +53,7 @@ public class MenuListAdapter extends RecyclerView.Adapter<MenuListAdapter.ViewHo
         Menu menu = listMenu.get(i);
         viewHolder.menuName.setText(menu.name);
         viewHolder.menuPrice.setText(ConvertData.getPrice(menu.price));
-        viewHolder.menuImage.setBackgroundResource(menu.image);
+        viewHolder.menuImage.setImageResource(menu.image);
         viewHolder.menuCount.setText(Integer.toString(menu.count));
 
         final TextView cntView = viewHolder.menuCount;

@@ -1,5 +1,6 @@
 package com.tws.soul.soulbrown.gcm;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
@@ -141,8 +142,9 @@ public class GcmClient {
             if (GooglePlayServicesUtil.isUserRecoverableError(resultCode)) {
 
                 this.customListener.onGcmClientResult(RET_CODE_FAIL, "isUserRecoverableError : "+resultCode);
-                //GooglePlayServicesUtil.getErrorDialog(resultCode, context,
-                //        PLAY_SERVICES_RESOLUTION_REQUEST).show();
+                GooglePlayServicesUtil.getErrorDialog(resultCode, (Activity)context,
+                        PLAY_SERVICES_RESOLUTION_REQUEST).show();
+
             } else {
 
                 this.customListener.onGcmClientResult(RET_CODE_FAIL, "GCM This device is not supported.");

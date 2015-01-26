@@ -19,6 +19,7 @@ package com.tws.soul.soulbrown.gcm;
 import com.app.define.LOG;
 import com.google.android.gms.gcm.GoogleCloudMessaging;
 import com.tws.common.lib.gms.LocationDefines;
+import com.tws.common.lib.mgr.WakeupMgr;
 import com.tws.soul.soulbrown.R;
 import com.tws.soul.soulbrown.broadcast.AlarmManagerBroadcastReceiver;
 import com.tws.soul.soulbrown.geofence.GeofenceClient;
@@ -27,6 +28,7 @@ import com.tws.soul.soulbrown.ui.SoulBrownMainActivity;
 import com.tws.soul.soulbrown.ui.SplashActivity;
 
 import android.app.IntentService;
+import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
@@ -168,6 +170,12 @@ public class GcmIntentService extends IntentService {
     // This is just one simple example of what you might choose to do with
     // a GCM message.
     private void sendNotification(String msg) {
+
+        WakeupMgr wakeupMgr;
+        wakeupMgr = new WakeupMgr(this);
+
+        wakeupMgr.setPowerWakeUp(4);
+
         mNotificationManager = (NotificationManager)
                 this.getSystemService(Context.NOTIFICATION_SERVICE);
 
@@ -185,10 +193,18 @@ public class GcmIntentService extends IntentService {
                         .setStyle(new NotificationCompat.BigTextStyle()
                                 .bigText(msg))
                         .setAutoCancel(true)
+                        .setDefaults(Notification.DEFAULT_SOUND | Notification.DEFAULT_LIGHTS)
                         .setContentText(msg);
 
         mBuilder.setContentIntent(contentIntent);
 
         mNotificationManager.notify(NOTIFICATION_ID, mBuilder.build());
+
+        wakeupMgr.releaseWifiManager();
     }
+
+
+
+
+
 }

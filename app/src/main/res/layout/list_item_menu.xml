@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="#F1F5F7"
-    android:paddingBottom="5dp"
+    android:paddingBottom="0dp"
     android:paddingLeft="10dp"
     android:paddingRight="10dp"
     android:paddingTop="5dp"
@@ -20,7 +20,7 @@
         <LinearLayout
             android:id="@+id/item_menu_info_layout"
             android:layout_width="match_parent"
-            android:layout_height="47dp"
+            android:layout_height="wrap_content"
             android:gravity="left"
             android:orientation="vertical"
             android:paddingLeft="15dp"
@@ -56,9 +56,10 @@
         <ImageView
             android:id="@+id/item_menu_info_image"
             android:layout_width="match_parent"
-            android:layout_height="220dp"
-            android:layout_marginBottom="8dp"
-            android:layout_marginTop="8dp"
+            android:layout_height="260dp"
+            android:layout_marginBottom="4dp"
+            android:layout_marginTop="4dp"
+
 
             android:scaleType="centerCrop" />
 

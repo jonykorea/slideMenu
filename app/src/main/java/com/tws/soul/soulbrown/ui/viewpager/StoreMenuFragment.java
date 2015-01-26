@@ -6,11 +6,14 @@ import android.animation.ValueAnimator;
 import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,6 +25,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.app.define.LOG;
 import com.tws.common.lib.dialog.CuzDialog;
+import com.tws.common.lib.gms.LocationDefines;
 import com.tws.common.lib.soulbrownlib.OrderDialog;
 import com.tws.common.listview.adapter.MenuListAdapter;
 import com.tws.network.data.RetOrderMenu;
@@ -32,6 +36,7 @@ import com.tws.soul.soulbrown.base.BaseFragment;
 import com.tws.soul.soulbrown.broadcast.AlarmManagerBroadcastReceiver;
 import com.tws.soul.soulbrown.data.Menu;
 import com.tws.soul.soulbrown.data.MenuDataManager;
+import com.tws.soul.soulbrown.geofence.GeofenceClient;
 import com.tws.soul.soulbrown.lib.ConvertData;
 import com.tws.soul.soulbrown.lib.Notice;
 import com.tws.soul.soulbrown.lib.StoreInfo;
@@ -355,7 +360,61 @@ public class StoreMenuFragment extends BaseFragment {
         AlarmManagerBroadcastReceiver alarmManagerBroadcastReceiver = new AlarmManagerBroadcastReceiver();
         alarmManagerBroadcastReceiver.setRepeatTimer(context, calcUnixTime);
 
+        geofenceHanlder.sendEmptyMessage(GeofenceClient.SET_GEOFENCE);
+
     }
+
+    GeofenceClient geofenceClient;
+
+    Handler geofenceHanlder = new Handler(){
+        @Override
+        public void handleMessage(Message msg) {
+
+            if( msg.what == GeofenceClient.SET_GEOFENCE)
+            {
+                geofenceClient = new GeofenceClient(context, GeofenceResultHandler);
+
+                geofenceClient.connect();
+
+            }
+
+
+        }
+    };
+
+    public Handler GeofenceResultHandler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+
+            switch (msg.what) {
+
+                case LocationDefines.GMS_CONNECT_SUCC:
+                    Log.i("LocationResultHandler", "GMS_CONNECT_SUCC");
+
+                    if( geofenceClient != null)
+                        geofenceClient.startGeofence();
+
+
+                    break;
+                case LocationDefines.GMS_CONNECT_FAIL:
+                    Log.i("LocationResultHandler", "GMS_CONNECT_FAIL");
+
+                    break;
+                case LocationDefines.GMS_DISCONNECT_SUCC:
+                    Log.i("LocationResultHandler", "GMS_DISCONNECT_SUCC");
+                    break;
+                case LocationDefines.GMS_LOCATION_NEED_SETTING:
+                    Log.i("LocationResultHandler", "GMS_LOCATION_NEED_SETTING");
+                    break;
+
+                case LocationDefines.GMS_LOCATION_FAIL:
+                    Log.i("LocationResultHandler", "GMS_LOCATION_FAIL");
+                    break;
+
+            }
+
+        }
+    };
 
     private void initAdapter(List<Menu> resetMenu) {
 
