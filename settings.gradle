@@ -1,1 +1,1 @@
-include ':TwsNetworkLib', ':TwsCommonLib', ':stickylistviewlib', ':app', ':googleapiclient'
+include ':TwsNetworkLib', ':TwsCommonLib', ':stickylistviewlib', ':app', ':googleapiclient', ':demoactivity'

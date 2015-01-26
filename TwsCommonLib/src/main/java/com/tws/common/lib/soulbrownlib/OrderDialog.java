@@ -124,7 +124,12 @@ public class OrderDialog
 
         int time = Integer.parseInt(textTime);
 
-        if (time < 60) {
+        if( time == 5)
+        {
+            time += 5;
+
+        }
+        else if (time < 60) {
 
             time += 10;
 
@@ -145,7 +150,11 @@ public class OrderDialog
 
         int time = Integer.parseInt(textTime);
 
-        if (time > 10) {
+        if( time == 10 )
+        {
+            time -= 5;
+        }
+        else if (time > 10) {
 
             time -= 10;
 
