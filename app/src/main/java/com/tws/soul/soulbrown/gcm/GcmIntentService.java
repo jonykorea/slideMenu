@@ -16,15 +16,18 @@
 
 package com.tws.soul.soulbrown.gcm;
 
+import com.app.AppController;
 import com.app.define.LOG;
 import com.google.android.gms.gcm.GoogleCloudMessaging;
 import com.tws.common.lib.gms.LocationDefines;
 import com.tws.common.lib.mgr.WakeupMgr;
+import com.tws.common.lib.soulbrownlib.SoundManager;
 import com.tws.soul.soulbrown.R;
 import com.tws.soul.soulbrown.broadcast.AlarmManagerBroadcastReceiver;
 import com.tws.soul.soulbrown.geofence.GeofenceClient;
 import com.tws.soul.soulbrown.pref.PrefOrderInfo;
-import com.tws.soul.soulbrown.ui.SoulBrownMainActivity;
+import com.tws.soul.soulbrown.service.AlarmNotiService;
+import com.tws.soul.soulbrown.service.LocationService;
 import com.tws.soul.soulbrown.ui.SplashActivity;
 
 import android.app.IntentService;
@@ -37,6 +40,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.os.SystemClock;
+import android.os.Vibrator;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.content.LocalBroadcastManager;
 import android.text.TextUtils;
@@ -116,10 +120,10 @@ public class GcmIntentService extends IntentService {
                 */
 
                 String msg = extras.getString("msg");
-                String pushflag = extras.getString("pushflag");
+                String pushFlag = extras.getString("pushflag");
                 String status = extras.getString("status");
 
-                LOG.d("GcmIntentService msg : " + msg + " pushflag : " + pushflag + " status : " + status);
+                LOG.d("GcmIntentService msg : " + msg + " pushFlag : " + pushFlag + " status : " + status);
 
                 String decMsg = "";
                 try {
@@ -134,6 +138,9 @@ public class GcmIntentService extends IntentService {
                 // Post notification of received message.
 
                 if (!TextUtils.isEmpty(decMsg)) {
+
+
+
                     sendNotification(decMsg);
 
                     Intent intentGcm = new Intent(GCM_BROADCAST);
@@ -144,7 +151,7 @@ public class GcmIntentService extends IntentService {
 
 
                     // alarm , geofence off
-                    if (pushflag.equals("chgorder") && status.equals("1")) {
+                    if (pushFlag.equals("chgorder") && status.equals("1")) {
 
                         LOG.d("GcmIntentService alarm , geofence off");
 
@@ -155,6 +162,14 @@ public class GcmIntentService extends IntentService {
                         alarmManagerBroadcastReceiver.cancelAlarm(this);
 
                         geofenceClient = new GeofenceClient(this, GeofenceResultHandler);
+                    }else if(pushFlag.equals("approachuser"))
+                    {
+                        // alarm service call
+
+                        Intent intentSvc = new Intent(this, AlarmNotiService.class);
+
+                        this.startService(intentSvc);
+
                     }
 
                 }
@@ -165,6 +180,30 @@ public class GcmIntentService extends IntentService {
         // Release the wake lock provided by the WakefulBroadcastReceiver.
         GcmBroadcastReceiver.completeWakefulIntent(intent);
     }
+
+    private SoundManager mSoundManager;
+    private Vibrator mVib;
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        LOG.d("GcmIntentService onDestroy");
+    }
+
+    private void initExtraAlarm()
+    {
+
+    }
+
+
+    @Override
+    public void onCreate() {
+        super.onCreate();
+
+        LOG.d("GcmIntentService onCreate");
+
+    }
+
 
     // Put the message into a notification and post it.
     // This is just one simple example of what you might choose to do with
@@ -193,8 +232,9 @@ public class GcmIntentService extends IntentService {
                         .setStyle(new NotificationCompat.BigTextStyle()
                                 .bigText(msg))
                         .setAutoCancel(true)
-                        .setDefaults(Notification.DEFAULT_SOUND | Notification.DEFAULT_LIGHTS)
+                        .setDefaults(Notification.DEFAULT_LIGHTS)
                         .setContentText(msg);
+
 
         mBuilder.setContentIntent(contentIntent);
 

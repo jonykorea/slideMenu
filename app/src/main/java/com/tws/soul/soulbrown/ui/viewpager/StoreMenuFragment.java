@@ -97,7 +97,11 @@ public class StoreMenuFragment extends BaseFragment {
         } else if (mStoreID.equals(StoreInfo.CODE_2FLAT)) {
             mMenuData = MenuDataManager.getInstance().getMenu2FLAT();
             mStoreName = context.getResources().getString(R.string.store_2flat);
+        } else if (mStoreID.equals(StoreInfo.CODE_TWS)) {
+            mMenuData = MenuDataManager.getInstance().getMenuTWS();
+            mStoreName = context.getResources().getString(R.string.store_tws);
         }
+
     }
 
     @Override

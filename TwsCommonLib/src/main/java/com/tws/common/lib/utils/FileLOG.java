@@ -14,7 +14,7 @@ public class FileLOG {
 
 	public static void writeLog(String str) {
 
-        boolean LOG_START = true;
+        boolean LOG_START = false;
 
         String logPath = "tws/log";
         String fileName = "log.txt";

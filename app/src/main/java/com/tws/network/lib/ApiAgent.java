@@ -42,25 +42,25 @@ public class ApiAgent {
     private static final String URL_PUBLICKEY = "/iNaviAir/air/inaviweb/PublicKey";
 
     // upload loaction
-    private static final String URL_SETUSERLOC = "/soulbrown/if/setuserloc";
+    private static final String URL_SETUSERLOC = "/soulbrown2/if/setuserloc";
 
     // check user
-    private static final String URL_USER_CHECKER = "/soulbrown/if/storeuserchecker";
+    private static final String URL_USER_CHECKER = "/soulbrown2/if/storeuserchecker";
 
     // order
-    private static final String URL_ORDER_MENU = "/soulbrown/if/ordermenu";
+    private static final String URL_ORDER_MENU = "/soulbrown2/if/ordermenu";
 
     // orderlist
-    private static final String URL_ORDER_LIST = "/soulbrown/if/getorderlist";
+    private static final String URL_ORDER_LIST = "/soulbrown2/if/getorderlist";
 
     // push key user
-    private static final String URL_PUSHKEY_USER = "/soulbrown/if/reguserkey";
+    private static final String URL_PUSHKEY_USER = "/soulbrown2/if/reguserkey";
 
     // push key owner
-    private static final String URL_PUSHKEY_OWNER = "/soulbrown/if/setstoreon";
+    private static final String URL_PUSHKEY_OWNER = "/soulbrown2/if/setstoreon";
 
     // chg status order menu
-    private static final String URL_STATUS_ORDER_MENU = "/soulbrown/if/chgorderstatus";
+    private static final String URL_STATUS_ORDER_MENU = "/soulbrown2/if/chgorderstatus";
 
 
 

@@ -332,6 +332,9 @@ public class NavigationDrawerFragment extends Fragment {
             sideMenuArrayList.add(  new SideMenu(getString(R.string.store_2flat),
                     R.xml.xml_icon_store)) ;
 
+            sideMenuArrayList.add(  new SideMenu(getString(R.string.store_tws),
+                    R.xml.xml_icon_store)) ;
+
             return sideMenuArrayList;
         }
         else

@@ -16,6 +16,7 @@
     <string name="store_haru">HARU</string>
     <string name="store_1022">1022</string>
     <string name="store_2flat">2FLAT</string>
+    <string name="store_tws">TWS</string>
     <string name="title_activity_setting">SettingActivity</string>
     <string name="hello_world">Hello world!</string>
     <string name="hello_blank_fragment">Hello blank fragment</string>

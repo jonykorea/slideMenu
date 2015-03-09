@@ -11,7 +11,7 @@ public class ViewPagerAdapter extends FragmentPagerAdapter {
 
     // Declare the number of ViewPager pages
 
-    private String titles[] = new String[]{"Tab1", "Tab2", "Tab3"};
+    private String titles[] = new String[]{"store1", "store2", "store3","store4"};
     final int PAGE_COUNT = titles.length;
 
     public ViewPagerAdapter(FragmentManager fm) {
@@ -56,6 +56,15 @@ public class ViewPagerAdapter extends FragmentPagerAdapter {
                 return storeMenuFragment03;
             //StoreFragment03 storeMenuFragment03 = new StoreFragment03();
             //return storeMenuFragment03;
+
+            case 3:
+                bundle.putString("store", StoreInfo.CODE_TWS);
+
+                StoreMenuFragment storeMenuFragment04 = new StoreMenuFragment();
+
+                storeMenuFragment04.setArguments(bundle);
+
+                return storeMenuFragment04;
         }
 
         return null;

@@ -23,10 +23,19 @@ public class MenuDataManager {
     private static int[] arrayPrice_2FLAT = {3000,3500,4500,4000,5000,5000};
     private static int[] arrayImage_2FLAT = {R.drawable.flat_01,R.drawable.flat_02,R.drawable.flat_03,R.drawable.flat_04,R.drawable.flat_05,R.drawable.flat_06};
 
+    // test Store
+    private static String[] arrayMenu_TWS = {"아메리카노(Hot)", "카페라떼(Hot)", "바밤바라떼(Hot)", "밀크티(Hot)", "블루베리레몬에이드(Hot)", "트리플베리요거트스무디(Hot)"};
+    private static int[] arrayPrice_TWS = {3000,3500,4500,4000,5000,5000};
+    private static int[] arrayImage_TWS = {R.drawable.flat_01,R.drawable.flat_02,R.drawable.flat_03,R.drawable.flat_04,R.drawable.flat_05,R.drawable.flat_06};
+
+
     private static MenuDataManager mInstance;
     private List<Menu> menuHaru;
     private List<Menu> menu1022;
     private List<Menu> menuFLAT;
+
+    // test Store
+    private List<Menu> menuTWS;
 
     public static MenuDataManager getInstance() {
         if (mInstance == null) {
@@ -83,6 +92,22 @@ public class MenuDataManager {
 
 
         return  menuFLAT;
+    }
+
+    public List<Menu> getMenuTWS() {
+
+        menuTWS = new ArrayList<Menu>();
+
+        for (int i = 0 ; i < arrayMenu_TWS.length ; i++) {
+            Menu info = new Menu();
+            info.name = arrayMenu_TWS[i];
+            info.price = arrayPrice_TWS[i];
+            info.image = arrayImage_TWS[i];
+            menuTWS.add(info);
+        }
+
+
+        return  menuTWS;
     }
 
 }
