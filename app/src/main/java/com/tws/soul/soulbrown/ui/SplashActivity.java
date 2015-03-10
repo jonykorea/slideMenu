@@ -14,10 +14,8 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.app.AppController;
 import com.app.define.LOG;
 import com.tws.network.data.ExtraType;
 import com.tws.network.data.RetUserChecker;

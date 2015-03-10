@@ -6,8 +6,8 @@ import android.text.TextUtils;
 
 import com.android.volley.Request;
 import com.android.volley.Response;
-import com.app.AppController;
 import com.app.define.LOG;
+import com.tws.network.api.ApiBase;
 import com.tws.network.data.CoreGetPublicKey;
 import com.tws.network.data.RetCode;
 import com.tws.network.data.RetOrderList;
@@ -35,32 +35,32 @@ public class ApiAgent {
 
     // into Domain
     //private static final String URL_DOMAIN = "https://airagt.inavi.com";
-    private static final String URL_DOMAIN = "http://61.33.249.180:8020";
+    private static final String URL_DOMAIN = "http://107.191.60.183:8020";
 
 
     // publickey info
     private static final String URL_PUBLICKEY = "/iNaviAir/air/inaviweb/PublicKey";
 
     // upload loaction
-    private static final String URL_SETUSERLOC = "/soulbrown2/if/setuserloc";
+    private static final String URL_SETUSERLOC = "/soulbrown/if/setuserloc";
 
     // check user
-    private static final String URL_USER_CHECKER = "/soulbrown2/if/storeuserchecker";
+    private static final String URL_USER_CHECKER = "/soulbrown/if/storeuserchecker";
 
     // order
-    private static final String URL_ORDER_MENU = "/soulbrown2/if/ordermenu";
+    private static final String URL_ORDER_MENU = "/soulbrown/if/ordermenu";
 
     // orderlist
-    private static final String URL_ORDER_LIST = "/soulbrown2/if/getorderlist";
+    private static final String URL_ORDER_LIST = "/soulbrown/if/getorderlist";
 
     // push key user
-    private static final String URL_PUSHKEY_USER = "/soulbrown2/if/reguserkey";
+    private static final String URL_PUSHKEY_USER = "/soulbrown/if/reguserkey";
 
     // push key owner
-    private static final String URL_PUSHKEY_OWNER = "/soulbrown2/if/setstoreon";
+    private static final String URL_PUSHKEY_OWNER = "/soulbrown/if/setstoreon";
 
     // chg status order menu
-    private static final String URL_STATUS_ORDER_MENU = "/soulbrown2/if/chgorderstatus";
+    private static final String URL_STATUS_ORDER_MENU = "/soulbrown/if/chgorderstatus";
 
 
 
@@ -102,7 +102,7 @@ public class ApiAgent {
         if (jsonParams != null)
             reqParams = jsonParams.toString();
 
-        LOG.d("reqParams " + reqParams);
+        LOG.d("url : "+url+" reqParams : " + reqParams);
 
 
         // set params E
@@ -117,7 +117,7 @@ public class ApiAgent {
         );
 
         // request queue!
-        AppController.getInstance().addToRequestQueue(gsObjRequest);
+        ApiBase.getInstance(context).addToRequestQueue(gsObjRequest);
 
 
 
@@ -161,7 +161,7 @@ public class ApiAgent {
         if (jsonParams != null)
             reqParams = jsonParams.toString();
 
-        LOG.d("reqParams " + reqParams);
+        LOG.d("url : "+url+" reqParams : " + reqParams);
 
 
         // set params E
@@ -176,7 +176,7 @@ public class ApiAgent {
         );
 
         // request queue!
-        AppController.getInstance().addToRequestQueue(gsObjRequest);
+        ApiBase.getInstance(context).addToRequestQueue(gsObjRequest);
 
     }
 
@@ -216,7 +216,7 @@ public class ApiAgent {
         if (jsonParams != null)
             reqParams = jsonParams.toString();
 
-        LOG.d("reqParams " + reqParams);
+        LOG.d("url : "+url+" reqParams : " + reqParams);
 
 
         // set params E
@@ -231,7 +231,7 @@ public class ApiAgent {
         );
 
         // request queue!
-        AppController.getInstance().addToRequestQueue(gsObjRequest);
+        ApiBase.getInstance(context).addToRequestQueue(gsObjRequest);
 
     }
     // apiOrderMenu
@@ -294,7 +294,7 @@ public class ApiAgent {
         if (jsonParams != null)
             reqParams = jsonParams.toString();
 
-        LOG.d("reqParams " + reqParams);
+        LOG.d("url : "+url+" reqParams : " + reqParams);
 
 
         // set params E
@@ -309,7 +309,7 @@ public class ApiAgent {
         );
 
         // request queue!
-        AppController.getInstance().addToRequestQueue(gsObjRequest);
+        ApiBase.getInstance(context).addToRequestQueue(gsObjRequest);
 
     }
 
@@ -360,7 +360,7 @@ public class ApiAgent {
         if (jsonParams != null)
             reqParams = jsonParams.toString();
 
-        LOG.d("reqParams " + reqParams);
+        LOG.d("url : "+url+" reqParams : " + reqParams);
 
 
         // set params E
@@ -375,7 +375,7 @@ public class ApiAgent {
         );
 
         // request queue!
-        AppController.getInstance().addToRequestQueue(gsObjRequest);
+        ApiBase.getInstance(context).addToRequestQueue(gsObjRequest);
     }
 
 
@@ -427,8 +427,7 @@ public class ApiAgent {
         if (jsonParams != null)
             reqParams = jsonParams.toString();
 
-        LOG.d("url :" + url);
-        LOG.d("reqParams " + reqParams);
+        LOG.d("url : "+url+" reqParams : " + reqParams);
 
 
         // set params E
@@ -443,7 +442,7 @@ public class ApiAgent {
         );
 
         // request queue!
-        AppController.getInstance().addToRequestQueue(gsObjRequest);
+        ApiBase.getInstance(context).addToRequestQueue(gsObjRequest);
 
     }
 
@@ -488,7 +487,7 @@ public class ApiAgent {
         if (jsonParams != null)
             reqParams = jsonParams.toString();
 
-        LOG.d("reqParams " + reqParams);
+        LOG.d("url : "+url+" reqParams : " + reqParams);
 
 
         // set params E
@@ -503,7 +502,7 @@ public class ApiAgent {
         );
 
         // request queue!
-        AppController.getInstance().addToRequestQueue(gsObjRequest);
+        ApiBase.getInstance(context).addToRequestQueue(gsObjRequest);
 
     }
     // ui Api E

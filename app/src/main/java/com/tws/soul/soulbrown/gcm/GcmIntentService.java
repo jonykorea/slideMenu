@@ -16,7 +16,6 @@
 
 package com.tws.soul.soulbrown.gcm;
 
-import com.app.AppController;
 import com.app.define.LOG;
 import com.google.android.gms.gcm.GoogleCloudMessaging;
 import com.tws.common.lib.gms.LocationDefines;
