@@ -27,7 +27,7 @@
         android:orientation="vertical">
 
         <com.tws.widget.CuzEditText
-            android:hint="ID"
+            android:hint="닉네임"
             android:singleLine="true"
             android:id="@+id/splash_login_edit"
             android:layout_width="@dimen/size_220"

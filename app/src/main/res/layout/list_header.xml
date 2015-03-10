@@ -117,7 +117,7 @@
                 android:layout_height="40dp">
 
                 <com.tws.widget.CuzTextView
-                    android:text="주문 완료"
+                    android:text="접수 완료"
                     android:textStyle="bold"
                     android:layout_width="match_parent"
                     android:layout_height="30dp"
@@ -135,7 +135,7 @@
                 android:layout_height="40dp">
 
                 <com.tws.widget.CuzTextView
-                    android:text="만드는 중"
+                    android:text="음료 쿠킹 중"
                     android:textStyle="bold"
                     android:layout_width="match_parent"
                     android:layout_height="30dp"
@@ -153,7 +153,7 @@
                 android:layout_height="40dp">
 
                 <com.tws.widget.CuzTextView
-                    android:text="완료"
+                    android:text="Take out"
                     android:textStyle="bold"
                     android:layout_width="match_parent"
                     android:layout_height="30dp"

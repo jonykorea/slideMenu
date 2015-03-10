@@ -9,6 +9,9 @@ import com.tws.soul.soulbrown.R;
  */
 public class StoreInfo {
 
+    public static double STORE_LATI = 37.402104;
+    public static double STORE_LON = 127.110381;
+
     public static String CODE_HARU = "PGA000001";
     public static String CODE_1022 = "PGA000002";
     public static String CODE_2FLAT = "PGA000003";

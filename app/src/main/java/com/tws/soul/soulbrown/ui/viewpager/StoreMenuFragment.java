@@ -166,7 +166,7 @@ public class StoreMenuFragment extends BaseFragment {
                     showToast("주문 선택을 해주세요.");
                 } else {
 
-                    orderMenuList += "총 합계 : " + ConvertData.getPrice(sumPrice);
+                    orderMenuList += "총 주문 금액 : " + ConvertData.getPrice(sumPrice);
 
                     String storeName = getResources().getString(StoreInfo.getStoreName(mStoreID));
 

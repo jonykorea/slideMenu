@@ -475,7 +475,7 @@ public class OwnerOrderListFragment extends BaseFragment implements
 
                 }
 
-                orderMenuList += "총 합계 : " + ConvertData.getPrice(sumPrice);
+                orderMenuList += "총 주문 금액 : " + ConvertData.getPrice(sumPrice);
 
                 String storeName = getResources().getString(StoreInfo.getStoreName(storeID));
 

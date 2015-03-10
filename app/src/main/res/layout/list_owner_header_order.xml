@@ -244,7 +244,7 @@
                 android:layout_height="40dp">
 
                 <com.tws.widget.CuzTextView
-                    android:text="만들기"
+                    android:text="쿠킹"
                     android:textStyle="bold"
                     android:layout_width="match_parent"
                     android:layout_height="30dp"
@@ -262,7 +262,7 @@
                 android:layout_height="40dp">
 
                 <com.tws.widget.CuzTextView
-                    android:text="준비완료"
+                    android:text="Take out"
                     android:textStyle="bold"
                     android:layout_width="match_parent"
                     android:layout_height="30dp"

@@ -225,7 +225,7 @@
                         android:layout_height="30dp"
                         android:layout_gravity="center"
                         android:gravity="center"
-                        android:text="만들기"
+                        android:text="쿠킹"
                         android:textColor="#ffffff"
                         android:textStyle="bold" />
                 </LinearLayout>
@@ -243,7 +243,7 @@
                         android:layout_height="30dp"
                         android:layout_gravity="center"
                         android:gravity="center"
-                        android:text="준비완료"
+                        android:text="Take out"
                         android:textColor="#ffffff"
                         android:textStyle="bold" />
                 </LinearLayout>

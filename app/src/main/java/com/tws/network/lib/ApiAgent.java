@@ -3,6 +3,7 @@ package com.tws.network.lib;
 import android.content.ContentValues;
 import android.content.Context;
 import android.text.TextUtils;
+import android.util.Log;
 
 import com.android.volley.Request;
 import com.android.volley.Response;
@@ -18,6 +19,8 @@ import com.tws.network.lib.JsonGsonRequest;
 import com.tws.network.util.CommonParams;
 import com.tws.network.util.DeviceInfo;
 import com.tws.soul.soulbrown.data.Menu;
+import com.tws.soul.soulbrown.lib.GPSUtils;
+import com.tws.soul.soulbrown.lib.StoreInfo;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -130,16 +133,21 @@ public class ApiAgent {
 
         // set add header S
         HashMap<String, String> header = new HashMap<String, String>();
-/*
+
         String auth = DeviceInfo.getAuth(context);
 
         if (!TextUtils.isEmpty(auth))
             header.put("auth_key", auth);
 
         header.put("mdn", DeviceInfo.getMDN(context));
-*/
+
         // set add header E
 
+        // test S
+        float distance = GPSUtils.getDistance(Double.parseDouble(lat),Double.parseDouble(lon), StoreInfo.STORE_LATI,StoreInfo.STORE_LON);
+        Log.i("jony", "distance : "+ distance);
+
+        // test E
         // set params S
         JSONObject jsonParams = new JSONObject();
         try {
@@ -148,6 +156,7 @@ public class ApiAgent {
             jsonParams.put("userid",userid);
             jsonParams.put("lon",lon);
             jsonParams.put("lat",lat);
+            jsonParams.put("distance",GPSUtils.getDistanceStr(distance));
 
             //jsonParams = CommonParams.getCommonParams(context, jsonParams);
 
@@ -187,14 +196,14 @@ public class ApiAgent {
 
         // set add header S
         HashMap<String, String> header = new HashMap<String, String>();
-/*
+
         String auth = DeviceInfo.getAuth(context);
 
         if (!TextUtils.isEmpty(auth))
             header.put("auth_key", auth);
 
         header.put("mdn", DeviceInfo.getMDN(context));
-*/
+
         // set add header E
 
         // set params S
@@ -241,14 +250,14 @@ public class ApiAgent {
 
         // set add header S
         HashMap<String, String> header = new HashMap<String, String>();
-/*
+
         String auth = DeviceInfo.getAuth(context);
 
         if (!TextUtils.isEmpty(auth))
             header.put("auth_key", auth);
 
         header.put("mdn", DeviceInfo.getMDN(context));
-*/
+
         // set add header E
 
         // set params S
@@ -320,14 +329,14 @@ public class ApiAgent {
 
         // set add header S
         HashMap<String, String> header = new HashMap<String, String>();
-/*
+
         String auth = DeviceInfo.getAuth(context);
 
         if (!TextUtils.isEmpty(auth))
             header.put("auth_key", auth);
 
         header.put("mdn", DeviceInfo.getMDN(context));
-*/
+
         // set add header E
 
         // set params S
@@ -386,14 +395,14 @@ public class ApiAgent {
 
         // set add header S
         HashMap<String, String> header = new HashMap<String, String>();
-/*
+
         String auth = DeviceInfo.getAuth(context);
 
         if (!TextUtils.isEmpty(auth))
             header.put("auth_key", auth);
 
         header.put("mdn", DeviceInfo.getMDN(context));
-*/
+
         // set add header E
 
         // set params S
@@ -453,14 +462,14 @@ public class ApiAgent {
 
         // set add header S
         HashMap<String, String> header = new HashMap<String, String>();
-/*
+
         String auth = DeviceInfo.getAuth(context);
 
         if (!TextUtils.isEmpty(auth))
             header.put("auth_key", auth);
 
         header.put("mdn", DeviceInfo.getMDN(context));
-*/
+
         // set add header E
 
         // set params S
