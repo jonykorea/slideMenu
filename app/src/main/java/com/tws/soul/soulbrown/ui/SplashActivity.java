@@ -17,6 +17,7 @@ import android.widget.Toast;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.app.define.LOG;
+import com.tws.common.lib.views.CuzToast;
 import com.tws.network.data.ExtraType;
 import com.tws.network.data.RetUserChecker;
 import com.tws.network.lib.ApiAgent;
@@ -42,6 +43,9 @@ public class SplashActivity extends BaseActivity implements TextView.OnEditorAct
         setContentView(R.layout.activity_splash);
 
         context = getApplicationContext();
+
+        CuzToast cuzToast = new CuzToast(context);
+        cuzToast.showToast("Test",Toast.LENGTH_SHORT);
 
         llLoginLayout = (LinearLayout) findViewById(R.id.splash_login_layout);
         etLoginInput = (EditText) findViewById(R.id.splash_login_edit);
