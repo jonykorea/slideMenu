@@ -34,7 +34,7 @@ public class CuzToast extends Toast {
     }
 
     private void show(Toast toast, View v, int duration){
-        toast.setGravity(Gravity.CENTER_VERTICAL, 0, 0);
+        //toast.setGravity(Gravity.BOTTOM | Gravity.CENTER, 0, 0);
         toast.setDuration(duration);
         toast.setView(v);
         toast.show();

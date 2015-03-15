@@ -156,7 +156,8 @@ public class ApiAgent {
             jsonParams.put("userid",userid);
             jsonParams.put("lon",lon);
             jsonParams.put("lat",lat);
-            jsonParams.put("distance",GPSUtils.getDistanceStr(distance));
+            //jsonParams.put("distance",GPSUtils.getDistanceStr(distance));
+            jsonParams.put("distance",distance);
 
             //jsonParams = CommonParams.getCommonParams(context, jsonParams);
 
