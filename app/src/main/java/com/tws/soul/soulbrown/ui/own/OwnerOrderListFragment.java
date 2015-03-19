@@ -475,11 +475,11 @@ public class OwnerOrderListFragment extends BaseFragment implements
 
                 }
 
-                orderMenuList += "총 주문 금액 : " + ConvertData.getPrice(sumPrice);
+                orderMenuList += getString(R.string.order_sum_price)+" : " + ConvertData.getPrice(sumPrice);
 
                 String storeName = getResources().getString(StoreInfo.getStoreName(storeID));
 
-                orderDialog = new OrderDialog(context, "재주문 ( " + storeName + " )", orderMenuList);
+                orderDialog = new OrderDialog(context, getString(R.string.reorder)+" ( " + storeName + " )", orderMenuList);
 
                 orderDialog.setOnAcceptButtonClickListener(new View.OnClickListener() {
                     @Override
@@ -512,11 +512,11 @@ public class OwnerOrderListFragment extends BaseFragment implements
                 // get setting time E
 
 
-                orderDialog.getButtonAccept().setText("재주문");
-                orderDialog.getButtonCancel().setText("취소");
+                orderDialog.getButtonAccept().setText(getString(R.string.reorder));
+                orderDialog.getButtonCancel().setText(getString(R.string.cancel));
 
             } else {
-                showToast("주문 선택을 해주세요.");
+                showToast(getString(R.string.order_select));
             }
         }
 
@@ -599,7 +599,7 @@ public class OwnerOrderListFragment extends BaseFragment implements
                         // fail
                         LOG.d("apiOrderMenu Fail " + retCode.result);
 
-                        showToast("주문 오류 : " + retCode.errormsg + "[" + retCode.result + "]");
+                        showToast(getString(R.string.order_fail)+" : " + retCode.errormsg + "[" + retCode.result + "]");
 
                     }
 
@@ -613,7 +613,7 @@ public class OwnerOrderListFragment extends BaseFragment implements
 
                     LOG.d("apiOrderMenu VolleyError " + volleyError.getMessage());
 
-                    showToast("네트워크 오류 : " + volleyError.getMessage());
+                    showToast(getString(R.string.network_fail)+" : " + volleyError.getMessage());
 
                 }
             });
@@ -714,7 +714,7 @@ public class OwnerOrderListFragment extends BaseFragment implements
 
         initData();
 
-        showToast("정상적으로 재주문되었습니다.");
+        showToast(getString(R.string.order_succ));
 
         String time = orderMenuInfo.arrivaltime;
 

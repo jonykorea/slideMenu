@@ -60,7 +60,7 @@ public class SplashActivity extends BaseActivity implements TextView.OnEditorAct
 
                 if (etLoginInput.getText().toString().length() == 0) {
                     showHideLogin(true);
-                    Toast.makeText(SplashActivity.this, "ID 를 확인해 주세요.", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(SplashActivity.this, getString(R.string.check_nickname), Toast.LENGTH_SHORT).show();
                 } else {
                     showHideLogin(false);
                     String userID = etLoginInput.getText().toString();
@@ -83,7 +83,7 @@ public class SplashActivity extends BaseActivity implements TextView.OnEditorAct
 
             if (etLoginInput.getText().toString().length() == 0) {
                 showHideLogin(true);
-                Toast.makeText(SplashActivity.this, "ID 를 확인해 주세요.", Toast.LENGTH_SHORT).show();
+                Toast.makeText(SplashActivity.this, getString(R.string.check_nickname), Toast.LENGTH_SHORT).show();
             } else {
                 showHideLogin(false);
                 String userID = etLoginInput.getText().toString();
@@ -168,7 +168,7 @@ public class SplashActivity extends BaseActivity implements TextView.OnEditorAct
                             startActivityForResult(intent, ACT_RESULT_CODE);
                         } else {
                             showHideLogin(true);
-                            Toast.makeText(SplashActivity.this, "등록되지 않는 ID 입니다. 확인 부탁드립니다.", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(SplashActivity.this, getString(R.string.check_user), Toast.LENGTH_SHORT).show();
                         }
 
 
@@ -189,7 +189,7 @@ public class SplashActivity extends BaseActivity implements TextView.OnEditorAct
                     showHideLogin(true);
 
                     LOG.d("apiSetUserLoc VolleyError " + volleyError.getMessage());
-                    Toast.makeText(SplashActivity.this, "네트워크 오류", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(SplashActivity.this, getString(R.string.network_fail), Toast.LENGTH_SHORT).show();
 
                 }
             });

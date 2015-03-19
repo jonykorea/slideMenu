@@ -301,7 +301,7 @@ public class SoulBrownMainActivity extends FragmentActivity
                 public void onErrorResponse(VolleyError volleyError) {
 
                     LOG.d("apiSetPushKey VolleyError " + volleyError.getMessage());
-                    Toast.makeText(SoulBrownMainActivity.this, "네트워크 오류", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(SoulBrownMainActivity.this, getString(R.string.network_fail), Toast.LENGTH_SHORT).show();
 
                 }
             });

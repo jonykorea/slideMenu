@@ -66,11 +66,36 @@ public class ApiAgent {
     private static final String URL_STATUS_ORDER_MENU = "/soulbrown/if/chgorderstatus";
 
 
+    // COMMON
+    private static final String URL_COMMON_CHECKER = "/bb/if/user/storeuserchecker";
+
+    // USER
+    private static final String URL_USER_REG_UESERKEY = "/bb/if/user/reguserkey";
+
+    private static final String URL_USER_GET_MENULIST = "/bb/if/user/getmenulist";
+
+    private static final String URL_USER_ORDER_MENU = "/bb/if/user/ordermenu";
+
+    private static final String URL_USER_GET_ORDERLIST = "/bb/if/user/getorderlist";
+
+    private static final String URL_USER_SET_USERLOC = "/bb/if/user/setuserloc";
+
+    private static final String URL_USER_CHG_ORDERSTATUS = "/bb/if/user/chgorderstatus";
+
+    private static final String URL_USER_LOGOUT = "/bb/if/user/logout";
 
 
+    // STORE
+    private static final String URL_STORE_GET_STATUS = "/bb/if/store/getmystatus";
 
+    private static final String URL_STORE_SET_STOREON = "/bb/if/store/setstoreon";
 
-    // 없으면 입력창 노출.
+    private static final String URL_STORE_GET_ORDERLIST = "/bb/if/store/getorderlist";
+
+    private static final String URL_STORE_CHG_ORDERSTATUS = "/bb/if/store/chgorderstatus";
+
+    private static final String URL_STORE_LOGOUT = "/bb/if/store/logout";
+
 
     // get publickey
     public void apiPublicKey(Context context, Response.Listener<CoreGetPublicKey> succListener, Response.ErrorListener failListener) {

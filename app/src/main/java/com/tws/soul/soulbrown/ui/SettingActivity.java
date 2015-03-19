@@ -153,7 +153,7 @@ public class SettingActivity extends BaseActivity {
 
                         gcmClient.savePushKey(regID);
 
-                        Toast.makeText(SettingActivity.this, "Push Message 등록되었습니다.", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(SettingActivity.this, getString(R.string.push_msg_on), Toast.LENGTH_SHORT).show();
 
                     } else {
                         // fail
@@ -172,7 +172,7 @@ public class SettingActivity extends BaseActivity {
                         mBaseProgressDialog.dismiss();
 
                     LOG.d("apiSetPushKey VolleyError " + volleyError.getMessage());
-                    Toast.makeText(SettingActivity.this, "네트워크 오류", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(SettingActivity.this, getString(R.string.network_fail), Toast.LENGTH_SHORT).show();
 
                 }
             });
@@ -257,7 +257,7 @@ public class SettingActivity extends BaseActivity {
                         mBaseProgressDialog.dismiss();
 
                     LOG.d("apiRemovePushKey VolleyError " + volleyError.getMessage());
-                    Toast.makeText(SettingActivity.this, "네트워크 오류", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(SettingActivity.this, getString(R.string.network_fail), Toast.LENGTH_SHORT).show();
 
                 }
             });

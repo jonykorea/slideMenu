@@ -185,10 +185,10 @@ public class UserOrderListFragment extends BaseFragment implements
 
             ReceiptInfoRow info = getSumPrice(recentOrderInfo.orderdata);
 
-            tvHeaderKey.setText("주문번호 : "+recentOrderInfo.orderkey);
+            tvHeaderKey.setText(getString(R.string.order_id)+" : "+recentOrderInfo.orderkey);
             tvHeaderStore.setText(StoreInfo.getStoreName(recentOrderInfo.storeid));
             tvHeaderMenu.setText(info.sumMenu);
-            tvHeaderPrice.setText("총 금액 : "+info.sumPrice);
+            tvHeaderPrice.setText(getString(R.string.order_sum_price)+" : "+info.sumPrice);
 
             String date = TimeUtil.getSoulBrownOrderDateInfo(recentOrderInfo.regdate);
 
@@ -449,11 +449,11 @@ public class UserOrderListFragment extends BaseFragment implements
 
                 }
 
-                orderMenuList += "총 주문 금액 : " + ConvertData.getPrice(sumPrice);
+                orderMenuList += getString(R.string.order_sum_price)+" : " + ConvertData.getPrice(sumPrice);
 
                 String storeName = getResources().getString(StoreInfo.getStoreName(storeID));
 
-                orderDialog = new OrderDialog(context, "재주문 ( " + storeName + " )", orderMenuList);
+                orderDialog = new OrderDialog(context, getString(R.string.reorder)+" ( " + storeName + " )", orderMenuList);
 
                 orderDialog.setOnAcceptButtonClickListener(new View.OnClickListener() {
                     @Override
@@ -486,11 +486,11 @@ public class UserOrderListFragment extends BaseFragment implements
                 // get setting time E
 
 
-                orderDialog.getButtonAccept().setText("재주문");
-                orderDialog.getButtonCancel().setText("취소");
+                orderDialog.getButtonAccept().setText(getString(R.string.reorder));
+                orderDialog.getButtonCancel().setText(getString(R.string.cancel));
 
             } else {
-                showToast("주문 선택을 해주세요.");
+                showToast(getString(R.string.order_select));
             }
         }
 
@@ -574,13 +574,13 @@ public class UserOrderListFragment extends BaseFragment implements
 
                         if( mBaseDialog == null || !mBaseDialog.isShowing()) {
                             mBaseDialog = new CuzDialog(context,
-                                    "확인", "이미 주문된 내역이 있습니다.\n주문내역에서 확인하세요.");
+                                    getString(R.string.confirm), getString(R.string.order_check_list));
 
                             mBaseDialog.show();
 
                             mBaseDialog.setCancelable(true);
 
-                            mBaseDialog.getButtonAccept().setText("확인");
+                            mBaseDialog.getButtonAccept().setText(getString(R.string.confirm));
 
                             mBaseDialog.getButtonCancel().setVisibility(View.INVISIBLE);
 
@@ -592,7 +592,7 @@ public class UserOrderListFragment extends BaseFragment implements
                         // fail
                         LOG.d("apiOrderMenu Fail " + retCode.result);
 
-                        showToast("주문 오류 : " + retCode.errormsg + "[" + retCode.result + "]");
+                        showToast(getString(R.string.order_fail)+ " : " + retCode.errormsg + "[" + retCode.result + "]");
 
                     }
 
@@ -606,7 +606,7 @@ public class UserOrderListFragment extends BaseFragment implements
 
                     LOG.d("apiOrderMenu VolleyError " + volleyError.getMessage());
 
-                    showToast("네트워크 오류 : " + volleyError.getMessage());
+                    showToast(getString(R.string.network_fail)+" : " + volleyError.getMessage());
 
                 }
             });
@@ -617,7 +617,7 @@ public class UserOrderListFragment extends BaseFragment implements
 
         initData();
 
-        showToast("정상적으로 재주문되었습니다.");
+        showToast(getString(R.string.reorder_succ));
 
         String time = orderMenuInfo.arrivaltime;
 

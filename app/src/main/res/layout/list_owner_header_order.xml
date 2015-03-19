@@ -19,7 +19,7 @@
         <com.tws.widget.CuzTextView
             android:id="@+id/header_recent_top"
 
-            android:text="최근 주문 내역"
+            android:text="@string/orderlist_recent"
             android:layout_marginLeft="@dimen/size_15"
 
             android:layout_width="match_parent"
@@ -48,7 +48,7 @@
                     android:layout_height="match_parent"
                     android:layout_alignParentLeft="true"
                     android:gravity="center"
-                    android:text="주문번호 : "
+                    android:text="@string/order_id"
                     android:textColor="#3D454C"
                     android:textSize="@dimen/size_16" />
 
@@ -188,7 +188,7 @@
                     android:layout_height="match_parent"
                     android:layout_alignParentLeft="true"
                     android:gravity="center"
-                    android:text="총 금액 : "
+                    android:text="@string/order_sum_price"
                     android:textColor="#3D454C"
                     android:textSize="@dimen/size_16" />
 
@@ -244,7 +244,7 @@
                 android:layout_height="40dp">
 
                 <com.tws.widget.CuzTextView
-                    android:text="쿠킹"
+                    android:text="@string/status_store_cooking"
                     android:textStyle="bold"
                     android:layout_width="match_parent"
                     android:layout_height="30dp"
@@ -262,7 +262,7 @@
                 android:layout_height="40dp">
 
                 <com.tws.widget.CuzTextView
-                    android:text="Take out"
+                    android:text="@string/status_takeout"
                     android:textStyle="bold"
                     android:layout_width="match_parent"
                     android:layout_height="30dp"
