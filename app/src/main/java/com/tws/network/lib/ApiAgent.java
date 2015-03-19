@@ -154,7 +154,7 @@ public class ApiAgent {
     // setuserloc
     public void apiUserLoc(Context context,String userid, String lon,String lat, Response.Listener<RetCode> succListener, Response.ErrorListener failListener) {
 
-        String url = URL_DOMAIN + URL_SETUSERLOC;
+        String url = URL_DOMAIN + URL_USER_SET_USERLOC;
 
         // set add header S
         HashMap<String, String> header = new HashMap<String, String>();
@@ -177,12 +177,13 @@ public class ApiAgent {
         JSONObject jsonParams = new JSONObject();
         try {
 
-            jsonParams.put("source","USERUI");
-            jsonParams.put("userid",userid);
-            jsonParams.put("lon",lon);
-            jsonParams.put("lat",lat);
+            //jsonParams.put("source","USERUI");
+            //jsonParams.put("userid",userid);
+            //jsonParams.put("lon",lon);
+            //jsonParams.put("lat",lat);
             //jsonParams.put("distance",GPSUtils.getDistanceStr(distance));
-            jsonParams.put("distance",distance);
+            jsonParams.put("store","d");
+            jsonParams.put("status",distance);
 
             //jsonParams = CommonParams.getCommonParams(context, jsonParams);
 
@@ -218,7 +219,7 @@ public class ApiAgent {
     // apiUserChecker
     public void apiUserChecker(Context context,String userid, Response.Listener<RetUserChecker> succListener, Response.ErrorListener failListener) {
 
-        String url = URL_DOMAIN + URL_USER_CHECKER;
+        String url = URL_DOMAIN + URL_COMMON_CHECKER;
 
         // set add header S
         HashMap<String, String> header = new HashMap<String, String>();
@@ -226,7 +227,7 @@ public class ApiAgent {
         String auth = DeviceInfo.getAuth(context);
 
         if (!TextUtils.isEmpty(auth))
-            header.put("auth_key", auth);
+            header.put("auth", auth);
 
         header.put("mdn", DeviceInfo.getMDN(context));
 
@@ -236,8 +237,7 @@ public class ApiAgent {
         JSONObject jsonParams = new JSONObject();
         try {
 
-            jsonParams.put("source","STARTUI");
-            jsonParams.put("usercode",userid);
+            jsonParams.put("nick",userid);
 
             //jsonParams = CommonParams.getCommonParams(context, jsonParams);
 
@@ -272,7 +272,7 @@ public class ApiAgent {
     // apiOrderMenu
     public void apiOrderMenu(Context context,String userid, String storeid, String arriveTime , List<Menu> listMenu, Response.Listener<RetOrderMenu> succListener, Response.ErrorListener failListener) {
 
-        String url = URL_DOMAIN + URL_ORDER_MENU;
+        String url = URL_DOMAIN + URL_USER_ORDER_MENU;
 
         // set add header S
         HashMap<String, String> header = new HashMap<String, String>();
@@ -291,12 +291,14 @@ public class ApiAgent {
         JSONArray jsonArray = new JSONArray();
         JSONObject jsonSubParams = null;
 
+        JSONArray jsonArrayOption = new JSONArray();
+        JSONObject jsonSubOptionParams = null;
+
         try {
 
-            jsonParams.put("source","USERUI");
-            jsonParams.put("userid",userid);
-            jsonParams.put("storeid",storeid);
-            jsonParams.put("arrivaltime",arriveTime);
+
+            jsonParams.put("store",storeid);
+            jsonParams.put("arrtime",arriveTime);
 
             if(listMenu!=null) {
                 for (int i = 0; i < listMenu.size(); i++) {
@@ -308,13 +310,30 @@ public class ApiAgent {
 
                     if( cnt != 0) {
 
-                        jsonSubParams.put("menuname", listMenu.get(i).name);
-                        jsonSubParams.put("menuprice", Integer.toString(listMenu.get(i).price));
+                        jsonSubParams.put("name", listMenu.get(i).name);
+                        jsonSubParams.put("price", Integer.toString(listMenu.get(i).price));
                         jsonSubParams.put("count", Integer.toString(cnt));
+
+                        if( listMenu.get(i).option !=null && listMenu.get(i).option.size() > 0 )
+                        {
+
+                            for (int j = 0; j < listMenu.get(i).option.size() ; j++) {
+
+                                jsonSubOptionParams = new JSONObject();
+
+                                jsonSubOptionParams.put("name", listMenu.get(i).option.get(j).name);
+                                jsonSubOptionParams.put("addprice", listMenu.get(i).option.get(j).addprice);
+
+                                jsonArrayOption.put(jsonSubOptionParams);
+                            }
+
+                            jsonSubParams.put("option", jsonArrayOption);
+                        }
+
                         jsonArray.put(jsonSubParams);
                     }
                 }
-            jsonParams.put("orderdata", jsonArray);
+            jsonParams.put("order", jsonArray);
 
             }
             //jsonParams = CommonParams.getCommonParams(context, jsonParams);
@@ -351,7 +370,7 @@ public class ApiAgent {
     // apiGetOrderList
     public void apiGetOrderList(Context context, String source, String userid, String storeid, String selectFlag , Response.Listener<RetOrderList> succListener, Response.ErrorListener failListener) {
 
-        String url = URL_DOMAIN + URL_ORDER_LIST;
+        String url = URL_DOMAIN + URL_USER_GET_ORDERLIST;
 
         // set add header S
         HashMap<String, String> header = new HashMap<String, String>();
@@ -370,25 +389,15 @@ public class ApiAgent {
         JSONArray jsonArray = new JSONArray();
         JSONObject jsonSubParams = null;
 
-        try {
-
-            jsonParams.put("source",source);
-
-            if(!TextUtils.isEmpty(userid))
-                jsonParams.put("userid",userid);
-
-            if(!TextUtils.isEmpty(storeid))
-                jsonParams.put("storeid",storeid);
-
-            jsonParams.put("selectflag",selectFlag);
-
-
-            //jsonParams = CommonParams.getCommonParams(context, jsonParams);
-
-        } catch (Exception e) {
-            LOG.d("apiGetOrderList error:" + e.getMessage());
-            jsonParams = null;
+        if(!TextUtils.isEmpty(userid))
+        {
+            url = URL_DOMAIN + URL_USER_GET_ORDERLIST;
         }
+
+        if(!TextUtils.isEmpty(storeid)) {
+            url = URL_DOMAIN + URL_STORE_GET_ORDERLIST;
+        }
+
 
         String reqParams = null;
 
@@ -414,10 +423,10 @@ public class ApiAgent {
     }
 
 
-    // apiGetOrderList
+    // apiSetPushKey
     public void apiSetPushKey(Context context, String source, String userid, String storeid, String pushKey, Response.Listener<RetCode> succListener, Response.ErrorListener failListener) {
 
-        String url = URL_DOMAIN + URL_PUSHKEY_USER;
+        String url = URL_DOMAIN + URL_USER_REG_UESERKEY;
 
         // set add header S
         HashMap<String, String> header = new HashMap<String, String>();
@@ -425,7 +434,7 @@ public class ApiAgent {
         String auth = DeviceInfo.getAuth(context);
 
         if (!TextUtils.isEmpty(auth))
-            header.put("auth_key", auth);
+            header.put("auth", auth);
 
         header.put("mdn", DeviceInfo.getMDN(context));
 
@@ -438,11 +447,14 @@ public class ApiAgent {
 
         try {
 
-            jsonParams.put("source",source);
+            // param info
+            // os  android : 1
+            jsonParams.put("os",1);
             jsonParams.put("pushkey",pushKey);
 
+            // user
             if(!TextUtils.isEmpty(userid)) {
-                jsonParams.put("userid", userid);
+                jsonParams.put("nick", userid);
             }
 
             if(!TextUtils.isEmpty(storeid)) {
@@ -492,7 +504,7 @@ public class ApiAgent {
         String auth = DeviceInfo.getAuth(context);
 
         if (!TextUtils.isEmpty(auth))
-            header.put("auth_key", auth);
+            header.put("auth", auth);
 
         header.put("mdn", DeviceInfo.getMDN(context));
 
@@ -502,9 +514,8 @@ public class ApiAgent {
         JSONObject jsonParams = new JSONObject();
         try {
 
-            jsonParams.put("source","STARTUI");
-
-            jsonParams.put("storeid",storeID);
+            if( !TextUtils.isEmpty(storeID))
+                jsonParams.put("store",storeID);
 
             jsonParams.put("orderkey",orderKey);
 

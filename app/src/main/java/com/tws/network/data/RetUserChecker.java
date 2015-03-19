@@ -5,6 +5,7 @@ package com.tws.network.data;
  */
 public class RetUserChecker extends RetCode{
 
-    public String usertype;
+    // type = 0 : 사용자 / 1: 점주
+    public int type;
 
 }

@@ -5,7 +5,7 @@ package com.tws.network.data;
  */
 public class RetCode {
 
-    public int result;
-    public String errormsg;
+    public int ret;
+    public String msg;
 
 }

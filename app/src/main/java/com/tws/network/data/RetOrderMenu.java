@@ -7,8 +7,8 @@ import java.util.ArrayList;
  */
 public class RetOrderMenu extends RetCode{
 
-    public String storeid;
-    public String arrivaltime;
+    public String store;
+    public String arrtime;
     public String orderkey;
 
     public ArrayList<ArrayOrderData> orderdata;

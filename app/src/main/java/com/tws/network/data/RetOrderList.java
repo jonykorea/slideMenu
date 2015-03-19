@@ -7,5 +7,5 @@ import java.util.ArrayList;
  */
 public class RetOrderList extends RetCode{
 
-    public ArrayList<ArrayOrderList> orderlist;
+    public ArrayList<ArrayOrderList> orders;
 }

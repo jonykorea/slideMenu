@@ -7,14 +7,15 @@ import java.util.ArrayList;
  */
 public class ArrayOrderList {
 
-    public String index;
-    public String regdate;
-    public String userid;
-    public String storeid;
-    public String arrivaltime;
+    //public String index;
+    public String regtime;
+    public String nick;
+    public String store;
+    public String storename;
+    public String arrtime;
     public String orderkey;
     public String status;
-    public String distance;
+    public String dist;
 
-    public ArrayList<ArrayOrderData> orderdata;
+    public ArrayList<ArrayOrderData> order;
 }
