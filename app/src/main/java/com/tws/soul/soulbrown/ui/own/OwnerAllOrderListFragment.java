@@ -46,7 +46,7 @@ public class OwnerAllOrderListFragment extends BaseFragment implements
         StickyListHeadersListView.OnStickyHeaderOffsetChangedListener,
         StickyListHeadersListView.OnStickyHeaderChangedListener , OrderListAdapter.onChangeStatusListener {
 
-    private final String SELECT_FLAG_USER = "store-complete";
+    private final int SELECT_FLAG_USER = 2;
 
     private OrderListAdapter listAapter;
     private boolean fadeHeader = true;
@@ -155,14 +155,14 @@ public class OwnerAllOrderListFragment extends BaseFragment implements
 
             for (int i = 0; i < orderData.size(); i++) {
                 int count = orderData.get(i).count;
-                int price = Integer.parseInt(orderData.get(i).menuprice);
+                int price = Integer.parseInt(orderData.get(i).price);
 
                 sum += count * price;
 
                 if (i == orderData.size() - 1)
-                    sumMenu += orderData.get(i).menuname + "x" + count;
+                    sumMenu += orderData.get(i).name + "x" + count;
                 else
-                    sumMenu += orderData.get(i).menuname + "x" + count + ", ";
+                    sumMenu += orderData.get(i).name + "x" + count + ", ";
 
             }
         }
@@ -190,7 +190,7 @@ public class OwnerAllOrderListFragment extends BaseFragment implements
 
         mOrderListData = orderListData;
 
-        listAapter = new OrderListAdapter(context, mOrderListData.orderlist, this);
+        listAapter = new OrderListAdapter(context, mOrderListData.orders, this);
 
         stickyList.setAdapter(listAapter);
 
@@ -198,7 +198,7 @@ public class OwnerAllOrderListFragment extends BaseFragment implements
 
 
     // apiOrderList
-    public void apiOrderList(String source, String userCode, String selectFlag) {
+    public void apiOrderList(String source, String userCode, int flag) {
 
         ApiAgent api = new ApiAgent();
 
@@ -209,7 +209,7 @@ public class OwnerAllOrderListFragment extends BaseFragment implements
             if( !mBaseProgressDialog.isShowing() )
                 mBaseProgressDialog.show();
 
-            api.apiGetOrderList(context, source, null, userCode, selectFlag, new Response.Listener<RetOrderList>() {
+            api.apiGetOrderList(context, source, null, userCode, flag, new Response.Listener<RetOrderList>() {
                 @Override
                 public void onResponse(RetOrderList retCode) {
 
@@ -222,16 +222,16 @@ public class OwnerAllOrderListFragment extends BaseFragment implements
                             refreshLayout.setRefreshing(false);
                     }
 
-                    LOG.d("retCode.result : " + retCode.result);
-                    LOG.d("retCode.errormsg : " + retCode.errormsg);
+                    LOG.d("retCode.result : " + retCode.ret);
+                    LOG.d("retCode.errormsg : " + retCode.msg);
 
 
-                    if (retCode.result == ServerDefineCode.NET_RESULT_SUCC) {
+                    if (retCode.ret == ServerDefineCode.NET_RESULT_SUCC) {
 
                         // success
                         LOG.d("apiOrderList Succ");
 
-                        if (retCode.orderlist != null)
+                        if (retCode.orders != null)
                             refreshDataSet(retCode);
                         else {
                             // 주문 내역이 없다.
@@ -242,7 +242,7 @@ public class OwnerAllOrderListFragment extends BaseFragment implements
 
                     } else {
                         // fail
-                        LOG.d("apiOrderList Fail " + retCode.result);
+                        LOG.d("apiOrderList Fail " + retCode.ret);
 
                         //showToast("주문 이력 오류 : "+ retCode.errormsg+"["+retCode.result+"]");
 

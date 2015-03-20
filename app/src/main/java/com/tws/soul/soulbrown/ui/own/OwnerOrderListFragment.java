@@ -59,7 +59,7 @@ public class OwnerOrderListFragment extends BaseFragment implements
         StickyListHeadersListView.OnStickyHeaderOffsetChangedListener,
         StickyListHeadersListView.OnStickyHeaderChangedListener, OrderListAdapter.onChangeStatusListener {
 
-    private final String SELECT_FLAG_USER = "store-incomplete";
+    private final int SELECT_FLAG_USER = 1;
 
     private OrderListAdapter listAapter;
     private boolean fadeHeader = true;
@@ -182,23 +182,23 @@ public class OwnerOrderListFragment extends BaseFragment implements
 
             String status = recentOrderInfo.status;
 
-            final String storeID = recentOrderInfo.storeid;
+            final String storeID = recentOrderInfo.store;
             final String orderKey = recentOrderInfo.orderkey;
 
             tvHeaderKey.setText(orderKey);
-            tvHeaderName.setText(recentOrderInfo.userid);
-            tvHeaderArriveTime.setText(TimeUtil.getNewSimpleDateFormat("a hh시 mm분", recentOrderInfo.arrivaltime));
-            tvHeaderDistance.setText(ConvertData.getDisance(recentOrderInfo.distance));
+            tvHeaderName.setText(recentOrderInfo.nick);
+            tvHeaderArriveTime.setText(TimeUtil.getNewSimpleDateFormat("a hh시 mm분", recentOrderInfo.arrtime));
+            tvHeaderDistance.setText(ConvertData.getDisance(recentOrderInfo.status));
 
-            ReceiptInfoRow info = getSumPrice(recentOrderInfo.orderdata);
+            ReceiptInfoRow info = getSumPrice(recentOrderInfo.order);
 
             tvHeaderMenu.setText(info.sumMenu);
             tvHeaderPrice.setText(info.sumPrice);
 
 
-            String date = TimeUtil.getSoulBrownOrderDateInfo(recentOrderInfo.regdate);
+            String date = TimeUtil.getSoulBrownOrderDateInfo(recentOrderInfo.regtime);
 
-            String regTime = TimeUtil.getNewSimpleDateFormat("a hh시 mm분", recentOrderInfo.regdate);
+            String regTime = TimeUtil.getNewSimpleDateFormat("a hh시 mm분", recentOrderInfo.regtime);
 
             tvHeaderTime.setText(date + " " + regTime);
 
@@ -259,14 +259,14 @@ public class OwnerOrderListFragment extends BaseFragment implements
 
             for (int i = 0; i < orderData.size(); i++) {
                 int count = orderData.get(i).count;
-                int price = Integer.parseInt(orderData.get(i).menuprice);
+                int price = Integer.parseInt(orderData.get(i).price);
 
                 sum += count * price;
 
                 if (i == orderData.size() - 1)
-                    sumMenu += orderData.get(i).menuname + "x" + count;
+                    sumMenu += orderData.get(i).name + "x" + count;
                 else
-                    sumMenu += orderData.get(i).menuname + "x" + count + ", ";
+                    sumMenu += orderData.get(i).name + "x" + count + ", ";
 
             }
         }
@@ -292,11 +292,11 @@ public class OwnerOrderListFragment extends BaseFragment implements
 
     private void refreshDataSet(RetOrderList orderListData) {
 
-        setHeaderContent(orderListData.orderlist.get(0));
+        setHeaderContent(orderListData.orders.get(0));
 
         mOrderListData = orderListData;
 
-        listAapter = new OrderListAdapter(context, orderListData.orderlist, this);
+        listAapter = new OrderListAdapter(context, orderListData.orders, this);
 
         stickyList.setAdapter(listAapter);
 
@@ -304,7 +304,7 @@ public class OwnerOrderListFragment extends BaseFragment implements
 
 
     // apiOrderList
-    public void apiOrderList(String source, String userCode, String selectFlag) {
+    public void apiOrderList(String source, String userCode, int flag) {
 
         ApiAgent api = new ApiAgent();
 
@@ -315,7 +315,7 @@ public class OwnerOrderListFragment extends BaseFragment implements
             if( !mBaseProgressDialog.isShowing() )
                 mBaseProgressDialog.show();
 
-            api.apiGetOrderList(context, source, null, userCode, selectFlag, new Response.Listener<RetOrderList>() {
+            api.apiGetOrderList(context, source, null, userCode, flag, new Response.Listener<RetOrderList>() {
                 @Override
                 public void onResponse(RetOrderList retCode) {
 
@@ -328,16 +328,16 @@ public class OwnerOrderListFragment extends BaseFragment implements
                             refreshLayout.setRefreshing(false);
                     }
 
-                    LOG.d("retCode.result : " + retCode.result);
-                    LOG.d("retCode.errormsg : " + retCode.errormsg);
+                    LOG.d("retCode.result : " + retCode.ret);
+                    LOG.d("retCode.errormsg : " + retCode.msg);
 
 
-                    if (retCode.result == ServerDefineCode.NET_RESULT_SUCC) {
+                    if (retCode.ret == ServerDefineCode.NET_RESULT_SUCC) {
 
                         // success
                         LOG.d("apiOrderList Succ");
 
-                        if (retCode.orderlist != null)
+                        if (retCode.orders != null)
                             refreshDataSet(retCode);
                         else {
                             // 주문 내역이 없다.
@@ -348,7 +348,7 @@ public class OwnerOrderListFragment extends BaseFragment implements
 
                     } else {
                         // fail
-                        LOG.d("apiOrderList Fail " + retCode.result);
+                        LOG.d("apiOrderList Fail " + retCode.ret);
 
                         //showToast("주문 이력 오류 : "+ retCode.errormsg+"["+retCode.result+"]");
 
@@ -428,8 +428,8 @@ public class OwnerOrderListFragment extends BaseFragment implements
 
     public void setOrderMenu(ArrayOrderList orderMenu) {
 
-        String storeID = orderMenu.storeid;
-        ArrayList<ArrayOrderData> orderData = orderMenu.orderdata;
+        String storeID = orderMenu.store;
+        ArrayList<ArrayOrderData> orderData = orderMenu.order;
 
 
         List<Menu> ListMenu = new ArrayList<Menu>();
@@ -438,8 +438,8 @@ public class OwnerOrderListFragment extends BaseFragment implements
             Menu menu = new Menu();
 
             menu.count = orderData.get(i).count;
-            menu.price = Integer.parseInt(orderData.get(i).menuprice);
-            menu.name = orderData.get(i).menuname;
+            menu.price = Integer.parseInt(orderData.get(i).price);
+            menu.name = orderData.get(i).name;
 
             ListMenu.add(menu);
         }
@@ -574,12 +574,12 @@ public class OwnerOrderListFragment extends BaseFragment implements
                     if( mBaseProgressDialog.isShowing() )
                         mBaseProgressDialog.dismiss();
 
-                    LOG.d("retCode.result : " + retCode.result);
-                    LOG.d("retCode.errormsg : " + retCode.errormsg);
+                    LOG.d("retCode.result : " + retCode.ret);
+                    LOG.d("retCode.errormsg : " + retCode.msg);
                     LOG.d("retCode.orderkey : " + retCode.orderkey);
-                    LOG.d("retCode.arrivaltime : " + retCode.arrivaltime);
+                    LOG.d("retCode.arrivaltime : " + retCode.arrtime);
 
-                    if (retCode.result == ServerDefineCode.NET_RESULT_SUCC) {
+                    if (retCode.ret == ServerDefineCode.NET_RESULT_SUCC) {
 
                         // success
                         LOG.d("apiOrderMenu Succ");
@@ -597,9 +597,9 @@ public class OwnerOrderListFragment extends BaseFragment implements
 
                     } else {
                         // fail
-                        LOG.d("apiOrderMenu Fail " + retCode.result);
+                        LOG.d("apiOrderMenu Fail " + retCode.ret);
 
-                        showToast(getString(R.string.order_fail)+" : " + retCode.errormsg + "[" + retCode.result + "]");
+                        showToast(getString(R.string.order_fail)+" : " + retCode.msg + "[" + retCode.ret + "]");
 
                     }
 
@@ -640,11 +640,11 @@ public class OwnerOrderListFragment extends BaseFragment implements
                     if( mBaseProgressDialog.isShowing() )
                         mBaseProgressDialog.dismiss();
 
-                    LOG.d("retCode.result : " + retCode.result);
-                    LOG.d("retCode.errormsg : " + retCode.errormsg);
+                    LOG.d("retCode.result : " + retCode.ret);
+                    LOG.d("retCode.errormsg : " + retCode.msg);
 
 
-                    if (retCode.result == ServerDefineCode.NET_RESULT_SUCC) {
+                    if (retCode.ret == ServerDefineCode.NET_RESULT_SUCC) {
 
                         // success
                         LOG.d("apiChgOrderMenu Succ");
@@ -656,7 +656,7 @@ public class OwnerOrderListFragment extends BaseFragment implements
 
                     } else {
                         // fail
-                        LOG.d("apiChgOrderMenu Fail " + retCode.result);
+                        LOG.d("apiChgOrderMenu Fail " + retCode.ret);
 
                         //showToast("주문 이력 오류 : "+ retCode.errormsg+"["+retCode.result+"]");
 
@@ -690,19 +690,19 @@ public class OwnerOrderListFragment extends BaseFragment implements
     private void changeStatusOrderMenu(String orderKey, int position, String status)
     {
 
-        if( orderKey.equals(mOrderListData.orderlist.get(position).orderkey)) {
-            mOrderListData.orderlist.get(position).status = status;
+        if( orderKey.equals(mOrderListData.orders.get(position).orderkey)) {
+            mOrderListData.orders.get(position).status = status;
 
             if( status.equals("1")) {
 
-                mOrderListData.orderlist.clear();
+                mOrderListData.orders.clear();
                 listAapter.notifyDataSetChanged();
                 initData();
 
             }
             else {
 
-                setHeaderContent(mOrderListData.orderlist.get(0));
+                setHeaderContent(mOrderListData.orders.get(0));
                 listAapter.notifyDataSetChanged();
             }
         }
@@ -716,7 +716,7 @@ public class OwnerOrderListFragment extends BaseFragment implements
 
         showToast(getString(R.string.order_succ));
 
-        String time = orderMenuInfo.arrivaltime;
+        String time = orderMenuInfo.arrtime;
 
         long arriveUnixTime = Long.parseLong(time);
         LOG.d("setSchLocation arriveUnixTime : " + arriveUnixTime);

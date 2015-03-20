@@ -79,12 +79,12 @@ public class LocationService extends Service {
                 @Override
                 public void onResponse(RetCode retCode) {
 
-                    FileLOG.writeLog("LocationService : apiUserLoc retCode : " + retCode.result);
+                    FileLOG.writeLog("LocationService : apiUserLoc retCode : " + retCode.ret);
 
-                    LOG.d("r_public.result : " + retCode.result);
-                    LOG.d("r_public.errormsg : " + retCode.errormsg);
+                    LOG.d("r_public.result : " + retCode.ret);
+                    LOG.d("r_public.errormsg : " + retCode.msg);
 
-                    if (retCode.result == ServerDefineCode.NET_RESULT_SUCC) {
+                    if (retCode.ret == ServerDefineCode.NET_RESULT_SUCC) {
 
                         // success
 
@@ -93,7 +93,7 @@ public class LocationService extends Service {
 
                     } else {
                         // fail
-                        LOG.d("apiSetUserLoc Fail " + retCode.result);
+                        LOG.d("apiSetUserLoc Fail " + retCode.ret);
 
                     }
 

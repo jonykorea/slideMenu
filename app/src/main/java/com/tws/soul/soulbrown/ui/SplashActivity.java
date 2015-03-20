@@ -23,6 +23,7 @@ import com.tws.network.data.RetUserChecker;
 import com.tws.network.lib.ApiAgent;
 import com.tws.soul.soulbrown.R;
 import com.tws.soul.soulbrown.base.BaseActivity;
+import com.tws.soul.soulbrown.data.Const;
 import com.tws.soul.soulbrown.pref.PrefUserInfo;
 
 /**
@@ -140,16 +141,16 @@ public class SplashActivity extends BaseActivity implements TextView.OnEditorAct
                 @Override
                 public void onResponse(RetUserChecker retCode) {
 
-                    LOG.d("retCode.result : " + retCode.result);
-                    LOG.d("retCode.errormsg : " + retCode.errormsg);
-                    LOG.d("retCode.usertype : " + retCode.usertype);
+                    LOG.d("retCode.result : " + retCode.ret);
+                    LOG.d("retCode.errormsg : " + retCode.msg);
+                    LOG.d("retCode.usertype : " + retCode.type);
 
 
-                    if (retCode.result == 1) {
+                    if (retCode.ret == 1) {
 
                         // success
 
-                        if (retCode.usertype.equals("user") || retCode.usertype.equals("owner")) {
+                        if (retCode.type == Const.USER || retCode.type == Const.OWNER) {
 
                             LOG.d("apiSetUserLoc Succ");
 
@@ -157,14 +158,14 @@ public class SplashActivity extends BaseActivity implements TextView.OnEditorAct
 
                             prefUserInfo.setUserID(userID);
 
-                            if (retCode.usertype.equals("user")) {
+                            if (retCode.type == Const.USER) {
                                 prefUserInfo.setUserType(true);
                             } else {
                                 prefUserInfo.setUserType(false);
                             }
 
                             Intent intent = new Intent(context, SoulBrownMainActivity.class);
-                            intent.putExtra(ExtraType.USER_TYPE, retCode.usertype);
+                            intent.putExtra(ExtraType.USER_TYPE, retCode.type);
                             startActivityForResult(intent, ACT_RESULT_CODE);
                         } else {
                             showHideLogin(true);
@@ -175,9 +176,9 @@ public class SplashActivity extends BaseActivity implements TextView.OnEditorAct
                     } else {
                         showHideLogin(true);
                         // fail
-                        LOG.d("apiSetUserLoc Fail " + retCode.result);
+                        LOG.d("apiSetUserLoc Fail " + retCode.ret);
 
-                        Toast.makeText(SplashActivity.this, retCode.errormsg + "(" + retCode.result + ")", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(SplashActivity.this, retCode.msg + "(" + retCode.ret + ")", Toast.LENGTH_SHORT).show();
 
                     }
 

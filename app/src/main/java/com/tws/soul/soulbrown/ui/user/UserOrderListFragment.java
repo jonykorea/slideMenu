@@ -60,7 +60,7 @@ public class UserOrderListFragment extends BaseFragment implements
         StickyListHeadersListView.OnStickyHeaderOffsetChangedListener,
         StickyListHeadersListView.OnStickyHeaderChangedListener {
 
-    private final String SELECT_FLAG_USER = "user-all";
+    private final int SELECT_FLAG_USER = -1;
     private Context context;
 
     private StickyListAdapter listAapter;
@@ -183,16 +183,16 @@ public class UserOrderListFragment extends BaseFragment implements
 
             String status = recentOrderInfo.status;
 
-            ReceiptInfoRow info = getSumPrice(recentOrderInfo.orderdata);
+            ReceiptInfoRow info = getSumPrice(recentOrderInfo.order);
 
             tvHeaderKey.setText(getString(R.string.order_id)+" : "+recentOrderInfo.orderkey);
-            tvHeaderStore.setText(StoreInfo.getStoreName(recentOrderInfo.storeid));
+            tvHeaderStore.setText(StoreInfo.getStoreName(recentOrderInfo.store));
             tvHeaderMenu.setText(info.sumMenu);
             tvHeaderPrice.setText(getString(R.string.order_sum_price)+" : "+info.sumPrice);
 
-            String date = TimeUtil.getSoulBrownOrderDateInfo(recentOrderInfo.regdate);
+            String date = TimeUtil.getSoulBrownOrderDateInfo(recentOrderInfo.regtime);
 
-            String regTime = TimeUtil.getNewSimpleDateFormat("a hh시 mm분", recentOrderInfo.regdate);
+            String regTime = TimeUtil.getNewSimpleDateFormat("a hh시 mm분", recentOrderInfo.regtime);
 
             tvHeaderTime.setText(date + " " +regTime);
 
@@ -237,14 +237,14 @@ public class UserOrderListFragment extends BaseFragment implements
             for(int i = 0 ; i< orderData.size() ; i++)
             {
                 int count = orderData.get(i).count;
-                int price = Integer.parseInt(orderData.get(i).menuprice);
+                int price = Integer.parseInt(orderData.get(i).price);
 
                 sum += count * price;
 
                 if( i == orderData.size() - 1)
-                    sumMenu += orderData.get(i).menuname +"x"+count;
+                    sumMenu += orderData.get(i).name +"x"+count;
                 else
-                    sumMenu += orderData.get(i).menuname +"x"+count+", ";
+                    sumMenu += orderData.get(i).name +"x"+count+", ";
 
             }
         }
@@ -274,11 +274,11 @@ public class UserOrderListFragment extends BaseFragment implements
 
     private void refreshDataSet(RetOrderList orderListData) {
 
-        setHeaderContent(orderListData.orderlist.get(0));
+        setHeaderContent(orderListData.orders.get(0));
 
         mOrderListData = orderListData;
 
-        listAapter = new StickyListAdapter(context, orderListData.orderlist);
+        listAapter = new StickyListAdapter(context, orderListData.orders);
 
         stickyList.setAdapter(listAapter);
 
@@ -286,7 +286,7 @@ public class UserOrderListFragment extends BaseFragment implements
 
 
     // apiOrderList
-    public void apiOrderList(String source, String userCode, String selectFlag) {
+    public void apiOrderList(String source, String userCode, int flag) {
 
         ApiAgent api = new ApiAgent();
 
@@ -295,7 +295,7 @@ public class UserOrderListFragment extends BaseFragment implements
             if( !mBaseProgressDialog.isShowing() )
                 mBaseProgressDialog.show();
 
-            api.apiGetOrderList(context, source, userCode, null, selectFlag, new Response.Listener<RetOrderList>() {
+            api.apiGetOrderList(context, source, userCode, null, flag, new Response.Listener<RetOrderList>() {
                 @Override
                 public void onResponse(RetOrderList retCode) {
 
@@ -308,16 +308,16 @@ public class UserOrderListFragment extends BaseFragment implements
                             refreshLayout.setRefreshing(false);
                     }
 
-                    LOG.d("retCode.result : " + retCode.result);
-                    LOG.d("retCode.errormsg : " + retCode.errormsg);
+                    LOG.d("retCode.result : " + retCode.ret);
+                    LOG.d("retCode.errormsg : " + retCode.msg);
 
 
-                    if (retCode.result == ServerDefineCode.NET_RESULT_SUCC) {
+                    if (retCode.ret == ServerDefineCode.NET_RESULT_SUCC) {
 
                         // success
                         LOG.d("apiOrderList Succ");
 
-                        if (retCode.orderlist != null)
+                        if (retCode.orders != null)
                             refreshDataSet(retCode);
                         else {
                             // 주문 내역이 없다.
@@ -326,7 +326,7 @@ public class UserOrderListFragment extends BaseFragment implements
 
                     } else {
                         // fail
-                        LOG.d("apiOrderList Fail " + retCode.result);
+                        LOG.d("apiOrderList Fail " + retCode.ret);
 
                         //showToast("주문 이력 오류 : "+ retCode.errormsg+"["+retCode.result+"]");
 
@@ -366,11 +366,11 @@ public class UserOrderListFragment extends BaseFragment implements
         }
         else {
 
-            if (mOrderListData != null && mOrderListData.orderlist != null) {
+            if (mOrderListData != null && mOrderListData.orders != null) {
                 int select = position - 1;
 
-                if( select < mOrderListData.orderlist.size())
-                    setOrderMenu(mOrderListData.orderlist.get(position - 1));
+                if( select < mOrderListData.orders.size())
+                    setOrderMenu(mOrderListData.orders.get(position - 1));
 
             }
         }
@@ -402,8 +402,8 @@ public class UserOrderListFragment extends BaseFragment implements
 
     public void setOrderMenu(ArrayOrderList orderMenu) {
 
-        String storeID = orderMenu.storeid;
-        ArrayList<ArrayOrderData> orderData = orderMenu.orderdata;
+        String storeID = orderMenu.store;
+        ArrayList<ArrayOrderData> orderData = orderMenu.order;
 
 
         List<Menu> ListMenu = new ArrayList<Menu>();
@@ -412,8 +412,8 @@ public class UserOrderListFragment extends BaseFragment implements
             Menu menu = new Menu();
 
             menu.count = orderData.get(i).count;
-            menu.price = Integer.parseInt(orderData.get(i).menuprice);
-            menu.name = orderData.get(i).menuname;
+            menu.price = Integer.parseInt(orderData.get(i).price);
+            menu.name = orderData.get(i).name;
 
             ListMenu.add(menu);
         }
@@ -548,12 +548,12 @@ public class UserOrderListFragment extends BaseFragment implements
                     if( mBaseProgressDialog.isShowing() )
                         mBaseProgressDialog.dismiss();
 
-                    LOG.d("retCode.result : " + retCode.result);
-                    LOG.d("retCode.errormsg : " + retCode.errormsg);
+                    LOG.d("retCode.result : " + retCode.ret);
+                    LOG.d("retCode.errormsg : " + retCode.msg);
                     LOG.d("retCode.orderkey : " + retCode.orderkey);
-                    LOG.d("retCode.arrivaltime : " + retCode.arrivaltime);
+                    LOG.d("retCode.arrivaltime : " + retCode.arrtime);
 
-                    if (retCode.result == ServerDefineCode.NET_RESULT_SUCC) {
+                    if (retCode.ret == ServerDefineCode.NET_RESULT_SUCC) {
 
                         // success
                         LOG.d("apiOrderMenu Succ");
@@ -569,7 +569,7 @@ public class UserOrderListFragment extends BaseFragment implements
                         setSchLocation(retCode);
 
 
-                    }else if( retCode.result == ServerDefineCode.NET_RESULT_ALREADY)
+                    }else if( retCode.ret == ServerDefineCode.NET_RESULT_ALREADY)
                     {
 
                         if( mBaseDialog == null || !mBaseDialog.isShowing()) {
@@ -590,9 +590,9 @@ public class UserOrderListFragment extends BaseFragment implements
                     }
                     else {
                         // fail
-                        LOG.d("apiOrderMenu Fail " + retCode.result);
+                        LOG.d("apiOrderMenu Fail " + retCode.ret);
 
-                        showToast(getString(R.string.order_fail)+ " : " + retCode.errormsg + "[" + retCode.result + "]");
+                        showToast(getString(R.string.order_fail)+ " : " + retCode.msg + "[" + retCode.ret + "]");
 
                     }
 
@@ -619,7 +619,7 @@ public class UserOrderListFragment extends BaseFragment implements
 
         showToast(getString(R.string.reorder_succ));
 
-        String time = orderMenuInfo.arrivaltime;
+        String time = orderMenuInfo.arrtime;
 
         long arriveUnixTime = Long.parseLong(time);
         LOG.d("setSchLocation arriveUnixTime : " + arriveUnixTime);

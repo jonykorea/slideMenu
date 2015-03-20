@@ -82,7 +82,7 @@ public class SoulBrownMainActivity extends FragmentActivity
 
         Intent intent = getIntent();
 
-        String userType = intent.getStringExtra(ExtraType.USER_TYPE);
+        int userType = intent.getIntExtra(ExtraType.USER_TYPE,0);
 
         LOG.d("SoulBrownMainActivity : userType : " +userType);
 
@@ -273,15 +273,15 @@ public class SoulBrownMainActivity extends FragmentActivity
         LOG.d("apiSetPushKey");
 
         if (api != null) {
-            api.apiSetPushKey(this, source, userID, null, regID ,new Response.Listener<RetCode>() {
+            api.apiSetPushKeyUser(this, userID, regID ,new Response.Listener<RetCode>() {
 
                 @Override
                 public void onResponse(RetCode retCode) {
 
-                    LOG.d("retCode.result : " + retCode.result);
-                    LOG.d("retCode.errormsg : " + retCode.errormsg);
+                    LOG.d("retCode.result : " + retCode.ret);
+                    LOG.d("retCode.errormsg : " + retCode.msg);
 
-                    if (retCode.result == 1) {
+                    if (retCode.ret == 1) {
 
                         // success
 
@@ -289,9 +289,9 @@ public class SoulBrownMainActivity extends FragmentActivity
 
                     } else {
                         // fail
-                        LOG.d("apiSetPushKey Fail " + retCode.result);
+                        LOG.d("apiSetPushKey Fail " + retCode.ret);
 
-                        Toast.makeText(SoulBrownMainActivity.this, retCode.errormsg + "(" + retCode.result + ")", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(SoulBrownMainActivity.this, retCode.msg + "(" + retCode.ret + ")", Toast.LENGTH_SHORT).show();
 
                     }
 

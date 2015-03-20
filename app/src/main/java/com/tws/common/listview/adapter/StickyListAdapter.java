@@ -52,9 +52,9 @@ public class StickyListAdapter extends BaseAdapter implements
 
     private int[] getSectionIndices() {
 
-        String timeYYYYMMDD = TimeUtil.getSimpleDateFormatYMD(mData.get(0).regdate);
+        String timeYYYYMMDD = TimeUtil.getSimpleDateFormatYMD(mData.get(0).regtime);
 
-        LOG.d("getSimpleDateFormatYMD : " + TimeUtil.getSimpleDateFormatYMD(mData.get(0).regdate));
+        LOG.d("getSimpleDateFormatYMD : " + TimeUtil.getSimpleDateFormatYMD(mData.get(0).regtime));
 
         ArrayList<Integer> sectionIndices = new ArrayList<Integer>();
 
@@ -64,11 +64,11 @@ public class StickyListAdapter extends BaseAdapter implements
         mData.get(0).index = Integer.toString(index);
 
         sectionIndices.add(0);
-        mOrderDate.put(Integer.toString(0),mData.get(0).regdate);
+        mOrderDate.put(Integer.toString(0),mData.get(0).regtime);
 
         for (int i = 1; i < mData.size(); i++) {
 
-            timeYYYYMMDD =  TimeUtil.getSimpleDateFormatYMD(mData.get(i).regdate);
+            timeYYYYMMDD =  TimeUtil.getSimpleDateFormatYMD(mData.get(i).regtime);
 
             if( !headCompare.equals(timeYYYYMMDD)){
 
@@ -80,12 +80,12 @@ public class StickyListAdapter extends BaseAdapter implements
 
                 sectionIndices.add(i);
 
-                mOrderDate.put(Integer.toString(i),mData.get(i).regdate);
+                mOrderDate.put(Integer.toString(i),mData.get(i).regtime);
             }
             else
             {
                 mData.get(i).index = Integer.toString(index);
-                mOrderDate.put(Integer.toString(i),mData.get(i).regdate);
+                mOrderDate.put(Integer.toString(i),mData.get(i).regtime);
             }
         }
         int[] sections = new int[sectionIndices.size()];
@@ -137,10 +137,10 @@ public class StickyListAdapter extends BaseAdapter implements
 
         ReceiptInfoRow receiptInfoRow;
 
-        String regUnixTime = mData.get(position).regdate;
+        String regUnixTime = mData.get(position).regtime;
 
-        receiptInfoRow = getSumPrice(mData.get(position).orderdata);
-        receiptInfoRow.store = mData.get(position).storeid;
+        receiptInfoRow = getSumPrice(mData.get(position).order);
+        receiptInfoRow.store = mData.get(position).store;
 
 
         String regTime = TimeUtil.getNewSimpleDateFormat("a hh시 mm분", regUnixTime);
@@ -168,14 +168,14 @@ public class StickyListAdapter extends BaseAdapter implements
             for(int i = 0 ; i< orderData.size() ; i++)
             {
                 int count = orderData.get(i).count;
-                int price = Integer.parseInt(orderData.get(i).menuprice);
+                int price = Integer.parseInt(orderData.get(i).price);
 
                 sum += count * price;
 
                 if( i == orderData.size() - 1)
-                    sumMenu += orderData.get(i).menuname ;
+                    sumMenu += orderData.get(i).name ;
                 else
-                    sumMenu += orderData.get(i).menuname + ", ";
+                    sumMenu += orderData.get(i).name + ", ";
 
             }
         }

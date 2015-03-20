@@ -265,12 +265,12 @@ public class StoreMenuFragment extends BaseFragment {
                     if( mBaseProgressDialog.isShowing() )
                         mBaseProgressDialog.dismiss();
 
-                    LOG.d("retCode.result : " + retCode.result);
-                    LOG.d("retCode.errormsg : " + retCode.errormsg);
+                    LOG.d("retCode.result : " + retCode.ret);
+                    LOG.d("retCode.errormsg : " + retCode.msg);
                     LOG.d("retCode.orderkey : " + retCode.orderkey);
-                    LOG.d("retCode.arrivaltime : " + retCode.arrivaltime);
+                    LOG.d("retCode.arrivaltime : " + retCode.arrtime);
 
-                    if (retCode.result == ServerDefineCode.NET_RESULT_SUCC) {
+                    if (retCode.ret == ServerDefineCode.NET_RESULT_SUCC) {
 
                         // success
                         LOG.d("apiOrderMenu Succ");
@@ -286,7 +286,7 @@ public class StoreMenuFragment extends BaseFragment {
                         setSchLocation(retCode);
 
 
-                    } else if(retCode.result == ServerDefineCode.NET_RESULT_ALREADY) {
+                    } else if(retCode.ret == ServerDefineCode.NET_RESULT_ALREADY) {
 
                         if( mBaseDialog == null || !mBaseDialog.isShowing()) {
                             mBaseDialog = new CuzDialog(context,
@@ -308,9 +308,9 @@ public class StoreMenuFragment extends BaseFragment {
                     else
                     {
                         // fail
-                        LOG.d("apiOrderMenu Fail " + retCode.result);
+                        LOG.d("apiOrderMenu Fail " + retCode.ret);
 
-                        showToast("주문 오류 : " + retCode.errormsg + "[" + retCode.result + "]");
+                        showToast("주문 오류 : " + retCode.msg + "[" + retCode.ret + "]");
 
                     }
 
@@ -339,9 +339,9 @@ public class StoreMenuFragment extends BaseFragment {
 
         initAdapter(mMenuData);
 
-        showToast("정상적으로 주문되었습니다.");
+        showToast(getString(R.string.order_succ));
 
-        String time = orderMenuInfo.arrivaltime;
+        String time = orderMenuInfo.arrtime;
 
         long arriveUnixTime = Long.parseLong(time);
         LOG.d("setSchLocation arriveUnixTime : " + arriveUnixTime);

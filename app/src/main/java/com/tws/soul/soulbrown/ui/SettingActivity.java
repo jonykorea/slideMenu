@@ -135,7 +135,7 @@ public class SettingActivity extends BaseActivity {
 
         if (api != null) {
 
-            api.apiSetPushKey(this, source, null, storeID, regID ,new Response.Listener<RetCode>() {
+            api.apiSetPushKeyStore(this, storeID, regID ,new Response.Listener<RetCode>() {
 
                 @Override
                 public void onResponse(RetCode retCode) {
@@ -143,10 +143,10 @@ public class SettingActivity extends BaseActivity {
                     if( mBaseProgressDialog.isShowing() )
                         mBaseProgressDialog.dismiss();
 
-                    LOG.d("retCode.result : " + retCode.result);
-                    LOG.d("retCode.errormsg : " + retCode.errormsg);
+                    LOG.d("retCode.result : " + retCode.ret);
+                    LOG.d("retCode.errormsg : " + retCode.msg);
 
-                    if (retCode.result == 1) {
+                    if (retCode.ret == 1) {
 
 
                         // success
@@ -157,9 +157,9 @@ public class SettingActivity extends BaseActivity {
 
                     } else {
                         // fail
-                        LOG.d("apiSetPushKey Fail " + retCode.result);
+                        LOG.d("apiSetPushKey Fail " + retCode.ret);
 
-                        Toast.makeText(SettingActivity.this, retCode.errormsg + "(" + retCode.result + ")", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(SettingActivity.this, retCode.msg + "(" + retCode.ret + ")", Toast.LENGTH_SHORT).show();
 
                     }
 
@@ -193,20 +193,20 @@ public class SettingActivity extends BaseActivity {
         if(AppController.getInstance().getIsUser())
         {
             userID = tmpUserID;
-            source = "USERUI";
+
         }
         else
         {
             storeID = tmpUserID;
-            source = "STOREUI";
+
         }
 
-        apiRemovePushKey(source, userID, storeID);
+        apiRemovePushKey( userID, storeID);
     }
 
 
     // apiRemovePushKey
-    public void apiRemovePushKey(String source, String userID, String storeID) {
+    public void apiRemovePushKey( String userID, String storeID) {
 
         final String regID = "";
 
@@ -216,7 +216,7 @@ public class SettingActivity extends BaseActivity {
 
         if (api != null) {
 
-            api.apiSetPushKey(this, source, userID, storeID, regID ,new Response.Listener<RetCode>() {
+            api.apiLogout(this, userID, storeID, regID ,new Response.Listener<RetCode>() {
 
                 @Override
                 public void onResponse(RetCode retCode) {
@@ -224,10 +224,10 @@ public class SettingActivity extends BaseActivity {
                     if( mBaseProgressDialog.isShowing() )
                         mBaseProgressDialog.dismiss();
 
-                    LOG.d("retCode.result : " + retCode.result);
-                    LOG.d("retCode.errormsg : " + retCode.errormsg);
+                    LOG.d("retCode.result : " + retCode.ret);
+                    LOG.d("retCode.errormsg : " + retCode.msg);
 
-                    if (retCode.result == 1) {
+                    if (retCode.ret == 1) {
 
                         // success
 
@@ -242,9 +242,9 @@ public class SettingActivity extends BaseActivity {
 
                     } else {
                         // fail
-                        LOG.d("apiRemovePushKey Fail " + retCode.result);
+                        LOG.d("apiRemovePushKey Fail " + retCode.ret);
 
-                        Toast.makeText(SettingActivity.this, retCode.errormsg + "(" + retCode.result + ")", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(SettingActivity.this, retCode.msg + "(" + retCode.ret + ")", Toast.LENGTH_SHORT).show();
 
                     }
 

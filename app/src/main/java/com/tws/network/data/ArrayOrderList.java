@@ -7,7 +7,7 @@ import java.util.ArrayList;
  */
 public class ArrayOrderList {
 
-    //public String index;
+    public String index;
     public String regtime;
     public String nick;
     public String store;

@@ -68,9 +68,9 @@ public class OrderListAdapter extends BaseAdapter implements
 
     private int[] getSectionIndices() {
 
-        String timeYYYYMMDD = TimeUtil.getSimpleDateFormatYMD(mData.get(0).regdate);
+        String timeYYYYMMDD = TimeUtil.getSimpleDateFormatYMD(mData.get(0).regtime);
 
-        LOG.d("getSimpleDateFormatYMD : " + TimeUtil.getSimpleDateFormatYMD(mData.get(0).regdate));
+        LOG.d("getSimpleDateFormatYMD : " + TimeUtil.getSimpleDateFormatYMD(mData.get(0).regtime));
 
         ArrayList<Integer> sectionIndices = new ArrayList<Integer>();
 
@@ -80,11 +80,11 @@ public class OrderListAdapter extends BaseAdapter implements
         mData.get(0).index = Integer.toString(index);
 
         sectionIndices.add(0);
-        mOrderDate.put(Integer.toString(0),mData.get(0).regdate);
+        mOrderDate.put(Integer.toString(0),mData.get(0).regtime);
 
         for (int i = 1; i < mData.size(); i++) {
 
-            timeYYYYMMDD =  TimeUtil.getSimpleDateFormatYMD(mData.get(i).regdate);
+            timeYYYYMMDD =  TimeUtil.getSimpleDateFormatYMD(mData.get(i).regtime);
 
             if( !headCompare.equals(timeYYYYMMDD)){
 
@@ -96,12 +96,12 @@ public class OrderListAdapter extends BaseAdapter implements
 
                 sectionIndices.add(i);
 
-                mOrderDate.put(Integer.toString(i),mData.get(i).regdate);
+                mOrderDate.put(Integer.toString(i),mData.get(i).regtime);
             }
             else
             {
                 mData.get(i).index = Integer.toString(index);
-                mOrderDate.put(Integer.toString(i),mData.get(i).regdate);
+                mOrderDate.put(Integer.toString(i),mData.get(i).regtime);
             }
         }
         int[] sections = new int[sectionIndices.size()];
@@ -160,19 +160,19 @@ public class OrderListAdapter extends BaseAdapter implements
         }
 
 
-        String name = mData.get(position).userid;
-        String distance = mData.get(position).distance;
+        String name = mData.get(position).nick;
+        String distance = mData.get(position).status;
 
-        String arriveUnixTime = mData.get(position).arrivaltime;
+        String arriveUnixTime = mData.get(position).arrtime;
 
         String arrivalTime = TimeUtil.getNewSimpleDateFormat("a hh시 mm분", arriveUnixTime);
 
         ReceiptInfoRow receiptInfoRow;
 
-        String regUnixTime = mData.get(position).regdate;
+        String regUnixTime = mData.get(position).regtime;
 
-        receiptInfoRow = getSumPrice(mData.get(position).orderdata);
-        receiptInfoRow.store = mData.get(position).storeid;
+        receiptInfoRow = getSumPrice(mData.get(position).order);
+        receiptInfoRow.store = mData.get(position).store;
 
 
         String regTime = TimeUtil.getNewSimpleDateFormat("a hh시 mm분", regUnixTime);
@@ -187,7 +187,7 @@ public class OrderListAdapter extends BaseAdapter implements
         holder.tvArriveTime.setText(arrivalTime);
         holder.tvDistance.setText(ConvertData.getDisance(distance));
 
-        final String storeID = mData.get(position).storeid;
+        final String storeID = mData.get(position).store;
         final String orderKey =  mData.get(position).orderkey;
         final String status =  mData.get(position).status;
 
@@ -250,14 +250,14 @@ public class OrderListAdapter extends BaseAdapter implements
             for(int i = 0 ; i< orderData.size() ; i++)
             {
                 int count = orderData.get(i).count;
-                int price = Integer.parseInt(orderData.get(i).menuprice);
+                int price = Integer.parseInt(orderData.get(i).price);
 
                 sum += count * price;
 
                 if( i == orderData.size() - 1)
-                    sumMenu += orderData.get(i).menuname +"x"+count;
+                    sumMenu += orderData.get(i).name +"x"+count;
                 else
-                    sumMenu += orderData.get(i).menuname +"x"+count+", ";
+                    sumMenu += orderData.get(i).name +"x"+count+", ";
 
             }
         }
@@ -398,11 +398,11 @@ public class OrderListAdapter extends BaseAdapter implements
                 public void onResponse(RetCode retCode) {
 
 
-                    LOG.d("retCode.result : " + retCode.result);
-                    LOG.d("retCode.errormsg : " + retCode.errormsg);
+                    LOG.d("retCode.result : " + retCode.ret);
+                    LOG.d("retCode.errormsg : " + retCode.msg);
 
 
-                    if (retCode.result == ServerDefineCode.NET_RESULT_SUCC) {
+                    if (retCode.ret == ServerDefineCode.NET_RESULT_SUCC) {
 
                         // success
                         LOG.d("apiChgOrderMenu Succ");
@@ -417,7 +417,7 @@ public class OrderListAdapter extends BaseAdapter implements
 
                     } else {
                         // fail
-                        LOG.d("apiChgOrderMenu Fail " + retCode.result);
+                        LOG.d("apiChgOrderMenu Fail " + retCode.ret);
 
                         //showToast("주문 이력 오류 : "+ retCode.errormsg+"["+retCode.result+"]");
 

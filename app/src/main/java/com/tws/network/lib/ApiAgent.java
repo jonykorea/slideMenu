@@ -38,7 +38,8 @@ public class ApiAgent {
 
     // into Domain
     //private static final String URL_DOMAIN = "https://airagt.inavi.com";
-    private static final String URL_DOMAIN = "http://107.191.60.183:8020";
+    //private static final String URL_DOMAIN = "http://107.191.60.183:8020";
+    private static final String URL_DOMAIN = "http://api.brewbrew.co.kr:8020";
 
 
     // publickey info
@@ -162,7 +163,7 @@ public class ApiAgent {
         String auth = DeviceInfo.getAuth(context);
 
         if (!TextUtils.isEmpty(auth))
-            header.put("auth_key", auth);
+            header.put("auth", auth);
 
         header.put("mdn", DeviceInfo.getMDN(context));
 
@@ -280,7 +281,7 @@ public class ApiAgent {
         String auth = DeviceInfo.getAuth(context);
 
         if (!TextUtils.isEmpty(auth))
-            header.put("auth_key", auth);
+            header.put("auth", auth);
 
         header.put("mdn", DeviceInfo.getMDN(context));
 
@@ -368,7 +369,7 @@ public class ApiAgent {
     }
 
     // apiGetOrderList
-    public void apiGetOrderList(Context context, String source, String userid, String storeid, String selectFlag , Response.Listener<RetOrderList> succListener, Response.ErrorListener failListener) {
+    public void apiGetOrderList(Context context, String source, String userid, String storeid, int flag , Response.Listener<RetOrderList> succListener, Response.ErrorListener failListener) {
 
         String url = URL_DOMAIN + URL_USER_GET_ORDERLIST;
 
@@ -378,7 +379,7 @@ public class ApiAgent {
         String auth = DeviceInfo.getAuth(context);
 
         if (!TextUtils.isEmpty(auth))
-            header.put("auth_key", auth);
+            header.put("auth", auth);
 
         header.put("mdn", DeviceInfo.getMDN(context));
 
@@ -396,10 +397,19 @@ public class ApiAgent {
 
         if(!TextUtils.isEmpty(storeid)) {
             url = URL_DOMAIN + URL_STORE_GET_ORDERLIST;
+            try {
+
+                jsonParams.put("store", storeid);
+                jsonParams.put("flag", flag);
+
+            } catch (Exception e) {
+                LOG.d("apiGetOrderList error:" + e.getMessage());
+                jsonParams = null;
+            }
         }
 
 
-        String reqParams = null;
+    String reqParams = null;
 
         if (jsonParams != null)
             reqParams = jsonParams.toString();
@@ -423,8 +433,8 @@ public class ApiAgent {
     }
 
 
-    // apiSetPushKey
-    public void apiSetPushKey(Context context, String source, String userid, String storeid, String pushKey, Response.Listener<RetCode> succListener, Response.ErrorListener failListener) {
+    // apiSetPushKeyUser
+    public void apiSetPushKeyUser(Context context, String nick, String pushKey, Response.Listener<RetCode> succListener, Response.ErrorListener failListener) {
 
         String url = URL_DOMAIN + URL_USER_REG_UESERKEY;
 
@@ -453,16 +463,73 @@ public class ApiAgent {
             jsonParams.put("pushkey",pushKey);
 
             // user
-            if(!TextUtils.isEmpty(userid)) {
-                jsonParams.put("nick", userid);
+            if(!TextUtils.isEmpty(nick)) {
+                jsonParams.put("nick", nick);
             }
 
-            if(!TextUtils.isEmpty(storeid)) {
-                url = URL_DOMAIN + URL_PUSHKEY_OWNER;
-                jsonParams.put("storeid", storeid);
-            }
 
-            //jsonParams = CommonParams.getCommonParams(context, jsonParams);
+        } catch (Exception e) {
+            LOG.d("apiSetPushKey error:" + e.getMessage());
+            jsonParams = null;
+        }
+
+        String reqParams = null;
+
+        if (jsonParams != null)
+            reqParams = jsonParams.toString();
+
+        LOG.d("url : "+url+" reqParams : " + reqParams);
+
+
+        // set params E
+
+        // request!
+        JsonGsonRequest<RetCode> gsObjRequest = new JsonGsonRequest<RetCode>(
+                Request.Method.POST,
+                url,
+                RetCode.class, header, reqParams,
+                succListener, failListener
+
+        );
+
+        // request queue!
+        ApiBase.getInstance(context).addToRequestQueue(gsObjRequest);
+
+    }
+
+    // apiSetPushKeyUser
+    public void apiSetPushKeyStore(Context context, String store, String pushKey, Response.Listener<RetCode> succListener, Response.ErrorListener failListener) {
+
+        String url = URL_DOMAIN + URL_STORE_SET_STOREON;
+
+        // set add header S
+        HashMap<String, String> header = new HashMap<String, String>();
+
+        String auth = DeviceInfo.getAuth(context);
+
+        if (!TextUtils.isEmpty(auth))
+            header.put("auth", auth);
+
+        header.put("mdn", DeviceInfo.getMDN(context));
+
+        // set add header E
+
+        // set params S
+        JSONObject jsonParams = new JSONObject();
+        JSONArray jsonArray = new JSONArray();
+        JSONObject jsonSubParams = null;
+
+        try {
+
+            // param info
+            // os  android : 1
+            jsonParams.put("os",1);
+            jsonParams.put("pushkey",pushKey);
+
+            // user
+            if(!TextUtils.isEmpty(store)) {
+                jsonParams.put("store", store);
+            }
 
         } catch (Exception e) {
             LOG.d("apiSetPushKey error:" + e.getMessage());
@@ -525,6 +592,75 @@ public class ApiAgent {
 
         } catch (Exception e) {
             LOG.d("apiChgOrderMenu error:" + e.getMessage());
+            jsonParams = null;
+        }
+
+        String reqParams = null;
+
+        if (jsonParams != null)
+            reqParams = jsonParams.toString();
+
+        LOG.d("url : "+url+" reqParams : " + reqParams);
+
+
+        // set params E
+
+        // request!
+        JsonGsonRequest<RetCode> gsObjRequest = new JsonGsonRequest<RetCode>(
+                Request.Method.POST,
+                url,
+                RetCode.class, header, reqParams,
+                succListener, failListener
+
+        );
+
+        // request queue!
+        ApiBase.getInstance(context).addToRequestQueue(gsObjRequest);
+
+    }
+
+    public void apiLogout(Context context, String userid, String storeid, String pushKey, Response.Listener<RetCode> succListener, Response.ErrorListener failListener) {
+
+        String url = URL_DOMAIN + URL_USER_LOGOUT;
+
+        // set add header S
+        HashMap<String, String> header = new HashMap<String, String>();
+
+        String auth = DeviceInfo.getAuth(context);
+
+        if (!TextUtils.isEmpty(auth))
+            header.put("auth", auth);
+
+        header.put("mdn", DeviceInfo.getMDN(context));
+
+        // set add header E
+
+        // set params S
+        JSONObject jsonParams = new JSONObject();
+        JSONArray jsonArray = new JSONArray();
+        JSONObject jsonSubParams = null;
+
+        try {
+
+            // param info
+            // os  android : 1
+            //jsonParams.put("os",1);
+            //jsonParams.put("pushkey",pushKey);
+
+            // user
+            if(!TextUtils.isEmpty(userid)) {
+                jsonParams.put("nick", userid);
+            }
+
+            if(!TextUtils.isEmpty(storeid)) {
+                url = URL_DOMAIN + URL_STORE_LOGOUT;
+                jsonParams.put("store", storeid);
+            }
+
+            //jsonParams = CommonParams.getCommonParams(context, jsonParams);
+
+        } catch (Exception e) {
+            LOG.d("apiSetPushKey error:" + e.getMessage());
             jsonParams = null;
         }
 
