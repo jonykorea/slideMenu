@@ -2,6 +2,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:layout_marginTop="@dimen/size_16"
+    android:layout_marginBottom="@dimen/size_16"
     tools:context=".NavigationDrawerFragment">
 
     <ListView
@@ -18,19 +20,18 @@
         android:clickable="true"
         android:id="@+id/menu_setting"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/size_65.5"
+        android:layout_height="@dimen/size_48"
         android:layout_alignParentBottom="true"
         android:background="#1F2226">
 
         <ImageView
-            android:layout_width="@dimen/size_29.5"
-            android:layout_height="@dimen/size_29.5"
+            android:layout_width="@dimen/size_32"
+            android:layout_height="@dimen/size_32"
             android:layout_gravity="center_vertical"
-            android:layout_marginLeft="@dimen/size_10"
+            android:layout_marginLeft="@dimen/size_16"
             android:background="@drawable/icon_setting_gray" />
 
         <com.tws.widget.CuzTextView
-
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_marginLeft="@dimen/size_10"
@@ -41,6 +42,4 @@
             android:textSize="@dimen/size_25" />
 
     </LinearLayout>
-
-
 </RelativeLayout>

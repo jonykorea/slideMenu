@@ -20,6 +20,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -80,6 +81,7 @@ public class OwnerOrderListFragment extends BaseFragment implements
 
     private LinearLayout llHeaderStatusIng;
     private LinearLayout llHeaderStatusFinish;
+    private Button btnHeaderStatusAllFinish;
 
     private Context context;
 
@@ -148,6 +150,8 @@ public class OwnerOrderListFragment extends BaseFragment implements
 
         llHeaderStatusIng = (LinearLayout) vHeader.findViewById(R.id.header_recent_row_status_ing);
         llHeaderStatusFinish = (LinearLayout) vHeader.findViewById(R.id.header_recent_row_status_finish);
+
+        btnHeaderStatusAllFinish = (Button) vHeader.findViewById(R.id.header_recent_row_status_allfinish);
         // header content E
 
         stickyList.addHeaderView(vHeader);
@@ -180,7 +184,7 @@ public class OwnerOrderListFragment extends BaseFragment implements
     private void setHeaderContent(ArrayOrderList recentOrderInfo) {
         if (recentOrderInfo != null) {
 
-            String status = recentOrderInfo.status;
+            int status = recentOrderInfo.status;
 
             final String storeID = recentOrderInfo.store;
             final String orderKey = recentOrderInfo.orderkey;
@@ -188,7 +192,7 @@ public class OwnerOrderListFragment extends BaseFragment implements
             tvHeaderKey.setText(orderKey);
             tvHeaderName.setText(recentOrderInfo.nick);
             tvHeaderArriveTime.setText(TimeUtil.getNewSimpleDateFormat("a hh시 mm분", recentOrderInfo.arrtime));
-            tvHeaderDistance.setText(ConvertData.getDisance(recentOrderInfo.status));
+            tvHeaderDistance.setText(ConvertData.getDisance(recentOrderInfo.dist));
 
             ReceiptInfoRow info = getSumPrice(recentOrderInfo.order);
 
@@ -205,7 +209,7 @@ public class OwnerOrderListFragment extends BaseFragment implements
 
             Log.i("jony", "setHeaderContent : "+ status);
 
-            if (status.equals("3")) {
+            if (status == 3) {
 
                 llHeaderStatusIng.setBackgroundResource(R.drawable.icon_btn_bg_s);
                 llHeaderStatusFinish.setBackgroundResource(R.drawable.icon_btn_bg_p);
@@ -214,15 +218,25 @@ public class OwnerOrderListFragment extends BaseFragment implements
                     @Override
                     public void onClick(View v) {
 
-                        apiChgOrderMenu(storeID, orderKey, "2" , 0);
+                        apiChgOrderMenu(storeID, orderKey, 2 , 0);
 
 
                     }
                 });
                 llHeaderStatusFinish.setOnClickListener(null);
 
+                btnHeaderStatusAllFinish.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
 
-            } else if (status.equals("2")) {
+                        apiChgOrderMenu(storeID, orderKey, 1 , 0);
+
+
+                    }
+                });
+
+
+            } else if (status == 2) {
 
                 llHeaderStatusIng.setBackgroundResource(R.drawable.icon_btn_bg_p);
                 llHeaderStatusFinish.setBackgroundResource(R.drawable.icon_btn_bg_s);
@@ -233,16 +247,22 @@ public class OwnerOrderListFragment extends BaseFragment implements
                     @Override
                     public void onClick(View v) {
 
-                        apiChgOrderMenu(storeID, orderKey, "1" , 0);
+                        apiChgOrderMenu(storeID, orderKey, 1 , 0);
+
+                    }
+                });
+
+                btnHeaderStatusAllFinish.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+
+                        apiChgOrderMenu(storeID, orderKey, 1 , 0);
+
 
                     }
                 });
 
             }
-
-
-
-
         }
 
     }
@@ -341,15 +361,13 @@ public class OwnerOrderListFragment extends BaseFragment implements
                             refreshDataSet(retCode);
                         else {
                             // 주문 내역이 없다.
-
-
+                            stickyList.setAdapter(null);
                         }
 
 
                     } else {
                         // fail
                         LOG.d("apiOrderList Fail " + retCode.ret);
-
                         //showToast("주문 이력 오류 : "+ retCode.errormsg+"["+retCode.result+"]");
 
                     }
@@ -621,7 +639,7 @@ public class OwnerOrderListFragment extends BaseFragment implements
     }
 
     // apiOrderList
-    public void apiChgOrderMenu(String storeID, final String orderKey, final String status, final int position) {
+    public void apiChgOrderMenu(String storeID, final String orderKey, final int status, final int position) {
 
         ApiAgent api = new ApiAgent();
 
@@ -682,18 +700,18 @@ public class OwnerOrderListFragment extends BaseFragment implements
     }
 
     @Override
-    public void onChangeStatus(String orderKey, int position,  String status) {
+    public void onChangeStatus(String orderKey, int position,  int status) {
 
         changeStatusOrderMenu(orderKey,  position, status);
     }
 
-    private void changeStatusOrderMenu(String orderKey, int position, String status)
+    private void changeStatusOrderMenu(String orderKey, int position, int status)
     {
 
         if( orderKey.equals(mOrderListData.orders.get(position).orderkey)) {
             mOrderListData.orders.get(position).status = status;
 
-            if( status.equals("1")) {
+            if( status == 1 ) {
 
                 mOrderListData.orders.clear();
                 listAapter.notifyDataSetChanged();

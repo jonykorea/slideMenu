@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.SectionIndexer;
 import android.widget.TextView;
@@ -38,7 +39,7 @@ public class OrderListAdapter extends BaseAdapter implements
 
     // 커스텀 리스너의 인터페이스
     public interface onChangeStatusListener {
-        public void onChangeStatus(String orderKey,int position, String status);
+        public void onChangeStatus(String orderKey,int position, int status);
     }
 
     private Context context;
@@ -153,6 +154,7 @@ public class OrderListAdapter extends BaseAdapter implements
             holder.llStatusIng = (LinearLayout) convertView.findViewById(R.id.row_status_ing);
             holder.llStatusFinish = (LinearLayout) convertView.findViewById(R.id.row_status_finish);
             holder.llStatusLayout = (LinearLayout) convertView.findViewById(R.id.row_status_layout);
+            holder.btnStatusAllFinish = (Button) convertView.findViewById(R.id.row_status_allfinish);
 
             convertView.setTag(holder);
         } else {
@@ -161,7 +163,7 @@ public class OrderListAdapter extends BaseAdapter implements
 
 
         String name = mData.get(position).nick;
-        String distance = mData.get(position).status;
+        String distance = mData.get(position).dist;
 
         String arriveUnixTime = mData.get(position).arrtime;
 
@@ -189,14 +191,14 @@ public class OrderListAdapter extends BaseAdapter implements
 
         final String storeID = mData.get(position).store;
         final String orderKey =  mData.get(position).orderkey;
-        final String status =  mData.get(position).status;
+        final int status =  mData.get(position).status;
 
-        if(status.equals("3"))
+        if(status == 3)
         {
             holder.llStatusIng.setBackgroundResource(R.drawable.icon_btn_bg_s);
             holder.llStatusFinish.setBackgroundResource(R.drawable.icon_btn_bg_p);
 
-        }else if(status.equals("2"))
+        }else if(status == 2)
         {
             holder.llStatusIng.setBackgroundResource(R.drawable.icon_btn_bg_p);
             holder.llStatusFinish.setBackgroundResource(R.drawable.icon_btn_bg_s);
@@ -216,8 +218,8 @@ public class OrderListAdapter extends BaseAdapter implements
 
                 Log.i("jony","llStatusIng orderKey "+ orderKey);
 
-                if( status.equals("3") ) {
-                    apiChgOrderMenu(storeID, orderKey, "2", pos);
+                if( status == 3 ) {
+                    apiChgOrderMenu(storeID, orderKey, 2, pos);
 
                 }
             }
@@ -228,8 +230,19 @@ public class OrderListAdapter extends BaseAdapter implements
             public void onClick(View view) {
                 Log.i("jony","llStatusFinish orderKey "+ orderKey);
 
-                if( status.equals("2") )
-                    apiChgOrderMenu(storeID, orderKey, "1" , pos);
+                if( status == 2 )
+                    apiChgOrderMenu(storeID, orderKey, 1 , pos);
+
+            }
+        });
+
+        holder.btnStatusAllFinish.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Log.i("jony","btnStatusAllFinish orderKey "+ orderKey);
+
+                if( status == 3 || status == 2 )
+                    apiChgOrderMenu(storeID, orderKey, 1 , pos);
 
             }
         });
@@ -367,6 +380,7 @@ public class OrderListAdapter extends BaseAdapter implements
         LinearLayout llStatusIng;
         LinearLayout llStatusFinish;
         LinearLayout llStatusLayout;
+        Button btnStatusAllFinish;
 
     }
 
@@ -386,7 +400,7 @@ public class OrderListAdapter extends BaseAdapter implements
     }
     */
     // apiOrderList
-    public void apiChgOrderMenu(String storeID, final String orderKey, final String status, final int position) {
+    public void apiChgOrderMenu(String storeID, final String orderKey, final int status, final int position) {
 
         ApiAgent api = new ApiAgent();
 
@@ -439,6 +453,7 @@ public class OrderListAdapter extends BaseAdapter implements
             });
         }
     }
+
 
 
 }

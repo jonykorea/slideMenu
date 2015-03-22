@@ -2,63 +2,85 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#fafafa"
-   >
+    android:background="#fafafa">
 
     <LinearLayout
         android:id="@+id/setting_back_btn"
-        android:clickable="true"
-        android:layout_alignParentTop="true"
         android:layout_width="wrap_content"
-        android:background="@drawable/selector_fafafa_f2f4f5"
-        android:gravity="center_vertical"
         android:layout_height="@dimen/size_47.5"
+        android:layout_alignParentTop="true"
+        android:background="@drawable/selector_fafafa_f2f4f5"
+        android:clickable="true"
+        android:gravity="center_vertical"
         android:orientation="horizontal">
+
         <ImageView
-            android:layout_marginLeft="@dimen/size_10"
             android:layout_width="@dimen/size_18.5"
             android:layout_height="@dimen/size_18.5"
+            android:layout_marginLeft="@dimen/size_10"
             android:background="@drawable/icon_back" />
 
         <com.tws.widget.CuzTextView
-            android:textColor="#3D454C"
-            android:layout_marginRight="@dimen/size_12"
-            android:layout_marginLeft="@dimen/size_12"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:text="설정"
+            android:layout_marginLeft="@dimen/size_12"
+            android:layout_marginRight="@dimen/size_12"
             android:gravity="center"
+            android:text="설정"
+            android:textColor="#3D454C"
 
-            android:textSize="@dimen/size_18"/>
+            android:textSize="@dimen/size_18" />
     </LinearLayout>
 
     <LinearLayout
-        android:layout_below="@id/setting_back_btn"
         android:layout_width="match_parent"
         android:layout_height="@dimen/size_1"
+        android:layout_below="@id/setting_back_btn"
         android:background="#C2C7CC">
 
-        </LinearLayout>
+    </LinearLayout>
 
     <LinearLayout
-        android:paddingLeft="@dimen/size_32"
-        android:paddingRight="@dimen/size_32"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
         android:gravity="center"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:paddingLeft="@dimen/size_32"
+        android:paddingRight="@dimen/size_32">
 
-        <com.tws.widget.CuzButton
-            android:id="@+id/setting_push_on_btn"
+        <LinearLayout
+            android:id="@+id/setting_push_layout"
             android:layout_width="match_parent"
             android:layout_height="50dp"
-            android:layout_marginBottom="@dimen/size_10"
+            android:gravity="center"
             android:background="@xml/xml_icon_btn_bg"
-            android:text="Push Message ON"
-            android:textColor="#349BCD"
-            android:textSize="@dimen/size_18"
-            android:textStyle="bold" />
+            android:layout_marginBottom="@dimen/size_10"
+            android:orientation="horizontal">
+
+            <com.tws.widget.CuzTextView
+                android:gravity="center"
+                android:layout_width="wrap_content"
+                android:layout_height="50dp"
+                android:text="Push Message Status"
+                android:textColor="#349BCD"
+                android:textSize="@dimen/size_18"
+                android:layout_marginRight="@dimen/size_10"
+                android:textStyle="bold" />
+
+            <ToggleButton
+                android:id="@+id/setting_push_swich"
+                android:layout_width="@dimen/size_34"
+                android:layout_height="@dimen/size_20"
+                android:layout_centerHorizontal="true"
+                android:layout_centerVertical="true"
+                android:background="@drawable/toggle_selector"
+                android:checked="false"
+                android:text=""
+                android:textOff=""
+                android:textOn="" />
+
+        </LinearLayout>
 
         <com.tws.widget.CuzButton
             android:id="@+id/setting_logout_btn"

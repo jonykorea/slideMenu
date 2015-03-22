@@ -347,7 +347,7 @@ public class OwnerAllOrderListFragment extends BaseFragment implements
     }
 
     @Override
-    public void onChangeStatus(String orderKey, int position,  String status) {
+    public void onChangeStatus(String orderKey, int position,  int status) {
 
 
     }

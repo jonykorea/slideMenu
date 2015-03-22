@@ -36,6 +36,14 @@
     </LinearLayout>
 
 
+    <ImageView
+        android:layout_centerVertical="true"
+        android:id="@+id/title_push_status"
+        android:layout_marginRight="@dimen/size_10"
+        android:layout_width="@dimen/size_32"
+        android:layout_height="@dimen/size_32"
+        android:background="@drawable/push_on"
+        android:layout_alignParentRight="true"/>
 
 
 </RelativeLayout>

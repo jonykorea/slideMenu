@@ -9,6 +9,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentTransaction;
 import android.os.Bundle;
+import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 import android.support.v4.widget.DrawerLayout;
 import android.widget.Toast;
@@ -21,6 +22,7 @@ import com.tws.common.lib.gms.LocationDefines;
 import com.tws.common.lib.gms.LocationGmsClient;
 import com.tws.network.data.ExtraType;
 import com.tws.network.data.RetCode;
+import com.tws.network.data.RetPushMsgStatus;
 import com.tws.network.lib.ApiAgent;
 import com.tws.soul.soulbrown.R;
 import com.tws.soul.soulbrown.gcm.GcmClient;
@@ -60,6 +62,8 @@ public class SoulBrownMainActivity extends FragmentActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        context = getApplicationContext();
+
         if(AppController.getInstance().getIsUser())
         {
             // user
@@ -74,11 +78,11 @@ public class SoulBrownMainActivity extends FragmentActivity
             // owner
             ownerOrderListFragment = new OwnerOrderListFragment();
             ownerAllOrderListFragment = new OwnerAllOrderListFragment();
+
+
         }
 
         setContentView(R.layout.activity_soul_brown_main);
-
-        context = getApplicationContext();
 
         Intent intent = getIntent();
 
@@ -93,6 +97,12 @@ public class SoulBrownMainActivity extends FragmentActivity
         mNavigationDrawerFragment.setUp(
                 R.id.navigation_drawer,
                 (DrawerLayout) findViewById(R.id.drawer_layout));
+
+        if(!AppController.getInstance().getIsUser())
+        {
+            // 현재 push 상태 확인.
+            apiGetPushMsgStatus();
+        }
 
         // location
         requestLocation();
@@ -265,7 +275,7 @@ public class SoulBrownMainActivity extends FragmentActivity
 
     // gcm E
 
-    // apiUserChecker
+    // apiSetPushKey
     public void apiSetPushKey(String source, String userID, final String regID) {
 
         ApiAgent api = new ApiAgent();
@@ -286,6 +296,57 @@ public class SoulBrownMainActivity extends FragmentActivity
                         // success
 
                         gcmClient.savePushKey(regID);
+
+                    } else {
+                        // fail
+                        LOG.d("apiSetPushKey Fail " + retCode.ret);
+
+                        Toast.makeText(SoulBrownMainActivity.this, retCode.msg + "(" + retCode.ret + ")", Toast.LENGTH_SHORT).show();
+
+                    }
+
+                }
+            }, new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError volleyError) {
+
+                    LOG.d("apiSetPushKey VolleyError " + volleyError.getMessage());
+                    Toast.makeText(SoulBrownMainActivity.this, getString(R.string.network_fail), Toast.LENGTH_SHORT).show();
+
+                }
+            });
+        }
+    }
+
+    // apiSetPushKey
+    public void apiGetPushMsgStatus() {
+
+        ApiAgent api = new ApiAgent();
+
+        LOG.d("apiSetPushKey");
+
+        PrefUserInfo prefUserInfo = new PrefUserInfo(context);
+
+        String storeID = prefUserInfo.getUserID();
+
+        if (api != null) {
+            api.apiGetPushMsgStatus(this, storeID, new Response.Listener<RetPushMsgStatus>() {
+
+                @Override
+                public void onResponse(RetPushMsgStatus retCode) {
+
+                    LOG.d("retCode.result : " + retCode.ret);
+                    LOG.d("retCode.errormsg : " + retCode.msg);
+                    LOG.d("retCode.push : " + retCode.push);
+
+                    if (retCode.ret == 1) {
+
+                        // success
+                        Intent intentGcm = new Intent("push_status");
+
+                        intentGcm.putExtra("status", retCode.push);
+
+                        LocalBroadcastManager.getInstance(context).sendBroadcast(intentGcm);
 
                     } else {
                         // fail

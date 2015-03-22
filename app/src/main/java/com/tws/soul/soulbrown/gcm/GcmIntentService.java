@@ -120,7 +120,7 @@ public class GcmIntentService extends IntentService {
 
                 String msg = extras.getString("msg");
                 String pushFlag = extras.getString("pushflag");
-                String status = extras.getString("status");
+                int status = extras.getInt("status");
 
                 LOG.d("GcmIntentService msg : " + msg + " pushFlag : " + pushFlag + " status : " + status);
 
@@ -150,18 +150,20 @@ public class GcmIntentService extends IntentService {
 
 
                     // alarm , geofence off
-                    if (pushFlag.equals("chgorder") && status.equals("1")) {
+                    if (pushFlag.equals(GcmDefine.PUSH_CHG_ORDER) ) {
 
-                        LOG.d("GcmIntentService alarm , geofence off");
+                        if( status == 1 ) {
+                            LOG.d("GcmIntentService alarm , geofence off");
 
-                        PrefOrderInfo prefOrderInfo = new PrefOrderInfo(this);
-                        prefOrderInfo.setArriveTime(0);
+                            PrefOrderInfo prefOrderInfo = new PrefOrderInfo(this);
+                            prefOrderInfo.setArriveTime(0);
 
-                        AlarmManagerBroadcastReceiver alarmManagerBroadcastReceiver = new AlarmManagerBroadcastReceiver();
-                        alarmManagerBroadcastReceiver.cancelAlarm(this);
+                            AlarmManagerBroadcastReceiver alarmManagerBroadcastReceiver = new AlarmManagerBroadcastReceiver();
+                            alarmManagerBroadcastReceiver.cancelAlarm(this);
 
-                        geofenceClient = new GeofenceClient(this, GeofenceResultHandler);
-                    }else if(pushFlag.equals("approachuser"))
+                            geofenceClient = new GeofenceClient(this, GeofenceResultHandler);
+                        }
+                    }else if(pushFlag.equals(GcmDefine.PUSH_APPROACH_USER) || pushFlag.equals(GcmDefine.PUSH_NEW_ORDER))
                     {
                         // alarm service call
 
@@ -227,7 +229,7 @@ public class GcmIntentService extends IntentService {
         NotificationCompat.Builder mBuilder =
                 new NotificationCompat.Builder(this)
                         .setSmallIcon(R.drawable.icon_coffeecup_white)
-                        .setContentTitle("Soul Brown")
+                        .setContentTitle(getString(R.string.app_name))
                         .setStyle(new NotificationCompat.BigTextStyle()
                                 .bigText(msg))
                         .setAutoCancel(true)

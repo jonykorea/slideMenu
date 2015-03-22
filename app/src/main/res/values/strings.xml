@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="app_name">SoulBrown</string>
+    <string name="app_name">브루브루</string>
     <string name="title_section1">Order List</string>
     <string name="title_section2">Haru</string>
     <string name="title_section3">Atti</string>
@@ -27,6 +27,8 @@
 
     <string name="reorder_succ">정상적으로 재주문되었습니다.</string>
 
+    <string name="order_succ_cancel">정상적으로 주문취소되었습니다.</string>
+
     <string name="order_fail">주문 오류</string>
 
     <string name="network_fail">네트워크 오류</string>
@@ -45,6 +47,7 @@
     <string name="order_check_list">이미 주문된 내역이 있습니다.\n주문 내역에서 확인하세요.</string>
 
     <string name="push_msg_on">Push Message 등록되었습니다.</string>
+    <string name="push_msg_off">Push Message 해제되었습니다.</string>
 
     <string name="check_nickname">닉네임을 확인해 주세요.</string>
 
@@ -56,7 +59,13 @@
 
     <string name="status_takeout">Take out</string>
 
+    <string name="status_store_allfinish">쿠킹+\nTake out</string>
+
     <string name="orderlist_recent">최근 주문 내역</string>
+
+    <string name="order_cancel_info">※ 접수완료 상태에서만 주문취소가 가능합니다.</string>
+
+    <string name="order_cancel">주문취소</string>
 
 
 

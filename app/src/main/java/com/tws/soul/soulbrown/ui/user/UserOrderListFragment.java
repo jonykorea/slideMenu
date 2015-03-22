@@ -19,6 +19,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -34,6 +35,7 @@ import com.tws.common.listview.adapter.StickyListAdapter;
 import com.tws.network.data.ArrayOrderData;
 import com.tws.network.data.ArrayOrderList;
 import com.tws.network.data.ReceiptInfoRow;
+import com.tws.network.data.RetCode;
 import com.tws.network.data.RetOrderList;
 import com.tws.network.data.RetOrderMenu;
 import com.tws.network.data.ServerDefineCode;
@@ -80,6 +82,8 @@ public class UserOrderListFragment extends BaseFragment implements
     private LinearLayout llHeaderStatusReady;
     private LinearLayout llHeaderStatusIng;
     private LinearLayout llHeaderStatusFinish;
+    private LinearLayout llHeaderStatusCancel;
+    private Button btnHeaderStatusCancel;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -145,6 +149,11 @@ public class UserOrderListFragment extends BaseFragment implements
         llHeaderStatusReady = (LinearLayout) vHeader.findViewById(R.id.header_recent_row_status_ready);
         llHeaderStatusIng = (LinearLayout) vHeader.findViewById(R.id.header_recent_row_status_ing);
         llHeaderStatusFinish = (LinearLayout) vHeader.findViewById(R.id.header_recent_row_status_finish);
+
+        llHeaderStatusCancel = (LinearLayout) vHeader.findViewById(R.id.header_recent_cancel);
+
+        btnHeaderStatusCancel = (Button) vHeader.findViewById(R.id.header_recent_cancel_btn);
+
         // header content E
 
         stickyList.addHeaderView(vHeader);
@@ -181,7 +190,7 @@ public class UserOrderListFragment extends BaseFragment implements
         if( recentOrderInfo != null )
         {
 
-            String status = recentOrderInfo.status;
+            int status = recentOrderInfo.status;
 
             ReceiptInfoRow info = getSumPrice(recentOrderInfo.order);
 
@@ -198,25 +207,78 @@ public class UserOrderListFragment extends BaseFragment implements
 
             Log.i("jony","setHeaderContent status : "+ status);
 
-            if(status.equals("3"))
+            if(status == 3)
             {
                 llHeaderStatusReady.setBackgroundResource(R.drawable.icon_btn_bg_s);
                 llHeaderStatusIng.setBackgroundResource(R.drawable.icon_btn_bg_p);
                 llHeaderStatusFinish.setBackgroundResource(R.drawable.icon_btn_bg_p);
+                llHeaderStatusCancel.setVisibility(View.VISIBLE);
 
-            }else if(status.equals("2"))
+                // cancel
+                final String orderkey =  recentOrderInfo.orderkey;
+                btnHeaderStatusCancel.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+
+                        if( !TextUtils.isEmpty(orderkey))
+                        {
+                            // cancel popup
+                            if( mBaseDialog == null || !mBaseDialog.isShowing()) {
+
+                                // order info
+                                String orderInfo =
+                                        tvHeaderStore.getText().toString() +"\n\n"
+                                        +tvHeaderTime.getText().toString() +"\n"
+                                        +tvHeaderKey.getText().toString() +"\n"
+                                        +tvHeaderPrice.getText().toString() +"\n"
+                                        +tvHeaderMenu.getText().toString();
+
+                                mBaseDialog = new CuzDialog(context,
+                                        getString(R.string.order_cancel), orderInfo);
+
+                                mBaseDialog.show();
+
+                                mBaseDialog.setCancelable(true);
+
+                                mBaseDialog.getButtonAccept().setText(getString(R.string.order_cancel));
+
+                                mBaseDialog.getButtonCancel().setText(getString(R.string.cancel));
+
+                                mBaseDialog.setOnAcceptButtonClickListener(new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View view) {
+
+                                        mBaseDialog.dismiss();
+                                        // api
+                                        apiOrderCancel(orderkey);
+                                    }
+                                });
+                            }
+                        }
+                        else
+                        {
+                            // order key error
+                        }
+                    }
+                });
+
+            }else if(status == 2)
             {
                 llHeaderStatusReady.setBackgroundResource(R.drawable.icon_btn_bg_p);
                 llHeaderStatusIng.setBackgroundResource(R.drawable.icon_btn_bg_s);
                 llHeaderStatusFinish.setBackgroundResource(R.drawable.icon_btn_bg_p);
+                llHeaderStatusCancel.setVisibility(View.GONE);
 
-            }else if(status.equals("1"))
+            }else if(status == 1)
             {
                 llHeaderStatusReady.setBackgroundResource(R.drawable.icon_btn_bg_p);
                 llHeaderStatusIng.setBackgroundResource(R.drawable.icon_btn_bg_p);
                 llHeaderStatusFinish.setBackgroundResource(R.drawable.icon_btn_bg_s);
+                llHeaderStatusCancel.setVisibility(View.GONE);
 
             }
+
+
 
 
         }
@@ -737,5 +799,65 @@ public class UserOrderListFragment extends BaseFragment implements
         }
     };
 
+    private void refreshData()
+    {
+        //refresh
+        PrefUserInfo prefUserInfo = new PrefUserInfo(context);
+
+        String userID = prefUserInfo.getUserID();
+
+        apiOrderList("USERUI", userID, SELECT_FLAG_USER);
+    }
+
+
+    public void apiOrderCancel(String orderKey) {
+
+        ApiAgent api = new ApiAgent();
+
+        LOG.d("apiOrderCanel orderKey " + orderKey);
+
+        if (api != null && !TextUtils.isEmpty(orderKey)) {
+            api.apiChgOrderMenu(context, orderKey, 1, new Response.Listener<RetCode>() {
+                @Override
+                public void onResponse(RetCode retCode) {
+
+
+                    LOG.d("retCode.result : " + retCode.ret);
+                    LOG.d("retCode.errormsg : " + retCode.msg);
+
+
+                    if (retCode.ret == ServerDefineCode.NET_RESULT_SUCC) {
+
+                        // success
+                        LOG.d("apiOrderCancel Succ");
+                        showToast(getString(R.string.order_succ_cancel));
+                        refreshData();
+
+
+                    } else {
+                        // fail
+                        LOG.d("apiOrderCancel Fail " + retCode.ret);
+
+                        //showToast("주문 이력 오류 : "+ retCode.errormsg+"["+retCode.result+"]");
+                        showToast(getString(R.string.order_fail)+ " : " + retCode.msg + "[" + retCode.ret + "]");
+                        refreshData();
+                    }
+
+                }
+            }, new Response.ErrorListener() {
+
+
+                @Override
+                public void onErrorResponse(VolleyError volleyError) {
+
+
+                    LOG.d("apiOrderCancel VolleyError " + volleyError.getMessage());
+
+                    showToast(getString(R.string.network_fail)+" : " + volleyError.getMessage());
+
+                }
+            });
+        }
+    }
 
 }

@@ -225,9 +225,11 @@
                         android:layout_height="30dp"
                         android:layout_gravity="center"
                         android:gravity="center"
-                        android:text="쿠킹"
+                        android:textSize="@dimen/size_14"
+                        android:text="@string/status_store_cooking"
                         android:textColor="#ffffff"
-                        android:textStyle="bold" />
+                        android:textStyle="bold"
+                         />
                 </LinearLayout>
 
                 <LinearLayout
@@ -243,10 +245,23 @@
                         android:layout_height="30dp"
                         android:layout_gravity="center"
                         android:gravity="center"
-                        android:text="Take out"
+                        android:text="@string/status_takeout"
                         android:textColor="#ffffff"
+                        android:textSize="@dimen/size_14"
                         android:textStyle="bold" />
                 </LinearLayout>
+
+                <com.tws.widget.CuzButton
+                    android:id="@+id/row_status_allfinish"
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:layout_weight="1"
+                    android:background="@xml/xml_icon_btn_bg"
+                    android:text="@string/status_store_allfinish"
+                    android:textColor="#349BCD"
+                    android:textSize="@dimen/size_14"
+                    />
+
             </LinearLayout>
 
         </LinearLayout>

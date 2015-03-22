@@ -17,7 +17,8 @@ public class InaviFont_Rixgo_M {
 	}
 	
 	public InaviFont_Rixgo_M(Context context){
-		mTypeface = Typeface.createFromAsset(context.getAssets(),"fonts/inavi_rixgo_m.ttf");
+		//mTypeface = Typeface.createFromAsset(context.getAssets(),"fonts/inavi_rixgo_m.ttf");
+        mTypeface = Typeface.createFromAsset(context.getAssets(),"fonts/BM-JUA.ttf");
 	}
 	
 	public Typeface getInaviFont(){

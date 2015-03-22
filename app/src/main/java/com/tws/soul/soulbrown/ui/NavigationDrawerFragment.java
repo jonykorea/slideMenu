@@ -3,11 +3,14 @@ package com.tws.soul.soulbrown.ui;
 
 import android.app.Activity;
 import android.app.ActionBar;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.os.Bundle;
@@ -16,6 +19,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
@@ -26,6 +30,7 @@ import com.tws.common.listview.adapter.GenericAdapter;
 import com.tws.common.listview.domain.SideMenu;
 import com.tws.common.listview.viewmapping.SideMenuView;
 import com.tws.soul.soulbrown.R;
+import com.tws.soul.soulbrown.gcm.GcmIntentService;
 import com.tws.soul.soulbrown.lib.StoreInfo;
 import com.tws.soul.soulbrown.pref.PrefUserInfo;
 
@@ -60,6 +65,7 @@ public class NavigationDrawerFragment extends Fragment {
     private DrawerLayout mDrawerLayout;
     private ListView mDrawerListView;
     private View mFragmentContainerView;
+    private ImageView mIvPushStatus;
 
 
     private int mCurrentSelectedPosition = SoulBrownMainActivity.INIT_MENU_POSITION;
@@ -82,8 +88,18 @@ public class NavigationDrawerFragment extends Fragment {
             //mFromSavedInstanceState = true;
         }
 
+        LocalBroadcastManager.getInstance(getActivity()).registerReceiver(PushStatusSync, new IntentFilter("push_status"));
+
         // Select either the default item (0) or the last selected item.
         selectItem(mCurrentSelectedPosition);
+
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+
+        LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(PushStatusSync);
 
     }
 
@@ -202,6 +218,10 @@ public class NavigationDrawerFragment extends Fragment {
         });
 
         TextView tvMenuTitle = (TextView) actionBarView.findViewById(R.id.title_store_name);
+
+        // push status
+        mIvPushStatus = (ImageView) actionBarView.findViewById(R.id.title_push_status);
+        mIvPushStatus.setVisibility(View.GONE);
 
         PrefUserInfo prefUserInfo = new PrefUserInfo(getActivity());
         String userID = prefUserInfo.getUserID();
@@ -349,4 +369,29 @@ public class NavigationDrawerFragment extends Fragment {
             return sideMenuArrayList;
         }
     }
+
+
+    // mIvPushStatus
+    private BroadcastReceiver PushStatusSync = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+
+            int status = intent.getIntExtra("status",0);
+
+            if( mIvPushStatus != null )
+            {
+                if( status == 0)
+                {
+                    mIvPushStatus.setImageResource(R.drawable.push_off);
+                    mIvPushStatus.setVisibility(View.VISIBLE);
+                }
+                else if( status == 1)
+                {
+                    mIvPushStatus.setImageResource(R.drawable.push_on);
+                    mIvPushStatus.setVisibility(View.VISIBLE);
+                }
+            }
+
+        }
+    };
 }

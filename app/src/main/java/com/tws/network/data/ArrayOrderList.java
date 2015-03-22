@@ -14,7 +14,7 @@ public class ArrayOrderList {
     public String storename;
     public String arrtime;
     public String orderkey;
-    public String status;
+    public int status;
     public String dist;
 
     public ArrayList<ArrayOrderData> order;

@@ -5,26 +5,26 @@
     android:layout_height="wrap_content">
 
     <LinearLayout
-        android:background="#F2F2F4"
-        android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:background="#F2F2F4"
+        android:orientation="vertical">
 
         <LinearLayout
-            android:background="#ffffff"
-            android:orientation="vertical"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/size_8"></LinearLayout>
+            android:layout_height="@dimen/size_8"
+            android:background="#ffffff"
+            android:orientation="vertical"></LinearLayout>
 
         <com.tws.widget.CuzTextView
             android:id="@+id/header_recent_top"
 
-            android:text="@string/orderlist_recent"
-            android:layout_marginLeft="@dimen/size_15"
-
             android:layout_width="match_parent"
             android:layout_height="@dimen/size_30"
+
+            android:layout_marginLeft="@dimen/size_15"
             android:gravity="center_vertical|left"
+            android:text="@string/orderlist_recent"
             android:textColor="#F9872B"
             android:textSize="@dimen/size_16"
             android:textStyle="bold" />
@@ -64,6 +64,7 @@
                     android:textSize="@dimen/size_16" />
 
             </RelativeLayout>
+
             <com.tws.widget.CuzTextView
 
                 android:id="@+id/header_recent_row_key"
@@ -85,17 +86,15 @@
                 android:textSize="@dimen/size_16" />
 
 
-
             <com.tws.widget.CuzTextView
-                android:layout_marginTop="5dp"
-                android:layout_marginBottom="5dp"
                 android:id="@+id/header_recent_row_menu"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginBottom="5dp"
+                android:layout_marginTop="5dp"
 
                 android:gravity="left|center_vertical"
 
-                android:text=""
                 android:textColor="#3D454C"
                 android:textSize="@dimen/size_16" />
         </LinearLayout>
@@ -110,58 +109,99 @@
 
             <LinearLayout
                 android:id="@+id/header_recent_row_status_ready"
-                android:background="@drawable/icon_btn_bg_n"
-                android:layout_weight="1"
-                android:orientation="horizontal"
                 android:layout_width="match_parent"
-                android:layout_height="40dp">
+                android:layout_height="40dp"
+                android:layout_weight="1"
+                android:background="@drawable/icon_btn_bg_n"
+                android:orientation="horizontal">
 
                 <com.tws.widget.CuzTextView
-                    android:text="@string/status_ready"
-                    android:textStyle="bold"
                     android:layout_width="match_parent"
                     android:layout_height="30dp"
+                    android:layout_gravity="center"
                     android:gravity="center"
+                    android:textSize="@dimen/size_14"
+                    android:text="@string/status_ready"
                     android:textColor="#ffffff"
-                    android:layout_gravity="center" />
+                    android:textStyle="bold" />
             </LinearLayout>
 
             <LinearLayout
                 android:id="@+id/header_recent_row_status_ing"
-                android:background="@drawable/icon_btn_bg_n"
-                android:layout_weight="1"
-                android:orientation="horizontal"
                 android:layout_width="match_parent"
-                android:layout_height="40dp">
+                android:layout_height="40dp"
+                android:layout_weight="1"
+                android:background="@drawable/icon_btn_bg_n"
+                android:orientation="horizontal">
 
                 <com.tws.widget.CuzTextView
-                    android:text="@string/status_cooking"
-                    android:textStyle="bold"
                     android:layout_width="match_parent"
                     android:layout_height="30dp"
+                    android:layout_gravity="center"
                     android:gravity="center"
+                    android:textSize="@dimen/size_14"
+                    android:text="@string/status_cooking"
                     android:textColor="#ffffff"
-                    android:layout_gravity="center" />
+                    android:textStyle="bold" />
             </LinearLayout>
 
             <LinearLayout
                 android:id="@+id/header_recent_row_status_finish"
-                android:background="@drawable/icon_btn_bg_n"
-                android:layout_weight="1"
-                android:orientation="horizontal"
                 android:layout_width="match_parent"
-                android:layout_height="40dp">
+                android:layout_height="40dp"
+                android:layout_weight="1"
+                android:background="@drawable/icon_btn_bg_n"
+                android:orientation="horizontal">
 
                 <com.tws.widget.CuzTextView
-                    android:text="@string/status_takeout"
-                    android:textStyle="bold"
                     android:layout_width="match_parent"
                     android:layout_height="30dp"
+                    android:layout_gravity="center"
                     android:gravity="center"
+                    android:textSize="@dimen/size_14"
+                    android:text="@string/status_takeout"
                     android:textColor="#ffffff"
-                    android:layout_gravity="center" />
+                    android:textStyle="bold" />
             </LinearLayout>
         </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/header_recent_cancel"
+
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+
+            <com.tws.widget.CuzTextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginBottom="@dimen/size_5"
+                android:layout_marginTop="@dimen/size_5"
+                android:gravity="center"
+                android:text="@string/order_cancel_info"
+                android:textColor="#E52A19"
+
+                android:textSize="@dimen/size_14"
+                android:textStyle="bold" />
+
+            <com.tws.widget.CuzButton
+                android:id="@+id/header_recent_cancel_btn"
+                android:layout_marginLeft="@dimen/size_20"
+                android:layout_marginRight="@dimen/size_20"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:layout_marginBottom="@dimen/size_5"
+                android:background="@xml/xml_icon_btn_bg"
+                android:text="@string/order_cancel"
+                android:textColor="#CE2617"
+                android:textSize="@dimen/size_14"
+                android:textStyle="bold" />
+
+        </LinearLayout>
+
+
 
     </LinearLayout>
 </FrameLayout>

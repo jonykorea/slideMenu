@@ -13,6 +13,7 @@ import com.tws.network.data.CoreGetPublicKey;
 import com.tws.network.data.RetCode;
 import com.tws.network.data.RetOrderList;
 import com.tws.network.data.RetOrderMenu;
+import com.tws.network.data.RetPushMsgStatus;
 import com.tws.network.data.RetUserChecker;
 import com.tws.network.lib.AirGsonRequest;
 import com.tws.network.lib.JsonGsonRequest;
@@ -109,7 +110,7 @@ public class ApiAgent {
         String auth = DeviceInfo.getAuth(context);
 
         if (!TextUtils.isEmpty(auth))
-           header.put("auth_key", auth);
+            header.put("auth_key", auth);
 
         header.put("mdn", DeviceInfo.getMDN(context));
 
@@ -131,7 +132,7 @@ public class ApiAgent {
         if (jsonParams != null)
             reqParams = jsonParams.toString();
 
-        LOG.d("url : "+url+" reqParams : " + reqParams);
+        LOG.d("url : " + url + " reqParams : " + reqParams);
 
 
         // set params E
@@ -149,11 +150,10 @@ public class ApiAgent {
         ApiBase.getInstance(context).addToRequestQueue(gsObjRequest);
 
 
-
     }
 
     // setuserloc
-    public void apiUserLoc(Context context,String userid, String lon,String lat, Response.Listener<RetCode> succListener, Response.ErrorListener failListener) {
+    public void apiUserLoc(Context context, String userid, String lon, String lat, Response.Listener<RetCode> succListener, Response.ErrorListener failListener) {
 
         String url = URL_DOMAIN + URL_USER_SET_USERLOC;
 
@@ -170,8 +170,8 @@ public class ApiAgent {
         // set add header E
 
         // test S
-        float distance = GPSUtils.getDistance(Double.parseDouble(lat),Double.parseDouble(lon), StoreInfo.STORE_LATI,StoreInfo.STORE_LON);
-        Log.i("jony", "distance : "+ distance);
+        float distance = GPSUtils.getDistance(Double.parseDouble(lat), Double.parseDouble(lon), StoreInfo.STORE_LATI, StoreInfo.STORE_LON);
+        Log.i("jony", "distance : " + distance);
 
         // test E
         // set params S
@@ -183,8 +183,8 @@ public class ApiAgent {
             //jsonParams.put("lon",lon);
             //jsonParams.put("lat",lat);
             //jsonParams.put("distance",GPSUtils.getDistanceStr(distance));
-            jsonParams.put("store","d");
-            jsonParams.put("status",distance);
+            jsonParams.put("store", "d");
+            jsonParams.put("status", distance);
 
             //jsonParams = CommonParams.getCommonParams(context, jsonParams);
 
@@ -198,7 +198,7 @@ public class ApiAgent {
         if (jsonParams != null)
             reqParams = jsonParams.toString();
 
-        LOG.d("url : "+url+" reqParams : " + reqParams);
+        LOG.d("url : " + url + " reqParams : " + reqParams);
 
 
         // set params E
@@ -218,7 +218,7 @@ public class ApiAgent {
     }
 
     // apiUserChecker
-    public void apiUserChecker(Context context,String userid, Response.Listener<RetUserChecker> succListener, Response.ErrorListener failListener) {
+    public void apiUserChecker(Context context, String userid, Response.Listener<RetUserChecker> succListener, Response.ErrorListener failListener) {
 
         String url = URL_DOMAIN + URL_COMMON_CHECKER;
 
@@ -238,7 +238,7 @@ public class ApiAgent {
         JSONObject jsonParams = new JSONObject();
         try {
 
-            jsonParams.put("nick",userid);
+            jsonParams.put("nick", userid);
 
             //jsonParams = CommonParams.getCommonParams(context, jsonParams);
 
@@ -252,7 +252,7 @@ public class ApiAgent {
         if (jsonParams != null)
             reqParams = jsonParams.toString();
 
-        LOG.d("url : "+url+" reqParams : " + reqParams);
+        LOG.d("url : " + url + " reqParams : " + reqParams);
 
 
         // set params E
@@ -270,8 +270,9 @@ public class ApiAgent {
         ApiBase.getInstance(context).addToRequestQueue(gsObjRequest);
 
     }
+
     // apiOrderMenu
-    public void apiOrderMenu(Context context,String userid, String storeid, String arriveTime , List<Menu> listMenu, Response.Listener<RetOrderMenu> succListener, Response.ErrorListener failListener) {
+    public void apiOrderMenu(Context context, String userid, String storeid, String arriveTime, List<Menu> listMenu, Response.Listener<RetOrderMenu> succListener, Response.ErrorListener failListener) {
 
         String url = URL_DOMAIN + URL_USER_ORDER_MENU;
 
@@ -298,10 +299,10 @@ public class ApiAgent {
         try {
 
 
-            jsonParams.put("store",storeid);
-            jsonParams.put("arrtime",arriveTime);
+            jsonParams.put("store", storeid);
+            jsonParams.put("arrtime", arriveTime);
 
-            if(listMenu!=null) {
+            if (listMenu != null) {
                 for (int i = 0; i < listMenu.size(); i++) {
 
 
@@ -309,16 +310,15 @@ public class ApiAgent {
 
                     int cnt = listMenu.get(i).count;
 
-                    if( cnt != 0) {
+                    if (cnt != 0) {
 
                         jsonSubParams.put("name", listMenu.get(i).name);
                         jsonSubParams.put("price", Integer.toString(listMenu.get(i).price));
                         jsonSubParams.put("count", Integer.toString(cnt));
 
-                        if( listMenu.get(i).option !=null && listMenu.get(i).option.size() > 0 )
-                        {
+                        if (listMenu.get(i).option != null && listMenu.get(i).option.size() > 0) {
 
-                            for (int j = 0; j < listMenu.get(i).option.size() ; j++) {
+                            for (int j = 0; j < listMenu.get(i).option.size(); j++) {
 
                                 jsonSubOptionParams = new JSONObject();
 
@@ -334,7 +334,7 @@ public class ApiAgent {
                         jsonArray.put(jsonSubParams);
                     }
                 }
-            jsonParams.put("order", jsonArray);
+                jsonParams.put("order", jsonArray);
 
             }
             //jsonParams = CommonParams.getCommonParams(context, jsonParams);
@@ -349,7 +349,7 @@ public class ApiAgent {
         if (jsonParams != null)
             reqParams = jsonParams.toString();
 
-        LOG.d("url : "+url+" reqParams : " + reqParams);
+        LOG.d("url : " + url + " reqParams : " + reqParams);
 
 
         // set params E
@@ -369,7 +369,7 @@ public class ApiAgent {
     }
 
     // apiGetOrderList
-    public void apiGetOrderList(Context context, String source, String userid, String storeid, int flag , Response.Listener<RetOrderList> succListener, Response.ErrorListener failListener) {
+    public void apiGetOrderList(Context context, String source, String userid, String storeid, int flag, Response.Listener<RetOrderList> succListener, Response.ErrorListener failListener) {
 
         String url = URL_DOMAIN + URL_USER_GET_ORDERLIST;
 
@@ -390,12 +390,11 @@ public class ApiAgent {
         JSONArray jsonArray = new JSONArray();
         JSONObject jsonSubParams = null;
 
-        if(!TextUtils.isEmpty(userid))
-        {
+        if (!TextUtils.isEmpty(userid)) {
             url = URL_DOMAIN + URL_USER_GET_ORDERLIST;
         }
 
-        if(!TextUtils.isEmpty(storeid)) {
+        if (!TextUtils.isEmpty(storeid)) {
             url = URL_DOMAIN + URL_STORE_GET_ORDERLIST;
             try {
 
@@ -409,12 +408,12 @@ public class ApiAgent {
         }
 
 
-    String reqParams = null;
+        String reqParams = null;
 
         if (jsonParams != null)
             reqParams = jsonParams.toString();
 
-        LOG.d("url : "+url+" reqParams : " + reqParams);
+        LOG.d("url : " + url + " reqParams : " + reqParams);
 
 
         // set params E
@@ -459,11 +458,11 @@ public class ApiAgent {
 
             // param info
             // os  android : 1
-            jsonParams.put("os",1);
-            jsonParams.put("pushkey",pushKey);
+            jsonParams.put("os", 1);
+            jsonParams.put("pushkey", pushKey);
 
             // user
-            if(!TextUtils.isEmpty(nick)) {
+            if (!TextUtils.isEmpty(nick)) {
                 jsonParams.put("nick", nick);
             }
 
@@ -478,7 +477,7 @@ public class ApiAgent {
         if (jsonParams != null)
             reqParams = jsonParams.toString();
 
-        LOG.d("url : "+url+" reqParams : " + reqParams);
+        LOG.d("url : " + url + " reqParams : " + reqParams);
 
 
         // set params E
@@ -523,11 +522,20 @@ public class ApiAgent {
 
             // param info
             // os  android : 1
-            jsonParams.put("os",1);
-            jsonParams.put("pushkey",pushKey);
+
+            if( TextUtils.isEmpty(pushKey))
+            {
+                jsonParams.put("os", 0);
+            }
+            else
+            {
+                jsonParams.put("os", 1);
+            }
+
+            jsonParams.put("pushkey", pushKey);
 
             // user
-            if(!TextUtils.isEmpty(store)) {
+            if (!TextUtils.isEmpty(store)) {
                 jsonParams.put("store", store);
             }
 
@@ -541,7 +549,7 @@ public class ApiAgent {
         if (jsonParams != null)
             reqParams = jsonParams.toString();
 
-        LOG.d("url : "+url+" reqParams : " + reqParams);
+        LOG.d("url : " + url + " reqParams : " + reqParams);
 
 
         // set params E
@@ -561,9 +569,9 @@ public class ApiAgent {
     }
 
     // apiChgOrderMenu
-    public void apiChgOrderMenu(Context context,String storeID, String orderKey, String status, Response.Listener<RetCode> succListener, Response.ErrorListener failListener) {
+    public void apiChgOrderMenu(Context context, String orderKey, int status, Response.Listener<RetCode> succListener, Response.ErrorListener failListener) {
 
-        String url = URL_DOMAIN + URL_STATUS_ORDER_MENU;
+        String url = URL_DOMAIN + URL_USER_CHG_ORDERSTATUS;
 
         // set add header S
         HashMap<String, String> header = new HashMap<String, String>();
@@ -581,12 +589,9 @@ public class ApiAgent {
         JSONObject jsonParams = new JSONObject();
         try {
 
-            if( !TextUtils.isEmpty(storeID))
-                jsonParams.put("store",storeID);
+            jsonParams.put("orderkey", orderKey);
 
-            jsonParams.put("orderkey",orderKey);
-
-            jsonParams.put("status",status);
+            jsonParams.put("status", status);
 
             //jsonParams = CommonParams.getCommonParams(context, jsonParams);
 
@@ -600,7 +605,66 @@ public class ApiAgent {
         if (jsonParams != null)
             reqParams = jsonParams.toString();
 
-        LOG.d("url : "+url+" reqParams : " + reqParams);
+        LOG.d("url : " + url + " reqParams : " + reqParams);
+
+
+        // set params E
+
+        // request!
+        JsonGsonRequest<RetCode> gsObjRequest = new JsonGsonRequest<RetCode>(
+                Request.Method.POST,
+                url,
+                RetCode.class, header, reqParams,
+                succListener, failListener
+
+        );
+
+        // request queue!
+        ApiBase.getInstance(context).addToRequestQueue(gsObjRequest);
+
+    }
+
+    // apiChgOrderMenu
+    public void apiChgOrderMenu(Context context, String storeID, String orderKey, int status, Response.Listener<RetCode> succListener, Response.ErrorListener failListener) {
+
+        String url = URL_DOMAIN + URL_STORE_CHG_ORDERSTATUS;
+
+        // set add header S
+        HashMap<String, String> header = new HashMap<String, String>();
+
+        String auth = DeviceInfo.getAuth(context);
+
+        if (!TextUtils.isEmpty(auth))
+            header.put("auth", auth);
+
+        header.put("mdn", DeviceInfo.getMDN(context));
+
+        // set add header E
+
+        // set params S
+        JSONObject jsonParams = new JSONObject();
+        try {
+
+
+            jsonParams.put("store", storeID);
+
+            jsonParams.put("orderkey", orderKey);
+
+            jsonParams.put("status", status);
+
+            //jsonParams = CommonParams.getCommonParams(context, jsonParams);
+
+        } catch (Exception e) {
+            LOG.d("apiChgOrderMenu error:" + e.getMessage());
+            jsonParams = null;
+        }
+
+        String reqParams = null;
+
+        if (jsonParams != null)
+            reqParams = jsonParams.toString();
+
+        LOG.d("url : " + url + " reqParams : " + reqParams);
 
 
         // set params E
@@ -648,11 +712,11 @@ public class ApiAgent {
             //jsonParams.put("pushkey",pushKey);
 
             // user
-            if(!TextUtils.isEmpty(userid)) {
+            if (!TextUtils.isEmpty(userid)) {
                 jsonParams.put("nick", userid);
             }
 
-            if(!TextUtils.isEmpty(storeid)) {
+            if (!TextUtils.isEmpty(storeid)) {
                 url = URL_DOMAIN + URL_STORE_LOGOUT;
                 jsonParams.put("store", storeid);
             }
@@ -669,7 +733,7 @@ public class ApiAgent {
         if (jsonParams != null)
             reqParams = jsonParams.toString();
 
-        LOG.d("url : "+url+" reqParams : " + reqParams);
+        LOG.d("url : " + url + " reqParams : " + reqParams);
 
 
         // set params E
@@ -679,6 +743,61 @@ public class ApiAgent {
                 Request.Method.POST,
                 url,
                 RetCode.class, header, reqParams,
+                succListener, failListener
+
+        );
+
+        // request queue!
+        ApiBase.getInstance(context).addToRequestQueue(gsObjRequest);
+
+    }
+
+    // apiChgOrderMenu
+    public void apiGetPushMsgStatus(Context context, String storeID, Response.Listener<RetPushMsgStatus> succListener, Response.ErrorListener failListener) {
+
+        String url = URL_DOMAIN + URL_STORE_GET_STATUS;
+
+        // set add header S
+        HashMap<String, String> header = new HashMap<String, String>();
+
+        String auth = DeviceInfo.getAuth(context);
+
+        if (!TextUtils.isEmpty(auth))
+            header.put("auth", auth);
+
+        header.put("mdn", DeviceInfo.getMDN(context));
+
+        // set add header E
+
+        // set params S
+        JSONObject jsonParams = new JSONObject();
+        try {
+
+
+            jsonParams.put("store", storeID);
+
+            //jsonParams = CommonParams.getCommonParams(context, jsonParams);
+
+        } catch (Exception e) {
+            LOG.d("apiGetPushMsgStatus error:" + e.getMessage());
+            jsonParams = null;
+        }
+
+        String reqParams = null;
+
+        if (jsonParams != null)
+            reqParams = jsonParams.toString();
+
+        LOG.d("url : " + url + " reqParams : " + reqParams);
+
+
+        // set params E
+
+        // request!
+        JsonGsonRequest<RetPushMsgStatus> gsObjRequest = new JsonGsonRequest<RetPushMsgStatus>(
+                Request.Method.POST,
+                url,
+                RetPushMsgStatus.class, header, reqParams,
                 succListener, failListener
 
         );

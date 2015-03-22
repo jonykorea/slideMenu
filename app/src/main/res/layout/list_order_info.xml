@@ -7,8 +7,8 @@
     <ImageView
         android:layout_marginLeft="@dimen/size_15"
         android:id="@+id/row_store"
-        android:layout_width="@dimen/size_33"
-        android:layout_height="@dimen/size_24"
+        android:layout_width="@dimen/size_40"
+        android:layout_height="@dimen/size_40"
         android:layout_centerVertical="true"
         android:layout_alignParentLeft="true"
         android:background="@drawable/icon_receipt" />

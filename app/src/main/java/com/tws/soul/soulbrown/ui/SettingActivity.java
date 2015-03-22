@@ -2,15 +2,20 @@ package com.tws.soul.soulbrown.ui;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v4.content.LocalBroadcastManager;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.LinearLayout;
 import android.widget.Toast;
+import android.widget.ToggleButton;
 
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
@@ -41,9 +46,12 @@ public class SettingActivity extends BaseActivity {
 
         context = getApplicationContext();
 
-        Button btnPushOn = (Button)findViewById(R.id.setting_push_on_btn);
+        //Button btnPushOn = (Button)findViewById(R.id.setting_push_on_btn);
+        LinearLayout llPushStatus =(LinearLayout)findViewById(R.id.setting_push_layout);
         Button btnLogOut = (Button)findViewById(R.id.setting_logout_btn);
         LinearLayout llBackKey =(LinearLayout)findViewById(R.id.setting_back_btn);
+
+
 
         gcmClient = new GcmClient(this);
 
@@ -51,6 +59,38 @@ public class SettingActivity extends BaseActivity {
         if( !AppController.getInstance().getIsUser() )
         {
             // 점주라면.
+            llPushStatus.setVisibility(View.VISIBLE);
+
+            ToggleButton toggleButton = (ToggleButton) findViewById(R.id.setting_push_swich);
+
+            toggleButton.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+
+                @Override
+                public void onCheckedChanged(CompoundButton arg0, boolean isChecked) {
+
+                    LOG.d("toggleButton isChecked : "+ isChecked);
+
+                    if( isChecked )
+                    {
+                        if( !mBaseProgressDialog.isShowing() )
+                            mBaseProgressDialog.show();
+
+                        setGcmClient();
+                    }
+                    else
+                    {
+                        PrefUserInfo prefUserInfo = new PrefUserInfo(SettingActivity.this);
+                        String userID = prefUserInfo.getUserID();
+
+                        // 점주
+
+                        apiSetPushKey(userID, "");
+                    }
+
+                }
+            });
+
+            /*
 
             btnPushOn.setVisibility(View.VISIBLE);
 
@@ -65,10 +105,12 @@ public class SettingActivity extends BaseActivity {
 
                 }
             });
+            */
         }
-        else
-            btnPushOn.setVisibility(View.GONE);
-
+        else {
+            llPushStatus.setVisibility(View.GONE);
+            //   btnPushOn.setVisibility(View.GONE);
+        }
         btnLogOut.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -105,7 +147,7 @@ public class SettingActivity extends BaseActivity {
                     String userID = prefUserInfo.getUserID();
 
                     // 점주
-                    apiSetPushKey("STOREUI", userID, msg);
+                    apiSetPushKey(userID, msg);
                 }
                 else
                 {
@@ -127,7 +169,7 @@ public class SettingActivity extends BaseActivity {
 
 
     // apiSetPushKey
-    public void apiSetPushKey(String source, String storeID, final String regID) {
+    public void apiSetPushKey( String storeID, final String regID) {
 
         ApiAgent api = new ApiAgent();
 
@@ -148,12 +190,18 @@ public class SettingActivity extends BaseActivity {
 
                     if (retCode.ret == 1) {
 
-
                         // success
+                        if(TextUtils.isEmpty(regID)) {
+                            setPushStatus(0);
+                            Toast.makeText(SettingActivity.this, getString(R.string.push_msg_off), Toast.LENGTH_SHORT).show();
+                        }
+                        else{
+                            setPushStatus(1);
+                            gcmClient.savePushKey(regID);
+                            Toast.makeText(SettingActivity.this, getString(R.string.push_msg_on), Toast.LENGTH_SHORT).show();
 
-                        gcmClient.savePushKey(regID);
+                        }
 
-                        Toast.makeText(SettingActivity.this, getString(R.string.push_msg_on), Toast.LENGTH_SHORT).show();
 
                     } else {
                         // fail
@@ -262,6 +310,15 @@ public class SettingActivity extends BaseActivity {
                 }
             });
         }
+    }
+
+    private void setPushStatus(int flag)
+    {
+        Intent intentGcm = new Intent("push_status");
+
+        intentGcm.putExtra("status", flag);
+
+        LocalBroadcastManager.getInstance(context).sendBroadcast(intentGcm);
     }
 
 }
