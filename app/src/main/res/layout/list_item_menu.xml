@@ -2,18 +2,18 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:card_view="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_gravity="center"
+    android:layout_height="match_parent"
     android:background="#F1F5F7"
     android:paddingBottom="0dp"
-    android:paddingLeft="10dp"
-    android:paddingRight="10dp"
     android:paddingTop="5dp"
 
     >
 
     <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:layout_width="296dp"
+        android:layout_height="320dp"
         android:background="@drawable/menu_card_bg"
         android:orientation="vertical">
 
@@ -56,7 +56,7 @@
         <ImageView
             android:id="@+id/item_menu_info_image"
             android:layout_width="match_parent"
-            android:layout_height="260dp"
+            android:layout_height="210dp"
             android:layout_marginBottom="4dp"
             android:layout_marginTop="4dp"
 
