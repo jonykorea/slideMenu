@@ -4,18 +4,24 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
+import android.util.Log;
 
+import com.tws.network.data.ArrayStoreData;
+import com.tws.network.data.RetMenuList;
 import com.tws.soul.soulbrown.lib.StoreInfo;
 
 public class ViewPagerAdapter extends FragmentPagerAdapter {
 
     // Declare the number of ViewPager pages
 
-    private String titles[] = new String[]{"store1", "store2", "store3","store4"};
-    final int PAGE_COUNT = titles.length;
+    //private String titles[] = new String[]{"store1", "store2"};
+    //int PAGE_COUNT = titles.length;
+    private RetMenuList mMenuList;
 
-    public ViewPagerAdapter(FragmentManager fm) {
+    public ViewPagerAdapter(FragmentManager fm, RetMenuList menuList) {
         super(fm);
+        this.mMenuList = menuList;
+
     }
 
     @Override
@@ -23,6 +29,22 @@ public class ViewPagerAdapter extends FragmentPagerAdapter {
 
         Bundle bundle = new Bundle();
 
+        ArrayStoreData storeInfo = mMenuList.store.get(position);
+
+        String code = storeInfo.store;
+
+        Log.i("jony", "getItem code : "+ code + " menu size : "+storeInfo.menu.size());
+
+        bundle.putString("store", code);
+
+        bundle.putParcelable("menu",storeInfo);
+        StoreMenuFragment storeMenuFragment = new StoreMenuFragment();
+
+        storeMenuFragment.setArguments(bundle);
+
+        return storeMenuFragment;
+
+        /*
         switch (position) {
 
             case 0:
@@ -67,16 +89,18 @@ public class ViewPagerAdapter extends FragmentPagerAdapter {
                 return storeMenuFragment04;
         }
 
+
         return null;
+        */
     }
 
     public CharSequence getPageTitle(int position) {
-        return titles[position];
+        return "";
     }
 
     @Override
     public int getCount() {
-        return PAGE_COUNT;
+        return mMenuList.store.size();
     }
 
 }

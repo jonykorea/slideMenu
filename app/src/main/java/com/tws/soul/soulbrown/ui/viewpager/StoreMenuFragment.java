@@ -28,6 +28,9 @@ import com.tws.common.lib.dialog.CuzDialog;
 import com.tws.common.lib.gms.LocationDefines;
 import com.tws.common.lib.soulbrownlib.OrderDialog;
 import com.tws.common.listview.adapter.MenuListAdapter;
+import com.tws.network.data.ArrayOptionData;
+import com.tws.network.data.ArrayStoreData;
+import com.tws.network.data.RetMenuList;
 import com.tws.network.data.RetOrderMenu;
 import com.tws.network.data.ServerDefineCode;
 import com.tws.network.lib.ApiAgent;
@@ -63,6 +66,8 @@ public class StoreMenuFragment extends BaseFragment {
 
     private Context context;
 
+    private ArrayStoreData storeInfo;
+
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
@@ -75,6 +80,8 @@ public class StoreMenuFragment extends BaseFragment {
 
         mStoreID = getArguments().getString("store");
 
+        storeInfo = getArguments().getParcelable("menu");
+
         animatorSet = new AnimatorSet();
 
         Notice.toast = Toast.makeText(context, "", Toast.LENGTH_SHORT);
@@ -83,11 +90,15 @@ public class StoreMenuFragment extends BaseFragment {
             getActivity().finish();
             return;
         }
-        else
+        else {
+
+
             initMenuData();
+        }
     }
 
     private void initMenuData() {
+        /*
         if (mStoreID.equals(StoreInfo.CODE_HARU)) {
             mMenuData = MenuDataManager.getInstance().getMenuHARU();
             mStoreName = context.getResources().getString(R.string.store_haru);
@@ -101,6 +112,28 @@ public class StoreMenuFragment extends BaseFragment {
             mMenuData = MenuDataManager.getInstance().getMenuTWS();
             mStoreName = context.getResources().getString(R.string.store_tws);
         }
+        */
+        mMenuData =  new ArrayList<Menu>();
+
+        int cnt = storeInfo.menu.size();
+
+        Log.i("jony","initMenuData "+ cnt);
+
+        Menu menu = null;
+        for( int i = 0; i < cnt; i++)
+        {
+
+            menu = new Menu();
+            menu.option = new ArrayList<ArrayOptionData>();
+            menu.option.addAll(storeInfo.menu.get(i).option);
+            menu.name = storeInfo.menu.get(i).name;
+            menu.price = storeInfo.menu.get(i).price;
+
+            Log.i("jony","initMenuData name "+  menu.name);
+            //menu.image = storeInfo.menu.get(i).img;
+            mMenuData.add(menu);
+        }
+
 
     }
 

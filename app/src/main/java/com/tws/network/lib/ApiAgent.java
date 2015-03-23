@@ -11,6 +11,7 @@ import com.app.define.LOG;
 import com.tws.network.api.ApiBase;
 import com.tws.network.data.CoreGetPublicKey;
 import com.tws.network.data.RetCode;
+import com.tws.network.data.RetMenuList;
 import com.tws.network.data.RetOrderList;
 import com.tws.network.data.RetOrderMenu;
 import com.tws.network.data.RetPushMsgStatus;
@@ -184,7 +185,7 @@ public class ApiAgent {
             //jsonParams.put("lat",lat);
             //jsonParams.put("distance",GPSUtils.getDistanceStr(distance));
             jsonParams.put("store", "d");
-            jsonParams.put("status", distance);
+            jsonParams.put("status", (int)distance);
 
             //jsonParams = CommonParams.getCommonParams(context, jsonParams);
 
@@ -271,6 +272,59 @@ public class ApiAgent {
 
     }
 
+    // apiGetMenuList
+    public void apiGetMenuList(Context context, String storeid, Response.Listener<RetMenuList> succListener, Response.ErrorListener failListener) {
+
+        String url = URL_DOMAIN + URL_USER_GET_MENULIST;
+
+        // set add header S
+        HashMap<String, String> header = new HashMap<String, String>();
+
+        String auth = DeviceInfo.getAuth(context);
+
+        if (!TextUtils.isEmpty(auth))
+            header.put("auth", auth);
+
+        header.put("mdn", DeviceInfo.getMDN(context));
+
+        // set add header E
+
+        // set params S
+        JSONObject jsonParams = new JSONObject();
+        try {
+
+            jsonParams.put("store", storeid);
+
+            //jsonParams = CommonParams.getCommonParams(context, jsonParams);
+
+        } catch (Exception e) {
+            LOG.d("apiGetMenuList error:" + e.getMessage());
+            jsonParams = null;
+        }
+
+        String reqParams = null;
+
+        if (jsonParams != null)
+            reqParams = jsonParams.toString();
+
+        LOG.d("url : " + url + " reqParams : " + reqParams);
+
+
+        // set params E
+
+        // request!
+        JsonGsonRequest<RetMenuList> gsObjRequest = new JsonGsonRequest<RetMenuList>(
+                Request.Method.POST,
+                url,
+                RetMenuList.class, header, reqParams,
+                succListener, failListener
+
+        );
+
+        // request queue!
+        ApiBase.getInstance(context).addToRequestQueue(gsObjRequest);
+
+    }
     // apiOrderMenu
     public void apiOrderMenu(Context context, String userid, String storeid, String arriveTime, List<Menu> listMenu, Response.Listener<RetOrderMenu> succListener, Response.ErrorListener failListener) {
 

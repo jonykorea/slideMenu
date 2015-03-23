@@ -13,6 +13,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.tws.network.data.RetMenuList;
 import com.tws.soul.soulbrown.R;
 import com.tws.soul.soulbrown.ui.viewpager.ViewPagerAdapter;
 
@@ -26,12 +27,15 @@ public class UserStoreMenuFragment extends Fragment {
         public void onChangeViewPager(int position);
     }
     // Activity 로 데이터를 전달할 커스텀 리스너를 연결
+
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
         customListener = (CustomOnClickListener)activity;
     }
     private int mPosition = 0;
+
+    private RetMenuList mMenuList;
 
     public void setPosition(int position)
     {
@@ -61,7 +65,6 @@ public class UserStoreMenuFragment extends Fragment {
 
         Log.i("jony", "onDestroyView MenuFragment02 ");
 
-        isInit = true;
         mViewPager = null;
     }
 
@@ -69,11 +72,13 @@ public class UserStoreMenuFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        Log.i("jony", "onCreate MenuFragment02 ");
+        Bundle bundle=getArguments();
+        mMenuList = bundle.getParcelable("menu_list");
+
+        Log.i("jony", "onCreate MenuFragment02 menuList.store.size : " + mMenuList.store.size());
 
     }
     ViewPager mViewPager;
-    boolean isInit = true;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -119,7 +124,7 @@ public class UserStoreMenuFragment extends Fragment {
     private void initDataSet() {
         // Set the ViewPagerAdapter into ViewPager
         if( mViewPager != null) {
-            mViewPager.setAdapter(new ViewPagerAdapter(getChildFragmentManager()));
+            mViewPager.setAdapter(new ViewPagerAdapter(getChildFragmentManager(), mMenuList));
 
             mViewPager.setOffscreenPageLimit(3);
 

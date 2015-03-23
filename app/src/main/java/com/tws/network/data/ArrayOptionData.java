@@ -5,7 +5,9 @@ package com.tws.network.data;
  */
 public class ArrayOptionData {
 
+    public String code;
     public String name;
     public int addprice;
+    public int count;
 
 }

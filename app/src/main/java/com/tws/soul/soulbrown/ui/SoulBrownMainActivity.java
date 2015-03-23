@@ -22,6 +22,7 @@ import com.tws.common.lib.gms.LocationDefines;
 import com.tws.common.lib.gms.LocationGmsClient;
 import com.tws.network.data.ExtraType;
 import com.tws.network.data.RetCode;
+import com.tws.network.data.RetMenuList;
 import com.tws.network.data.RetPushMsgStatus;
 import com.tws.network.lib.ApiAgent;
 import com.tws.soul.soulbrown.R;
@@ -64,13 +65,36 @@ public class SoulBrownMainActivity extends FragmentActivity
 
         context = getApplicationContext();
 
-        if(AppController.getInstance().getIsUser())
+        if(AppController.getInstance().getIsUser()) {
+            apiGetMenuList("");
+        }
+        else
         {
-            // user
-            userOrderListFragment = new UserOrderListFragment();
-            userStoreMenuFragment = new UserStoreMenuFragment();
+            initViews(null);
+        }
 
-            setGcmClient();
+    }
+
+
+    private void initViews(RetMenuList menuList)
+    {
+        if(AppController.getInstance().getIsUser()) {
+            if (menuList != null) {
+                // user
+                userOrderListFragment = new UserOrderListFragment();
+                userStoreMenuFragment = new UserStoreMenuFragment();
+
+                Bundle args = new Bundle();
+                args.putParcelable("menu_list", menuList);
+                userStoreMenuFragment.setArguments(args);
+
+                setGcmClient();
+            }
+            else
+            {
+                // 종료 팝업.
+                finish();
+            }
 
         }
         else
@@ -109,6 +133,7 @@ public class SoulBrownMainActivity extends FragmentActivity
 
         onChangeDrawerLayout(INIT_MENU_POSITION);
     }
+
 
 
     @Override
@@ -369,6 +394,47 @@ public class SoulBrownMainActivity extends FragmentActivity
         }
     }
 
+    // apiSetPushKey
+    public void apiGetMenuList(String storeID) {
+
+        ApiAgent api = new ApiAgent();
+
+        LOG.d("apiGetMenuList");
+
+        if (api != null) {
+            api.apiGetMenuList(this, storeID, new Response.Listener<RetMenuList>() {
+
+                @Override
+                public void onResponse(RetMenuList retCode) {
+
+                    LOG.d("retCode.result : " + retCode.ret);
+                    LOG.d("retCode.errormsg : " + retCode.msg);
+                    LOG.d("retCode.store.size() : " + retCode.store.size());
+
+                    if (retCode.ret == 1) {
+
+                        // success
+                        initViews(retCode);
+
+                    } else {
+                        // fail
+                        LOG.d("apiGetMenuList Fail " + retCode.ret);
+
+                        Toast.makeText(SoulBrownMainActivity.this, retCode.msg + "(" + retCode.ret + ")", Toast.LENGTH_SHORT).show();
+
+                    }
+
+                }
+            }, new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError volleyError) {
+
+                    LOG.d("apiGetMenuList VolleyError " + volleyError.getMessage());
+                    Toast.makeText(SoulBrownMainActivity.this, getString(R.string.network_fail), Toast.LENGTH_SHORT).show();
+                }
+            });
+        }
+    }
 
     @Override
     protected void onResume() {
