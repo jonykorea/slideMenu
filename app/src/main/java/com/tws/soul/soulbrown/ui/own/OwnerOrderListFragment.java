@@ -483,15 +483,23 @@ public class OwnerOrderListFragment extends BaseFragment implements
 
 
                 for (int i = 0; i < ListMenu.size(); i++) {
-                    int cnt = ListMenu.get(i).count;
-                    String name = ListMenu.get(i).name;
-                    int price = ListMenu.get(i).price;
 
-                    sumPrice += price * cnt;
+                    Menu menu = ListMenu.get(i);
+                    String name = menu.name;
 
-                    if (ListMenu.get(i).count != 0) {
-                        orderMenuList += name + " : " + cnt + "개\n";
-                        //orderMenuList += ConvertPrice.getPrice(price * cnt)+"\n";
+
+                    for(int j = 0; j<menu.option.size();j++) {
+                        int cnt = menu.option.get(j).count;
+                        String nameOpt = menu.option.get(j).name;
+                        int saleprice = menu.saleprice;
+
+                        sumPrice += (saleprice + menu.option.get(j).addprice) * cnt;
+
+                        if (cnt != 0) {
+
+                            orderMenuList += name+" ("+nameOpt + ") : " + cnt + "개\n";
+                            //orderMenuList += ConvertPrice.getPrice(price * cnt)+"\n";
+                        }
                     }
 
                 }

@@ -225,15 +225,6 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal">
 
-            <ImageView
-
-                android:layout_width="@dimen/size_35"
-                android:layout_height="@dimen/size_35"
-                android:layout_alignParentLeft="true"
-                android:layout_centerVertical="true"
-                android:layout_marginLeft="@dimen/size_15"
-                android:layout_marginRight="@dimen/size_10"
-                android:background="@drawable/icon_owner_receipt" />
 
             <LinearLayout
                 android:id="@+id/header_recent_row_status_ing"

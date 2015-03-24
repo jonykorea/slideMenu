@@ -4,14 +4,7 @@
     android:layout_height="wrap_content"
     android:paddingTop="@dimen/size_5">
 
-    <ImageView
-        android:id="@+id/row_store"
-        android:layout_width="@dimen/size_35"
-        android:layout_height="@dimen/size_35"
-        android:layout_alignParentLeft="true"
-        android:layout_centerVertical="true"
-        android:layout_marginLeft="@dimen/size_15"
-        android:background="@drawable/icon_owner_receipt" />
+
 
     <LinearLayout
         android:id="@+id/row_receipt"

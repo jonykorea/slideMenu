@@ -463,9 +463,11 @@ public class UserOrderListFragment extends BaseFragment implements
 
     }
 
+
     public void setOrderMenu(ArrayOrderList orderMenu) {
 
         String storeID = orderMenu.store;
+        String storeName = orderMenu.storename;
         ArrayList<ArrayOrderData> orderData = orderMenu.order;
 
 
@@ -481,12 +483,13 @@ public class UserOrderListFragment extends BaseFragment implements
             ListMenu.add(menu);
         }
 
-        showDialog(storeID, ListMenu);
+        showDialog(storeName, storeID, ListMenu);
     }
 
     private OrderDialog orderDialog;
 
-    private void showDialog(final String storeID, final List<Menu> ListMenu) {
+    private void showDialog(final String storeName,final String storeID, final List<Menu> ListMenu) {
+
 
         if (orderDialog != null && orderDialog.isShowing())
             return;
@@ -497,24 +500,29 @@ public class UserOrderListFragment extends BaseFragment implements
         if (ListMenu != null) {
             if (ListMenu.size() > 0) {
 
-
                 for (int i = 0; i < ListMenu.size(); i++) {
-                    int cnt = ListMenu.get(i).count;
-                    String name = ListMenu.get(i).name;
-                    int price = ListMenu.get(i).price;
 
-                    sumPrice += price * cnt;
+                    Menu menu = ListMenu.get(i);
+                    String name = menu.name;
 
-                    if (ListMenu.get(i).count != 0) {
-                        orderMenuList += name + " : " + cnt + "개\n";
-                        //orderMenuList += ConvertPrice.getPrice(price * cnt)+"\n";
+
+                    for(int j = 0; j<menu.option.size();j++) {
+                        int cnt = menu.option.get(j).count;
+                        String nameOpt = menu.option.get(j).name;
+                        int saleprice = menu.saleprice;
+
+                        sumPrice += (saleprice + menu.option.get(j).addprice) * cnt;
+
+                        if (cnt != 0) {
+
+                            orderMenuList += name+" ("+nameOpt + ") : " + cnt + "개\n";
+                            //orderMenuList += ConvertPrice.getPrice(price * cnt)+"\n";
+                        }
                     }
 
                 }
 
                 orderMenuList += getString(R.string.order_sum_price)+" : " + ConvertData.getPrice(sumPrice);
-
-                String storeName = getResources().getString(StoreInfo.getStoreName(storeID));
 
                 orderDialog = new OrderDialog(context, getString(R.string.reorder)+" ( " + storeName + " )", orderMenuList);
 

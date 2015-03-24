@@ -20,15 +20,15 @@
         <LinearLayout
             android:id="@+id/item_menu_info_layout"
             android:layout_width="match_parent"
-            android:layout_height="48dp"
+            android:layout_height="52dp"
             android:gravity="left"
             android:orientation="vertical">
 
             <com.tws.widget.CuzTextView
                 android:id="@+id/item_menu_info_name"
                 android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
+                android:layout_height="26dp"
+
                 android:gravity="center"
                 android:singleLine="true"
                 android:text="아메리카노"
@@ -37,27 +37,36 @@
                 android:textStyle="bold" />
 
             <LinearLayout
-                android:layout_height="match_parent"
-                android:layout_width="match_parent"
-                android:layout_weight="1"
+                android:layout_height="26dp"
+                android:layout_width="wrap_content"
+
                 android:orientation="horizontal">
 
             <com.tws.widget.CuzTextView
                 android:id="@+id/item_menu_info_price"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:gravity="center"
                 android:singleLine="true"
                 android:text="￦ 2,000원"
                 android:textColor="#3D454C"
-                android:textSize="@dimen/size_20"
+                android:textSize="@dimen/size_18"
                 android:textStyle="bold" />
+
+                <ImageView
+                    android:layout_gravity="center"
+                    android:id="@+id/item_menu_info_arrow"
+                    android:layout_marginLeft="@dimen/size_6"
+                    android:layout_marginRight="@dimen/size_6"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:background="@drawable/arrow_right"/>
 
             <com.tws.widget.CuzTextView
                 android:id="@+id/item_menu_info_saleprice"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="@dimen/size_12"
+                android:layout_height="match_parent"
+
                 android:gravity="center"
                 android:singleLine="true"
                 android:text="￦ 2,000원"
@@ -85,9 +94,11 @@
                 android:scaleType="centerCrop" />
 
             <com.tws.widget.CuzTextView
+                android:background="@drawable/menu_bg"
                 android:id="@+id/item_menu_info_txt"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+
                 android:gravity="center"
                 android:text="메뉴별 간단한 설명..."
                 android:textColor="#3D454C"
@@ -114,6 +125,11 @@
 
                 android:paddingRight="5dp">
 
+                <ImageView
+                    android:layout_gravity="center"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:background="@drawable/icon_opt"/>
 
                 <com.tws.widget.CuzTextView
                     android:id="@+id/item_menu_control_opt1_txt"
@@ -192,6 +208,11 @@
 
                 android:paddingRight="5dp">
 
+                <ImageView
+                    android:layout_gravity="center"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:background="@drawable/icon_opt"/>
 
                 <com.tws.widget.CuzTextView
                     android:id="@+id/item_menu_control_opt2_txt"

@@ -75,18 +75,34 @@
         android:paddingLeft="@dimen/size_16"
         android:paddingRight="@dimen/size_16">
 
-        <com.tws.widget.CuzTextView
-            android:id="@+id/store_name_txt"
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginRight="10dp"
-            android:layout_toLeftOf="@id/store_item_sum_count"
             android:layout_weight="1"
-            android:gravity="center_vertical"
-            android:text="Haru"
+            android:orientation="horizontal">
 
-            android:textColor="#349bcd"
-            android:textSize="@dimen/size_26" />
+            <ImageView
+                android:layout_marginRight="2dp"
+                android:layout_gravity="center"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:background="@drawable/icon_store"/>
+
+            <com.tws.widget.CuzTextView
+                android:id="@+id/store_name_txt"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginRight="10dp"
+                android:layout_toLeftOf="@id/store_item_sum_count"
+
+                android:gravity="center_vertical"
+                android:text="Haru"
+
+                android:textColor="#349bcd"
+                android:textSize="@dimen/size_26" />
+
+            </LinearLayout>
+
 
         <com.tws.widget.CuzTextView
             android:id="@+id/store_addr_txt"

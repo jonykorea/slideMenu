@@ -108,12 +108,14 @@ public class MenuListAdapter extends RecyclerView.Adapter<MenuListAdapter.ViewHo
             viewHolder.menuPrice.setText(ConvertData.getPrice(menu.price));
             viewHolder.menuSalePrice.setVisibility(View.VISIBLE);
             viewHolder.menuSalePrice.setText(ConvertData.getPrice(menu.saleprice));
+            viewHolder.menuArrow.setVisibility(View.VISIBLE);
 
         }
         else {
             viewHolder.menuPrice.setTextColor(Color.parseColor("#3D454C"));
             viewHolder.menuPrice.setText(ConvertData.getPrice(menu.price));
             viewHolder.menuSalePrice.setVisibility(View.GONE);
+            viewHolder.menuArrow.setVisibility(View.GONE);
         }
 
         Glide.with(mContext).load(menu.image).into(viewHolder.menuImage);
@@ -239,6 +241,7 @@ public class MenuListAdapter extends RecyclerView.Adapter<MenuListAdapter.ViewHo
         public RelativeLayout menuLayoutOpt02;
 
         public LinearLayout menuDiv;
+        public ImageView menuArrow;
 
 
         public ViewHolder(View itemView) {
@@ -250,6 +253,7 @@ public class MenuListAdapter extends RecyclerView.Adapter<MenuListAdapter.ViewHo
 
             // option
 
+            menuArrow = (ImageView) itemView.findViewById(R.id.item_menu_info_arrow);
             menuDiv = (LinearLayout) itemView.findViewById(R.id.item_menu_control_div_layout);
             // opt1
             menuLayoutOpt01 = (RelativeLayout) itemView.findViewById(R.id.item_menu_control_opt1_layout);

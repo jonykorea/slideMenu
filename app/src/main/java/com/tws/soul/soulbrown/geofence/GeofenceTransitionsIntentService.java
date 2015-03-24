@@ -75,8 +75,6 @@ public class GeofenceTransitionsIntentService extends IntentService {
                     geofencingEvent.getErrorCode());
 
             FileLOG.writeLog("GeofenceTransitionsIntentService : errorMessage "+ errorMessage);
-
-            Log.e(TAG, errorMessage);
             return;
         }
 
@@ -202,11 +200,11 @@ public class GeofenceTransitionsIntentService extends IntentService {
         NotificationCompat.Builder builder = new NotificationCompat.Builder(this);
 
         // Define the notification settings.
-        builder.setSmallIcon(R.drawable.logo)
+        builder.setSmallIcon(R.drawable.push_logo_s)
                 // In a real app, you may want to use a library like Volley
                 // to decode the Bitmap.
                 .setLargeIcon(BitmapFactory.decodeResource(getResources(),
-                        R.drawable.logo))
+                        R.drawable.push_logo_l))
                 .setColor(Color.RED)
                 .setContentTitle(notificationDetails)
                 .setContentText(getString(R.string.geofence_transition_notification_text))
