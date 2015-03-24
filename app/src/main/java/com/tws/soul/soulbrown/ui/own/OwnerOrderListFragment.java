@@ -194,7 +194,7 @@ public class OwnerOrderListFragment extends BaseFragment implements
             tvHeaderArriveTime.setText(TimeUtil.getNewSimpleDateFormat("a hh시 mm분", recentOrderInfo.arrtime));
             tvHeaderDistance.setText(ConvertData.getDisance(recentOrderInfo.dist));
 
-            ReceiptInfoRow info = getSumPrice(recentOrderInfo.order);
+            ReceiptInfoRow info = ConvertData.getSumPrice(recentOrderInfo.order);
 
             tvHeaderMenu.setText(info.sumMenu);
             tvHeaderPrice.setText(info.sumPrice);
@@ -266,7 +266,7 @@ public class OwnerOrderListFragment extends BaseFragment implements
         }
 
     }
-
+/*
     private ReceiptInfoRow getSumPrice(ArrayList<ArrayOrderData> orderData) {
 
         ReceiptInfoRow receiptInfoRow = new ReceiptInfoRow();
@@ -296,6 +296,7 @@ public class OwnerOrderListFragment extends BaseFragment implements
 
         return receiptInfoRow;
     }
+    */
 
     private void initData() {
 
@@ -444,6 +445,7 @@ public class OwnerOrderListFragment extends BaseFragment implements
 
     }
 
+    /*
     public void setOrderMenu(ArrayOrderList orderMenu) {
 
         String storeID = orderMenu.store;
@@ -464,6 +466,7 @@ public class OwnerOrderListFragment extends BaseFragment implements
 
         showDialog(storeID, ListMenu);
     }
+    */
 
     private OrderDialog orderDialog;
 

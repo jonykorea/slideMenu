@@ -11,10 +11,17 @@ import java.util.ArrayList;
 
 public class Menu {
 
+    public String code;
+
     public String name;
-    public int image;
+
+    public String image;
+
     public int price;
+    public int saleprice;
+
     public int count;
+
     public ArrayList<ArrayOptionData> option;
 
 }

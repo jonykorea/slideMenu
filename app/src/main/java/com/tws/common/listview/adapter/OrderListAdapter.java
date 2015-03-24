@@ -173,7 +173,7 @@ public class OrderListAdapter extends BaseAdapter implements
 
         String regUnixTime = mData.get(position).regtime;
 
-        receiptInfoRow = getSumPrice(mData.get(position).order);
+        receiptInfoRow = ConvertData.getSumPrice(mData.get(position).order);
         receiptInfoRow.store = mData.get(position).store;
 
 
@@ -262,8 +262,8 @@ public class OrderListAdapter extends BaseAdapter implements
 
             for(int i = 0 ; i< orderData.size() ; i++)
             {
-                int count = orderData.get(i).count;
-                int price = Integer.parseInt(orderData.get(i).price);
+                int count = 0;
+                int price = orderData.get(i).totalprice;
 
                 sum += count * price;
 

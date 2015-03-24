@@ -62,7 +62,7 @@
                 android:gravity="center"
                 android:layout_width="wrap_content"
                 android:layout_height="50dp"
-                android:text="Push Message Status"
+                android:text="@string/setting_push_status"
                 android:textColor="#349BCD"
                 android:textSize="@dimen/size_18"
                 android:layout_marginRight="@dimen/size_10"
@@ -83,11 +83,33 @@
         </LinearLayout>
 
         <com.tws.widget.CuzButton
+            android:layout_marginBottom="@dimen/size_10"
+            android:id="@+id/setting_webview_info_btn"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:background="@xml/xml_icon_btn_bg"
+            android:text="@string/setting_info"
+            android:textColor="#349BCD"
+            android:textSize="@dimen/size_18"
+            android:textStyle="bold" />
+
+        <com.tws.widget.CuzButton
+            android:layout_marginBottom="@dimen/size_10"
+            android:id="@+id/setting_webview_event_btn"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:background="@xml/xml_icon_btn_bg"
+            android:text="@string/setting_event"
+            android:textColor="#349BCD"
+            android:textSize="@dimen/size_18"
+            android:textStyle="bold" />
+
+        <com.tws.widget.CuzButton
             android:id="@+id/setting_logout_btn"
             android:layout_width="match_parent"
             android:layout_height="50dp"
             android:background="@xml/xml_icon_btn_bg"
-            android:text="Logout"
+            android:text="@string/logout"
             android:textColor="#349BCD"
             android:textSize="@dimen/size_18"
             android:textStyle="bold" />

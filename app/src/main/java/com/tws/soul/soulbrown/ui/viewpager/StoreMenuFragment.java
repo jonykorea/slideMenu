@@ -78,8 +78,8 @@ public class StoreMenuFragment extends BaseFragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        mStoreID = getArguments().getString("store");
-
+        mStoreID = getArguments().getString("store_id");
+        mStoreName = getArguments().getString("store_name");
         storeInfo = getArguments().getParcelable("menu");
 
         animatorSet = new AnimatorSet();
@@ -125,12 +125,21 @@ public class StoreMenuFragment extends BaseFragment {
 
             menu = new Menu();
             menu.option = new ArrayList<ArrayOptionData>();
+
+            for( int j = 0;j<storeInfo.menu.get(i).option.size();j++)
+            {
+                storeInfo.menu.get(i).option.get(j).count = 0;
+            }
+
+
             menu.option.addAll(storeInfo.menu.get(i).option);
+
+            menu.code = storeInfo.menu.get(i).code;
             menu.name = storeInfo.menu.get(i).name;
             menu.price = storeInfo.menu.get(i).price;
+            menu.saleprice = storeInfo.menu.get(i).saleprice;
 
-            Log.i("jony","initMenuData name "+  menu.name);
-            //menu.image = storeInfo.menu.get(i).img;
+            menu.image = storeInfo.menu.get(i).img;
             mMenuData.add(menu);
         }
 
@@ -182,18 +191,27 @@ public class StoreMenuFragment extends BaseFragment {
 
 
                 for (int i = 0; i < ListMenu.size(); i++) {
-                    int cnt = ListMenu.get(i).count;
-                    String name = ListMenu.get(i).name;
-                    int price = ListMenu.get(i).price;
 
-                    sumPrice += price * cnt;
+                    Menu menu = ListMenu.get(i);
+                    String name = menu.name;
 
-                    if (ListMenu.get(i).count != 0) {
-                        orderMenuList += name + " : " + cnt + "개\n";
-                        //orderMenuList += ConvertPrice.getPrice(price * cnt)+"\n";
+
+                    for(int j = 0; j<menu.option.size();j++) {
+                        int cnt = menu.option.get(j).count;
+                        String nameOpt = menu.option.get(j).name;
+                        int saleprice = menu.saleprice;
+
+                        sumPrice += (saleprice + menu.option.get(j).addprice) * cnt;
+
+                        if (cnt != 0) {
+
+                            orderMenuList += name+" ("+nameOpt + ") : " + cnt + "개\n";
+                            //orderMenuList += ConvertPrice.getPrice(price * cnt)+"\n";
+                        }
                     }
 
                 }
+
 
                 if (sumPrice == 0) {
                     showToast("주문 선택을 해주세요.");
@@ -201,7 +219,7 @@ public class StoreMenuFragment extends BaseFragment {
 
                     orderMenuList += "총 주문 금액 : " + ConvertData.getPrice(sumPrice);
 
-                    String storeName = getResources().getString(StoreInfo.getStoreName(mStoreID));
+                    String storeName = mStoreName;
 
                     orderDialog = new OrderDialog(context, "주문 ( " + storeName + " )", orderMenuList);
 
@@ -494,8 +512,18 @@ public class StoreMenuFragment extends BaseFragment {
         for (int i = 0; i < listMenu.size(); i++) {
             Menu menu = listMenu.get(i);
 
-            sumCount += menu.count;
-            sumPrice += menu.count * menu.price;
+
+            for(int j = 0; j<menu.option.size();j++)
+            {
+                sumCount += menu.option.get(j).count;
+
+                int saleprice = menu.saleprice;
+
+                sumPrice += (saleprice + menu.option.get(j).addprice) * menu.option.get(j).count;
+            }
+
+            //sumCount += menu.count;
+            //sumPrice += menu.count * menu.price;
 
         }
 

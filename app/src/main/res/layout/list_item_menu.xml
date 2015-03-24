@@ -2,29 +2,27 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:card_view="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_gravity="center"
     android:layout_height="match_parent"
+    android:layout_gravity="center"
     android:background="#F1F5F7"
-    android:paddingBottom="0dp"
-    android:paddingTop="5dp"
+
 
     >
 
     <LinearLayout
+        android:layout_width="320dp"
+        android:layout_height="wrap_content"
         android:layout_centerInParent="true"
-        android:layout_width="296dp"
-        android:layout_height="320dp"
         android:background="@drawable/menu_card_bg"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:padding="12dp">
 
         <LinearLayout
             android:id="@+id/item_menu_info_layout"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="48dp"
             android:gravity="left"
-            android:orientation="vertical"
-            android:paddingLeft="15dp"
-            android:paddingRight="15dp">
+            android:orientation="vertical">
 
             <com.tws.widget.CuzTextView
                 android:id="@+id/item_menu_info_name"
@@ -35,47 +33,79 @@
                 android:singleLine="true"
                 android:text="아메리카노"
                 android:textColor="#3D454C"
-                android:textSize="@dimen/size_16"
+                android:textSize="@dimen/size_22"
                 android:textStyle="bold" />
 
+            <LinearLayout
+                android:layout_height="match_parent"
+                android:layout_width="match_parent"
+                android:layout_weight="1"
+                android:orientation="horizontal">
 
             <com.tws.widget.CuzTextView
                 android:id="@+id/item_menu_info_price"
                 android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
+                android:layout_height="wrap_content"
                 android:gravity="center"
-
                 android:singleLine="true"
                 android:text="￦ 2,000원"
                 android:textColor="#3D454C"
-                android:textSize="@dimen/size_16"
+                android:textSize="@dimen/size_20"
+                android:textStyle="bold" />
+
+            <com.tws.widget.CuzTextView
+                android:id="@+id/item_menu_info_saleprice"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/size_12"
+                android:gravity="center"
+                android:singleLine="true"
+                android:text="￦ 2,000원"
+                android:textColor="#3D454C"
+                android:textSize="@dimen/size_20"
+                android:textStyle="bold" />
+                </LinearLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="140dp"
+
+            android:layout_marginBottom="6dp"
+            android:layout_marginTop="6dp"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:id="@+id/item_menu_info_image"
+                android:layout_width="140dp"
+                android:layout_height="140dp"
+                android:layout_gravity="center_vertical"
+                android:layout_marginRight="6dp"
+
+                android:scaleType="centerCrop" />
+
+            <com.tws.widget.CuzTextView
+                android:id="@+id/item_menu_info_txt"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:text="메뉴별 간단한 설명..."
+                android:textColor="#3D454C"
+                android:textSize="@dimen/size_20"
                 android:textStyle="bold" />
         </LinearLayout>
 
-        <ImageView
-            android:id="@+id/item_menu_info_image"
-            android:layout_width="match_parent"
-            android:layout_height="210dp"
-            android:layout_marginBottom="4dp"
-            android:layout_marginTop="4dp"
-
-
-            android:scaleType="centerCrop" />
-
 
         <RelativeLayout
+            android:id="@+id/item_menu_control_opt1_layout"
             android:layout_width="match_parent"
-            android:layout_height="35dp"
+            android:layout_height="36dp"
 
-            android:orientation="horizontal"
-            android:paddingLeft="15dp"
-
-            android:paddingRight="15dp">
+            android:orientation="horizontal">
 
             <LinearLayout
                 android:layout_width="wrap_content"
-                android:layout_height="35dp"
+                android:layout_height="36dp"
                 android:layout_alignParentLeft="true"
                 android:layout_centerVertical="true"
 
@@ -84,44 +114,37 @@
 
                 android:paddingRight="5dp">
 
-                <ImageView
-
-                    android:layout_width="wrap_content"
-
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
-                    android:background="@drawable/like" />
 
                 <com.tws.widget.CuzTextView
-                    android:id="@+id/item_menu_control_like"
+                    android:id="@+id/item_menu_control_opt1_txt"
                     android:layout_width="wrap_content"
-                    android:layout_height="35dp"
+                    android:layout_height="36dp"
                     android:layout_marginLeft="5dp"
 
                     android:gravity="center"
-                    android:text="0"
+                    android:text="ice : +100"
                     android:textColor="#3D454C"
-                    android:textSize="@dimen/size_16"
+                    android:textSize="@dimen/size_20"
                     android:textStyle="bold" />
             </LinearLayout>
 
             <LinearLayout
                 android:layout_width="wrap_content"
-                android:layout_height="35dp"
+                android:layout_height="36dp"
                 android:layout_alignParentRight="true"
                 android:layout_centerVertical="true"
                 android:gravity="center_vertical"
                 android:orientation="horizontal">
 
                 <ImageButton
-                    android:id="@+id/item_menu_control_remove_btn"
+                    android:id="@+id/item_menu_control_opt1_remove_btn"
                     android:layout_width="30dp"
                     android:layout_height="30dp"
                     android:background="@xml/xml_icon_remove_bg" />
 
 
                 <com.tws.widget.CuzTextView
-                    android:id="@+id/item_menu_control_count"
+                    android:id="@+id/item_menu_control_opt1_count"
                     android:layout_width="45dp"
                     android:layout_height="30dp"
 
@@ -133,7 +156,85 @@
 
 
                 <ImageButton
-                    android:id="@+id/item_menu_control_add_btn"
+                    android:id="@+id/item_menu_control_opt1_add_btn"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:background="@xml/xml_icon_add_bg" />
+            </LinearLayout>
+
+        </RelativeLayout>
+
+        <LinearLayout
+            android:id="@+id/item_menu_control_div_layout"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+
+            android:layout_marginBottom="4dp"
+            android:layout_marginTop="4dp"
+            android:background="#C2C7CC"
+            android:orientation="vertical"></LinearLayout>
+
+        <RelativeLayout
+            android:id="@+id/item_menu_control_opt2_layout"
+            android:layout_width="match_parent"
+            android:layout_height="36dp"
+
+            android:orientation="horizontal">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="36dp"
+                android:layout_alignParentLeft="true"
+                android:layout_centerVertical="true"
+
+                android:orientation="horizontal"
+
+
+                android:paddingRight="5dp">
+
+
+                <com.tws.widget.CuzTextView
+                    android:id="@+id/item_menu_control_opt2_txt"
+                    android:layout_width="wrap_content"
+                    android:layout_height="36dp"
+                    android:layout_marginLeft="5dp"
+
+                    android:gravity="center"
+                    android:text="hot : +100"
+                    android:textColor="#3D454C"
+                    android:textSize="@dimen/size_20"
+                    android:textStyle="bold" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="36dp"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <ImageButton
+                    android:id="@+id/item_menu_control_opt2_remove_btn"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:background="@xml/xml_icon_remove_bg" />
+
+
+                <com.tws.widget.CuzTextView
+                    android:id="@+id/item_menu_control_opt2_count"
+                    android:layout_width="45dp"
+                    android:layout_height="30dp"
+
+                    android:gravity="center"
+                    android:text="0"
+                    android:textColor="#3D454C"
+                    android:textSize="@dimen/size_20"
+                    android:textStyle="bold" />
+
+
+                <ImageButton
+                    android:id="@+id/item_menu_control_opt2_add_btn"
                     android:layout_width="30dp"
                     android:layout_height="30dp"
                     android:background="@xml/xml_icon_add_bg" />

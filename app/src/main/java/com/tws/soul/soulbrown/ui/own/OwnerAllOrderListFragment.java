@@ -154,8 +154,9 @@ public class OwnerAllOrderListFragment extends BaseFragment implements
 
 
             for (int i = 0; i < orderData.size(); i++) {
-                int count = orderData.get(i).count;
-                int price = Integer.parseInt(orderData.get(i).price);
+                //int count = orderData.get(i).count;
+                int count = 0;
+                int price = orderData.get(i).totalprice;
 
                 sum += count * price;
 

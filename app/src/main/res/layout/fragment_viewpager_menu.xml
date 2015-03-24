@@ -4,50 +4,50 @@
     android:layout_height="match_parent"
     android:background="#ffffff">
 
+
     <RelativeLayout
+
         android:id="@+id/store_name"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/size_73"
+        android:layout_height="@dimen/size_72"
         android:background="#F2F4F5"
         android:paddingBottom="@dimen/size_9"
         android:paddingLeft="@dimen/size_10"
-        android:paddingRight="@dimen/size_10"
-        >
+        android:paddingRight="@dimen/size_10">
 
         <RelativeLayout
             android:id="@+id/store_item_btn"
-            android:clickable="true"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="@drawable/selector_349bcd_2f8bb9"
+            android:clickable="true"
             android:paddingLeft="15dp"
             android:paddingRight="15dp">
 
             <com.tws.widget.CuzTextView
-                android:id="@+id/store_name_txt"
+
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:gravity="left|center_vertical"
-                android:text="Haru : "
+                android:text="주문하기"
                 android:textColor="#ffffff"
                 android:textSize="@dimen/size_34" />
-
 
 
             <com.tws.widget.CuzTextView
                 android:id="@+id/store_item_sum_count"
                 android:layout_width="32dp"
                 android:layout_height="31dp"
-                android:text="0"
-                android:textSize="16dp"
-                android:gravity="center"
-                android:paddingRight="4dp"
-                android:paddingBottom="4dp"
-                android:textStyle="bold"
-                android:textColor="#ffffff"
                 android:layout_alignParentRight="true"
                 android:layout_centerVertical="true"
-                android:background="@drawable/icon_upper_menu_white" />
+                android:background="@drawable/icon_upper_menu_white"
+                android:gravity="center"
+                android:paddingBottom="4dp"
+                android:paddingRight="4dp"
+                android:text="0"
+                android:textColor="#ffffff"
+                android:textSize="16dp"
+                android:textStyle="bold" />
 
             <com.tws.widget.CuzTextView
                 android:id="@+id/store_item_sum_price"
@@ -65,10 +65,50 @@
     </RelativeLayout>
 
     <LinearLayout
+        android:id="@+id/store_info"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/size_64"
+        android:layout_below="@id/store_name"
+        android:background="#F2F4F5"
+        android:orientation="vertical"
+        android:paddingBottom="@dimen/size_8"
+        android:paddingLeft="@dimen/size_16"
+        android:paddingRight="@dimen/size_16">
+
+        <com.tws.widget.CuzTextView
+            android:id="@+id/store_name_txt"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginRight="10dp"
+            android:layout_toLeftOf="@id/store_item_sum_count"
+            android:layout_weight="1"
+            android:gravity="center_vertical"
+            android:text="Haru"
+
+            android:textColor="#349bcd"
+            android:textSize="@dimen/size_26" />
+
+        <com.tws.widget.CuzTextView
+            android:id="@+id/store_addr_txt"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginRight="10dp"
+            android:layout_toLeftOf="@id/store_item_sum_count"
+            android:layout_weight="1"
+            android:gravity="center_vertical"
+            android:text="주소 : "
+
+
+            android:textColor="#349bcd"
+            android:textSize="@dimen/size_18" />
+
+    </LinearLayout>
+
+    <LinearLayout
         android:id="@+id/store_title"
         android:layout_width="match_parent"
         android:layout_height="@dimen/size_1"
-        android:layout_below="@id/store_name"
+        android:layout_below="@id/store_info"
         android:background="#C2C7CC"
         android:orientation="horizontal" />
 

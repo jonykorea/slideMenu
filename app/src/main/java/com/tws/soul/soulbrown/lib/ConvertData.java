@@ -1,8 +1,16 @@
 package com.tws.soul.soulbrown.lib;
 
+import android.graphics.Color;
+import android.text.SpannableStringBuilder;
 import android.text.TextUtils;
+import android.text.style.ForegroundColorSpan;
+import android.util.Log;
+
+import com.tws.network.data.ArrayOrderData;
+import com.tws.network.data.ReceiptInfoRow;
 
 import java.text.DecimalFormat;
+import java.util.ArrayList;
 
 /**
  * Created by jonychoi on 15. 1. 12..
@@ -51,5 +59,48 @@ public class ConvertData {
         }
 
         return retDiatance;
+    }
+
+    public static ReceiptInfoRow getSumPrice(ArrayList<ArrayOrderData> orderData) {
+
+        ReceiptInfoRow receiptInfoRow = new ReceiptInfoRow();
+
+        int sum = 0;
+        String sumMenu = "";
+
+        if( orderData != null)
+        {
+
+            for(int i = 0 ; i< orderData.size() ; i++)
+            {
+                int price = orderData.get(i).totalprice;
+                String name = orderData.get(i).name;
+
+                sum += price;
+
+                for(int j = 0; j < orderData.get(i).option.size();j++)
+                {
+                    int cnt = orderData.get(i).option.get(j).count;
+
+                    if( cnt != 0) {
+
+                        Log.i("jony", "i : "+i +" j :"+j+"orderData.size() + "+ orderData.size() +" orderData.get(i).option.size() "+ orderData.get(i).option.size());
+
+                        if (i == (orderData.size() - 1) && j == (orderData.get(i).option.size() - 1)) {
+                            sumMenu += name + "(" + orderData.get(i).option.get(j).name + ")x" + orderData.get(i).option.get(j).count;
+                        } else {
+                            sumMenu += name + "(" + orderData.get(i).option.get(j).name + ")x" + orderData.get(i).option.get(j).count + ",";
+                        }
+                    }
+
+                }
+
+            }
+        }
+
+        receiptInfoRow.sumPrice = ConvertData.getPrice(sum);
+        receiptInfoRow.sumMenu = sumMenu;
+
+        return receiptInfoRow;
     }
 }

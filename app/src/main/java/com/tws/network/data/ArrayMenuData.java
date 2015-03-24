@@ -10,7 +10,7 @@ public class ArrayMenuData {
     public String code;
     public String name;
     public int price;
-    public String saleprice;
+    public int saleprice;
     public String img;
 
     public ArrayList<ArrayOptionData> option;

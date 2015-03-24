@@ -27,6 +27,7 @@ import com.tws.network.data.RetPushMsgStatus;
 import com.tws.network.lib.ApiAgent;
 import com.tws.soul.soulbrown.R;
 import com.tws.soul.soulbrown.gcm.GcmClient;
+import com.tws.soul.soulbrown.pref.PrefStoreInfo;
 import com.tws.soul.soulbrown.pref.PrefUserInfo;
 import com.tws.soul.soulbrown.ui.own.OwnerAllOrderListFragment;
 import com.tws.soul.soulbrown.ui.own.OwnerOrderListFragment;
@@ -34,6 +35,8 @@ import com.tws.soul.soulbrown.ui.user.UserOrderListFragment;
 import com.tws.soul.soulbrown.ui.user.UserStoreMenuFragment;
 
 import java.io.IOException;
+import java.util.StringTokenizer;
+import java.util.concurrent.Callable;
 import java.util.concurrent.atomic.AtomicInteger;
 
 
@@ -66,6 +69,7 @@ public class SoulBrownMainActivity extends FragmentActivity
         context = getApplicationContext();
 
         if(AppController.getInstance().getIsUser()) {
+
             apiGetMenuList("");
         }
         else
@@ -76,17 +80,22 @@ public class SoulBrownMainActivity extends FragmentActivity
     }
 
 
+    private RetMenuList mMenuList;
+
+    public RetMenuList getMenuList()
+    {
+        return mMenuList;
+    }
     private void initViews(RetMenuList menuList)
     {
         if(AppController.getInstance().getIsUser()) {
             if (menuList != null) {
+
+                mMenuList = menuList;
+
                 // user
                 userOrderListFragment = new UserOrderListFragment();
                 userStoreMenuFragment = new UserStoreMenuFragment();
-
-                Bundle args = new Bundle();
-                args.putParcelable("menu_list", menuList);
-                userStoreMenuFragment.setArguments(args);
 
                 setGcmClient();
             }
@@ -102,7 +111,6 @@ public class SoulBrownMainActivity extends FragmentActivity
             // owner
             ownerOrderListFragment = new OwnerOrderListFragment();
             ownerAllOrderListFragment = new OwnerAllOrderListFragment();
-
 
         }
 
@@ -370,6 +378,10 @@ public class SoulBrownMainActivity extends FragmentActivity
                         Intent intentGcm = new Intent("push_status");
 
                         intentGcm.putExtra("status", retCode.push);
+
+                        PrefStoreInfo prefStoreInfo = new PrefStoreInfo(context);
+                        prefStoreInfo.setPushStatus(retCode.push);
+
 
                         LocalBroadcastManager.getInstance(context).sendBroadcast(intentGcm);
 

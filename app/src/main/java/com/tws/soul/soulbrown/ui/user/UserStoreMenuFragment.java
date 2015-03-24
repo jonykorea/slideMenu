@@ -15,6 +15,7 @@ import android.view.ViewGroup;
 
 import com.tws.network.data.RetMenuList;
 import com.tws.soul.soulbrown.R;
+import com.tws.soul.soulbrown.ui.SoulBrownMainActivity;
 import com.tws.soul.soulbrown.ui.viewpager.ViewPagerAdapter;
 
 public class UserStoreMenuFragment extends Fragment {
@@ -31,6 +32,8 @@ public class UserStoreMenuFragment extends Fragment {
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
+
+        mMenuList = ((SoulBrownMainActivity)activity).getMenuList();
         customListener = (CustomOnClickListener)activity;
     }
     private int mPosition = 0;
@@ -71,11 +74,6 @@ public class UserStoreMenuFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        Bundle bundle=getArguments();
-        mMenuList = bundle.getParcelable("menu_list");
-
-        Log.i("jony", "onCreate MenuFragment02 menuList.store.size : " + mMenuList.store.size());
 
     }
     ViewPager mViewPager;
@@ -126,7 +124,7 @@ public class UserStoreMenuFragment extends Fragment {
         if( mViewPager != null) {
             mViewPager.setAdapter(new ViewPagerAdapter(getChildFragmentManager(), mMenuList));
 
-            mViewPager.setOffscreenPageLimit(3);
+            mViewPager.setOffscreenPageLimit(mMenuList.store.size());
 
             mViewPager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
 

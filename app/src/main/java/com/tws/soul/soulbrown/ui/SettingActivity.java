@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.content.LocalBroadcastManager;
@@ -24,20 +25,27 @@ import com.app.define.LOG;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.gcm.GoogleCloudMessaging;
+import com.tws.common.lib.dialog.CuzDialog;
 import com.tws.network.data.RetCode;
 import com.tws.network.lib.ApiAgent;
 import com.tws.soul.soulbrown.R;
 import com.tws.soul.soulbrown.base.BaseActivity;
 import com.tws.soul.soulbrown.gcm.GcmClient;
+import com.tws.soul.soulbrown.pref.PrefStoreInfo;
 import com.tws.soul.soulbrown.pref.PrefUserInfo;
 
 import java.io.IOException;
+import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class SettingActivity extends BaseActivity {
 
     private Context context;
     private GcmClient gcmClient;
+
+    private final String INFO_URL= "http://coffeebrewbrew.blogspot.kr/2015/03/close-beta.html";
+    private final String EVENT_URL= "https://www.facebook.com/coffeebrewbrew/posts/856353921103968";
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,6 +59,8 @@ public class SettingActivity extends BaseActivity {
         Button btnLogOut = (Button)findViewById(R.id.setting_logout_btn);
         LinearLayout llBackKey =(LinearLayout)findViewById(R.id.setting_back_btn);
 
+        Button btnInfo = (Button)findViewById(R.id.setting_webview_info_btn);
+        Button btnEvent = (Button)findViewById(R.id.setting_webview_event_btn);
 
 
         gcmClient = new GcmClient(this);
@@ -62,6 +72,18 @@ public class SettingActivity extends BaseActivity {
             llPushStatus.setVisibility(View.VISIBLE);
 
             ToggleButton toggleButton = (ToggleButton) findViewById(R.id.setting_push_swich);
+
+            PrefStoreInfo prefStoreInfo = new PrefStoreInfo(context);
+            int status = prefStoreInfo.getPushStatus();
+
+            if( status == 1 )
+            {
+                toggleButton.setChecked(true);
+            }
+            else
+            {
+                toggleButton.setChecked(false);
+            }
 
             toggleButton.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
 
@@ -115,10 +137,35 @@ public class SettingActivity extends BaseActivity {
             @Override
             public void onClick(View view) {
 
-                if( !mBaseProgressDialog.isShowing() )
-                    mBaseProgressDialog.show();
+                if(mBaseDialog == null || !mBaseDialog.isShowing()) {
 
-                logoutAction();
+                    mBaseDialog = new CuzDialog(SettingActivity.this,
+                            getString(R.string.confirm), getString(R.string.setting_logout_action));
+
+                    mBaseDialog.show();
+
+                    mBaseDialog.setCancelable(true);
+
+                    mBaseDialog.getButtonAccept().setText(getString(R.string.confirm));
+
+                    mBaseDialog.getButtonCancel().setText(getString(R.string.cancel));
+
+                    mBaseDialog.setOnAcceptButtonClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+
+                            mBaseDialog.dismiss();
+                            // api
+                            if( !mBaseProgressDialog.isShowing() )
+                                mBaseProgressDialog.show();
+
+                            logoutAction();
+
+                        }
+                    });
+                }
+
+
             }
         });
 
@@ -130,6 +177,81 @@ public class SettingActivity extends BaseActivity {
             }
         });
 
+        // webview S
+
+        btnInfo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                if(mBaseDialog == null || !mBaseDialog.isShowing()) {
+
+                    mBaseDialog = new CuzDialog(SettingActivity.this,
+                            getString(R.string.confirm), getString(R.string.setting_info) +" "+getString(R.string.setting_mv_browser));
+
+                    mBaseDialog.show();
+
+                    mBaseDialog.setCancelable(true);
+
+                    mBaseDialog.getButtonAccept().setText(getString(R.string.confirm));
+
+                    mBaseDialog.getButtonCancel().setText(getString(R.string.cancel));
+
+                    mBaseDialog.setOnAcceptButtonClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+
+                            mBaseDialog.dismiss();
+                            // api
+                            callBrowser(INFO_URL);
+
+                        }
+                    });
+                }
+
+
+
+            }
+        });
+
+        btnEvent.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                if(mBaseDialog == null || !mBaseDialog.isShowing()) {
+
+                    mBaseDialog = new CuzDialog(SettingActivity.this,
+                            getString(R.string.confirm), getString(R.string.setting_event) +" "+getString(R.string.setting_mv_browser));
+
+                    mBaseDialog.show();
+
+                    mBaseDialog.setCancelable(true);
+
+                    mBaseDialog.getButtonAccept().setText(getString(R.string.confirm));
+
+                    mBaseDialog.getButtonCancel().setText(getString(R.string.cancel));
+
+                    mBaseDialog.setOnAcceptButtonClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+
+                            mBaseDialog.dismiss();
+                            // api
+                            callBrowser(EVENT_URL);
+
+                        }
+                    });
+                }
+
+            }
+        });
+        // webview E
+
+    }
+
+    private void callBrowser(String url)
+    {
+        Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+        startActivity(browserIntent);
     }
 
     // gcm S
@@ -312,11 +434,14 @@ public class SettingActivity extends BaseActivity {
         }
     }
 
-    private void setPushStatus(int flag)
+    private void setPushStatus(int status)
     {
         Intent intentGcm = new Intent("push_status");
 
-        intentGcm.putExtra("status", flag);
+        intentGcm.putExtra("status", status);
+
+        PrefStoreInfo prefStoreInfo = new PrefStoreInfo(context);
+        prefStoreInfo.setPushStatus(status);
 
         LocalBroadcastManager.getInstance(context).sendBroadcast(intentGcm);
     }

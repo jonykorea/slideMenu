@@ -5,6 +5,8 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.os.PersistableBundle;
 
+import com.tws.common.lib.dialog.CuzDialog;
+
 import cn.pedant.SweetAlert.SweetAlertDialog;
 
 /**
@@ -13,6 +15,8 @@ import cn.pedant.SweetAlert.SweetAlertDialog;
 public class BaseActivity extends Activity {
 
     public SweetAlertDialog mBaseProgressDialog;
+
+    public CuzDialog mBaseDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

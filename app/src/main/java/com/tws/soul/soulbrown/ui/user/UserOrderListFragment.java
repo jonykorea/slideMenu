@@ -192,10 +192,10 @@ public class UserOrderListFragment extends BaseFragment implements
 
             int status = recentOrderInfo.status;
 
-            ReceiptInfoRow info = getSumPrice(recentOrderInfo.order);
+            ReceiptInfoRow info = ConvertData.getSumPrice(recentOrderInfo.order);
 
             tvHeaderKey.setText(getString(R.string.order_id)+" : "+recentOrderInfo.orderkey);
-            tvHeaderStore.setText(StoreInfo.getStoreName(recentOrderInfo.store));
+            tvHeaderStore.setText(recentOrderInfo.storename);
             tvHeaderMenu.setText(info.sumMenu);
             tvHeaderPrice.setText(getString(R.string.order_sum_price)+" : "+info.sumPrice);
 
@@ -298,15 +298,15 @@ public class UserOrderListFragment extends BaseFragment implements
 
             for(int i = 0 ; i< orderData.size() ; i++)
             {
-                int count = orderData.get(i).count;
-                int price = Integer.parseInt(orderData.get(i).price);
+                int price = orderData.get(i).totalprice;
+                String name = orderData.get(i).name;
 
-                sum += count * price;
+                sum += price;
 
-                if( i == orderData.size() - 1)
-                    sumMenu += orderData.get(i).name +"x"+count;
-                else
-                    sumMenu += orderData.get(i).name +"x"+count+", ";
+                for(int j = 0; j < orderData.get(i).option.size();j++)
+                {
+                    sumMenu += name +"("+orderData.get(i).option.get(j).name+")x" +orderData.get(i).option.get(j).count+",";
+                }
 
             }
         }
@@ -383,6 +383,7 @@ public class UserOrderListFragment extends BaseFragment implements
                             refreshDataSet(retCode);
                         else {
                             // 주문 내역이 없다.
+                            stickyList.setAdapter(null);
                         }
 
 
@@ -473,8 +474,8 @@ public class UserOrderListFragment extends BaseFragment implements
         for (int i = 0; i < orderData.size(); i++) {
             Menu menu = new Menu();
 
-            menu.count = orderData.get(i).count;
-            menu.price = Integer.parseInt(orderData.get(i).price);
+            //menu.count = orderData.get(i).count;
+            menu.price = orderData.get(i).price;
             menu.name = orderData.get(i).name;
 
             ListMenu.add(menu);

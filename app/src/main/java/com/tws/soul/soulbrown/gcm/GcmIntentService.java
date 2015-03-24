@@ -25,6 +25,7 @@ import com.tws.soul.soulbrown.R;
 import com.tws.soul.soulbrown.broadcast.AlarmManagerBroadcastReceiver;
 import com.tws.soul.soulbrown.geofence.GeofenceClient;
 import com.tws.soul.soulbrown.pref.PrefOrderInfo;
+import com.tws.soul.soulbrown.pref.PrefStoreInfo;
 import com.tws.soul.soulbrown.service.AlarmNotiService;
 import com.tws.soul.soulbrown.service.LocationService;
 import com.tws.soul.soulbrown.ui.SplashActivity;
@@ -171,6 +172,9 @@ public class GcmIntentService extends IntentService {
 
                         this.startService(intentSvc);
 
+                    }else if(pushFlag.equals(GcmDefine.PUSH_CHG_PUSHKEY))
+                    {
+                        setPushStatus(0);
                     }
 
                 }
@@ -244,6 +248,17 @@ public class GcmIntentService extends IntentService {
         wakeupMgr.releaseWifiManager();
     }
 
+    private void setPushStatus(int status)
+    {
+        Intent intentGcm = new Intent("push_status");
+
+        intentGcm.putExtra("status", status);
+
+        PrefStoreInfo prefStoreInfo = new PrefStoreInfo(this);
+        prefStoreInfo.setPushStatus(status);
+
+        LocalBroadcastManager.getInstance(this).sendBroadcast(intentGcm);
+    }
 
 
 

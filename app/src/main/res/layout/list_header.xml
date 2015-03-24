@@ -195,7 +195,7 @@
                 android:layout_marginBottom="@dimen/size_5"
                 android:background="@xml/xml_icon_btn_bg"
                 android:text="@string/order_cancel"
-                android:textColor="#CE2617"
+                android:textColor="#E52A19"
                 android:textSize="@dimen/size_14"
                 android:textStyle="bold" />
 

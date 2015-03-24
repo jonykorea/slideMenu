@@ -31,11 +31,13 @@ public class ViewPagerAdapter extends FragmentPagerAdapter {
 
         ArrayStoreData storeInfo = mMenuList.store.get(position);
 
-        String code = storeInfo.store;
+        String id = storeInfo.store;
+        String name = storeInfo.storename;
 
-        Log.i("jony", "getItem code : "+ code + " menu size : "+storeInfo.menu.size());
+        Log.i("jony", "storeInfo id : "+ id + " menu size : "+storeInfo.menu.size());
 
-        bundle.putString("store", code);
+        bundle.putString("store_id", id);
+        bundle.putString("store_name", name);
 
         bundle.putParcelable("menu",storeInfo);
         StoreMenuFragment storeMenuFragment = new StoreMenuFragment();

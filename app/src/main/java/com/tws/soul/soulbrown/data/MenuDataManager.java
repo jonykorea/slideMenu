@@ -53,7 +53,7 @@ public class MenuDataManager {
                 Menu info = new Menu();
                 info.name = arrayMenu_HARU[i];
                 info.price = arrayPrice_HARU[i];
-                info.image = arrayImage_HARU[i];
+                //ßinfo.image = arrayImage_HARU[i];
                 menuHaru.add(info);
             }
 
@@ -70,7 +70,7 @@ public class MenuDataManager {
                 Menu info = new Menu();
                 info.name = arrayMenu_1022[i];
                 info.price = arrayPrice_1022[i];
-                info.image = arrayImage_1022[i];
+                //info.image = arrayImage_1022[i];
                 menu1022.add(info);
             }
 
@@ -86,7 +86,7 @@ public class MenuDataManager {
                 Menu info = new Menu();
                 info.name = arrayMenu_2FLAT[i];
                 info.price = arrayPrice_2FLAT[i];
-                info.image = arrayImage_2FLAT[i];
+                //info.image = arrayImage_2FLAT[i];
                 menuFLAT.add(info);
             }
 
@@ -102,7 +102,7 @@ public class MenuDataManager {
             Menu info = new Menu();
             info.name = arrayMenu_TWS[i];
             info.price = arrayPrice_TWS[i];
-            info.image = arrayImage_TWS[i];
+            //info.image = arrayImage_TWS[i];
             menuTWS.add(info);
         }
 

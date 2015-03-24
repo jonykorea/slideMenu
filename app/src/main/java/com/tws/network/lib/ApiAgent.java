@@ -359,33 +359,54 @@ public class ApiAgent {
             if (listMenu != null) {
                 for (int i = 0; i < listMenu.size(); i++) {
 
+                   jsonSubParams = new JSONObject();
 
-                    jsonSubParams = new JSONObject();
+                    Menu menu = listMenu.get(i);
 
-                    int cnt = listMenu.get(i).count;
+                    if (menu != null) {
 
-                    if (cnt != 0) {
+                        int totalPrice = 0;
+                        int totalCnt = 0;
+                        int salePrice = menu.saleprice;
 
-                        jsonSubParams.put("name", listMenu.get(i).name);
-                        jsonSubParams.put("price", Integer.toString(listMenu.get(i).price));
-                        jsonSubParams.put("count", Integer.toString(cnt));
+                        if (menu.option != null && menu.option.size() > 0) {
 
-                        if (listMenu.get(i).option != null && listMenu.get(i).option.size() > 0) {
 
-                            for (int j = 0; j < listMenu.get(i).option.size(); j++) {
+                            jsonArrayOption = new JSONArray();
+
+                            for (int j = 0; j < menu.option.size(); j++) {
 
                                 jsonSubOptionParams = new JSONObject();
 
-                                jsonSubOptionParams.put("name", listMenu.get(i).option.get(j).name);
-                                jsonSubOptionParams.put("addprice", listMenu.get(i).option.get(j).addprice);
 
-                                jsonArrayOption.put(jsonSubOptionParams);
+                                int cnt = menu.option.get(j).count;
+
+                                if(cnt != 0) {
+                                    jsonSubOptionParams.put("code", menu.option.get(j).code);
+                                    jsonSubOptionParams.put("count", cnt);
+
+                                    jsonArrayOption.put(jsonSubOptionParams);
+
+                                    totalPrice += (salePrice + menu.option.get(j).addprice) * cnt;
+
+                                    totalCnt += cnt;
+                                }
                             }
 
                             jsonSubParams.put("option", jsonArrayOption);
                         }
 
-                        jsonArray.put(jsonSubParams);
+
+                        if( totalCnt != 0) {
+                            jsonSubParams.put("code", menu.code);
+
+                            jsonSubParams.put("totalprice", totalPrice);
+                            jsonSubParams.put("totalcount", totalCnt);
+
+                            jsonArray.put(jsonSubParams);
+                        }
+
+
                     }
                 }
                 jsonParams.put("order", jsonArray);

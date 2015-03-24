@@ -7,9 +7,12 @@ import java.util.ArrayList;
  */
 public class ArrayOrderData {
 
+    public String code;
     public String name;
-    public String price;
-    public int count;
+    public int price;
+    public int saleprice;
+    public int totalcount;
+    public int totalprice;
 
     public ArrayList<ArrayOptionData> option;
 }

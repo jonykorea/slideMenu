@@ -14,6 +14,7 @@ import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,9 +27,11 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.app.AppController;
+import com.app.define.LOG;
 import com.tws.common.listview.adapter.GenericAdapter;
 import com.tws.common.listview.domain.SideMenu;
 import com.tws.common.listview.viewmapping.SideMenuView;
+import com.tws.network.data.RetMenuList;
 import com.tws.soul.soulbrown.R;
 import com.tws.soul.soulbrown.gcm.GcmIntentService;
 import com.tws.soul.soulbrown.lib.StoreInfo;
@@ -67,11 +70,13 @@ public class NavigationDrawerFragment extends Fragment {
     private View mFragmentContainerView;
     private ImageView mIvPushStatus;
 
+    private RetMenuList mMenuList = null;
+
 
     private int mCurrentSelectedPosition = SoulBrownMainActivity.INIT_MENU_POSITION;
     private boolean mFromSavedInstanceState;
 
-    RelativeLayout mRlRootLayout;
+    private RelativeLayout mRlRootLayout;
 
     public NavigationDrawerFragment() {
     }
@@ -87,6 +92,8 @@ public class NavigationDrawerFragment extends Fragment {
             mCurrentSelectedPosition = savedInstanceState.getInt(STATE_SELECTED_POSITION);
             //mFromSavedInstanceState = true;
         }
+
+        LOG.d("mNavigationDrawerFragment : 3 : ");
 
         LocalBroadcastManager.getInstance(getActivity()).registerReceiver(PushStatusSync, new IntentFilter("push_status"));
 
@@ -129,7 +136,7 @@ public class NavigationDrawerFragment extends Fragment {
 
         List<SideMenuView> list = new ArrayList<SideMenuView>();
 
-        ArrayList<SideMenu> sideMenu = getSideMenu();
+        ArrayList<SideMenu> sideMenu = getSideMenu(mMenuList);
 
 
         for (int i = 0; i < sideMenu.size(); i++) {
@@ -176,6 +183,7 @@ public class NavigationDrawerFragment extends Fragment {
         return mDrawerLayout != null && mDrawerLayout.isDrawerOpen(mFragmentContainerView);
     }
 
+
     /**
      * Users of this fragment must call this method to set up the navigation drawer interactions.
      *
@@ -183,6 +191,8 @@ public class NavigationDrawerFragment extends Fragment {
      * @param drawerLayout The DrawerLayout containing this fragment's UI.
      */
     public void setUp(int fragmentId, DrawerLayout drawerLayout) {
+
+        LOG.d("mNavigationDrawerFragment : 2 : ");
         mFragmentContainerView = getActivity().findViewById(fragmentId);
         mDrawerLayout = drawerLayout;
 
@@ -284,7 +294,12 @@ public class NavigationDrawerFragment extends Fragment {
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
+
+        LOG.d("mNavigationDrawerFragment : 4 : ");
         try {
+
+            mMenuList = ((SoulBrownMainActivity)activity).getMenuList();
+
             mCallbacks = (NavigationDrawerCallbacks) activity;
         } catch (ClassCastException e) {
             throw new ClassCastException("Activity must implement NavigationDrawerCallbacks.");
@@ -333,7 +348,7 @@ public class NavigationDrawerFragment extends Fragment {
         }
     }
 
-    private ArrayList<SideMenu> getSideMenu()
+    private ArrayList<SideMenu> getSideMenu(RetMenuList menuList)
     {
         ArrayList<SideMenu> sideMenuArrayList= new ArrayList<SideMenu>();
 
@@ -343,6 +358,21 @@ public class NavigationDrawerFragment extends Fragment {
             sideMenuArrayList.add(  new SideMenu(getString(R.string.orderlist),
                     R.xml.xml_icon_menu_list)) ;
 
+            if( menuList != null)
+            {
+                Log.i("jony", "getSideMenu : "+ menuList.store.size());
+
+
+                for(int i = 0;i<menuList.store.size();i++)
+                {
+                    String name = menuList.store.get(i).storename;
+
+                    sideMenuArrayList.add(  new SideMenu(name,
+                            R.xml.xml_icon_store)) ;
+                }
+            }
+
+            /*
             sideMenuArrayList.add(  new SideMenu(getString(R.string.store_haru),
                     R.xml.xml_icon_store)) ;
 
@@ -354,6 +384,7 @@ public class NavigationDrawerFragment extends Fragment {
 
             sideMenuArrayList.add(  new SideMenu(getString(R.string.store_tws),
                     R.xml.xml_icon_store)) ;
+            */
 
             return sideMenuArrayList;
         }
