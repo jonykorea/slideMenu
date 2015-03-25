@@ -17,6 +17,7 @@ import android.widget.Toast;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.app.define.LOG;
+import com.flurry.android.FlurryAgent;
 import com.tws.common.lib.views.CuzToast;
 import com.tws.network.data.ExtraType;
 import com.tws.network.data.RetUserChecker;
@@ -45,8 +46,8 @@ public class SplashActivity extends BaseActivity implements TextView.OnEditorAct
 
         context = getApplicationContext();
 
-        CuzToast cuzToast = new CuzToast(context);
-        cuzToast.showToast("Test",Toast.LENGTH_SHORT);
+        //CuzToast cuzToast = new CuzToast(context);
+        //cuzToast.showToast("Test",Toast.LENGTH_SHORT);
 
         llLoginLayout = (LinearLayout) findViewById(R.id.splash_login_layout);
         etLoginInput = (EditText) findViewById(R.id.splash_login_edit);
@@ -235,5 +236,18 @@ public class SplashActivity extends BaseActivity implements TextView.OnEditorAct
     @Override
     protected void onDestroy() {
         super.onDestroy();
+    }
+
+    // flurry
+    @Override
+    protected void onStart() {
+        super.onStart();
+        FlurryAgent.onStartSession(this);
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        FlurryAgent.onEndSession(this);
     }
 }

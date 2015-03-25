@@ -9,5 +9,6 @@ public class ArrayStoreData extends GlobalParcelable{
 
     public String store;
     public String storename;
+    public String addr;
     public ArrayList<ArrayMenuData> menu;
 }

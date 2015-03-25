@@ -8,7 +8,6 @@ import android.content.Context;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.support.v4.app.Fragment;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -30,7 +29,6 @@ import com.tws.common.lib.soulbrownlib.OrderDialog;
 import com.tws.common.listview.adapter.MenuListAdapter;
 import com.tws.network.data.ArrayOptionData;
 import com.tws.network.data.ArrayStoreData;
-import com.tws.network.data.RetMenuList;
 import com.tws.network.data.RetOrderMenu;
 import com.tws.network.data.ServerDefineCode;
 import com.tws.network.lib.ApiAgent;
@@ -38,11 +36,9 @@ import com.tws.soul.soulbrown.R;
 import com.tws.soul.soulbrown.base.BaseFragment;
 import com.tws.soul.soulbrown.broadcast.AlarmManagerBroadcastReceiver;
 import com.tws.soul.soulbrown.data.Menu;
-import com.tws.soul.soulbrown.data.MenuDataManager;
 import com.tws.soul.soulbrown.geofence.GeofenceClient;
 import com.tws.soul.soulbrown.lib.ConvertData;
 import com.tws.soul.soulbrown.lib.Notice;
-import com.tws.soul.soulbrown.lib.StoreInfo;
 import com.tws.soul.soulbrown.pref.PrefOrderInfo;
 import com.tws.soul.soulbrown.pref.PrefUserInfo;
 
@@ -54,6 +50,7 @@ public class StoreMenuFragment extends BaseFragment {
     String mStoreID = null;
     List<Menu> mMenuData = null;
     String mStoreName = null;
+    String mStoreAddr = null;
 
     List<Menu> orderMenu;
     AnimatorSet animatorSet;
@@ -80,6 +77,7 @@ public class StoreMenuFragment extends BaseFragment {
 
         mStoreID = getArguments().getString("store_id");
         mStoreName = getArguments().getString("store_name");
+        mStoreAddr = getArguments().getString("store_addr");
         storeInfo = getArguments().getParcelable("menu");
 
         animatorSet = new AnimatorSet();
@@ -158,6 +156,9 @@ public class StoreMenuFragment extends BaseFragment {
 
         TextView tvStoreName = (TextView) view.findViewById(R.id.store_name_txt);
         tvStoreName.setText(mStoreName);
+
+        TextView tvStoreAddr = (TextView) view.findViewById(R.id.store_addr_txt);
+        tvStoreAddr.setText("주소 : "+mStoreAddr);
 
         tvItemSumCount = (TextView) view.findViewById(R.id.store_item_sum_count);
         tvItemSumPrice = (TextView) view.findViewById(R.id.store_item_sum_price);
@@ -393,6 +394,7 @@ public class StoreMenuFragment extends BaseFragment {
         showToast(getString(R.string.order_succ));
 
         String time = orderMenuInfo.arrtime;
+        String store = orderMenuInfo.store;
 
         long arriveUnixTime = Long.parseLong(time);
         LOG.d("setSchLocation arriveUnixTime : " + arriveUnixTime);
@@ -400,6 +402,7 @@ public class StoreMenuFragment extends BaseFragment {
         // save arriveTime
         PrefOrderInfo prefOrderInfo = new PrefOrderInfo(context);
         prefOrderInfo.setArriveTime(arriveUnixTime * 1000);
+        prefOrderInfo.setOrderStore(store);
 
         long nowUnixTime = System.currentTimeMillis() / 1000;
         LOG.d("setSchLocation nowUnixTime : " + nowUnixTime);

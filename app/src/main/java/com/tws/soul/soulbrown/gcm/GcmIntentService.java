@@ -153,18 +153,19 @@ public class GcmIntentService extends IntentService {
                     // alarm , geofence off
                     if (pushFlag.equals(GcmDefine.PUSH_CHG_ORDER) ) {
 
-                        if( status == 1 ) {
+                        //if( status == 1 ) {
                             LOG.d("GcmIntentService alarm , geofence off");
 
                             PrefOrderInfo prefOrderInfo = new PrefOrderInfo(this);
                             prefOrderInfo.setArriveTime(0);
+                            prefOrderInfo.setOrderStore("");
 
                             AlarmManagerBroadcastReceiver alarmManagerBroadcastReceiver = new AlarmManagerBroadcastReceiver();
                             alarmManagerBroadcastReceiver.cancelAlarm(this);
 
                             geofenceClient = new GeofenceClient(this, GeofenceResultHandler);
-                        }
-                    }else if(pushFlag.equals(GcmDefine.PUSH_APPROACH_USER) || pushFlag.equals(GcmDefine.PUSH_NEW_ORDER))
+                        //}
+                    }else if(pushFlag.equals(GcmDefine.PUSH_CANCEL_ORDER) || pushFlag.equals(GcmDefine.PUSH_APPROACH_USER) || pushFlag.equals(GcmDefine.PUSH_NEW_ORDER))
                     {
                         // alarm service call
 
@@ -237,7 +238,7 @@ public class GcmIntentService extends IntentService {
                         .setStyle(new NotificationCompat.BigTextStyle()
                                 .bigText(msg))
                         .setAutoCancel(true)
-                        .setDefaults(Notification.DEFAULT_LIGHTS)
+                        .setDefaults(Notification.DEFAULT_LIGHTS | Notification.DEFAULT_SOUND)
                         .setContentText(msg);
 
 

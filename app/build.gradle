@@ -26,7 +26,6 @@ dependencies {
     compile project(':TwsNetworkLib')
     compile project(':TwsCommonLib')
     compile project(':stickylistviewlib')
-
     compile 'com.android.support:support-v4:21.0.3'
     compile 'com.android.support:recyclerview-v7:21.0.3'
     //compile 'com.android.support:cardview-v7:21.0.3'
@@ -35,5 +34,5 @@ dependencies {
     compile 'com.makeramen:roundedimageview:1.5.0'
     compile 'com.android.support:appcompat-v7:21.0.3'
     compile 'cn.pedant.sweetalert:library:1.3'
-
+    compile files('libs/FlurryAnalytics-5.3.0.jar')
 }

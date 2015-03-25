@@ -23,6 +23,7 @@ import com.tws.network.util.DeviceInfo;
 import com.tws.soul.soulbrown.data.Menu;
 import com.tws.soul.soulbrown.lib.GPSUtils;
 import com.tws.soul.soulbrown.lib.StoreInfo;
+import com.tws.soul.soulbrown.pref.PrefOrderInfo;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -184,7 +185,10 @@ public class ApiAgent {
             //jsonParams.put("lon",lon);
             //jsonParams.put("lat",lat);
             //jsonParams.put("distance",GPSUtils.getDistanceStr(distance));
-            jsonParams.put("store", "d");
+            PrefOrderInfo prefOrderInfo = new PrefOrderInfo(context);
+            String storeID = prefOrderInfo.getOrderStore();
+
+            jsonParams.put("store", storeID);
             jsonParams.put("status", (int)distance);
 
             //jsonParams = CommonParams.getCommonParams(context, jsonParams);

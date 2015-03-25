@@ -47,74 +47,78 @@ uses-permission#android.permission.WAKE_LOCK
 ADDED from AndroidManifest.xml:22:5
 	android:name
 		ADDED from AndroidManifest.xml:22:22
+uses-permission#android.permission.VIBRATE
+ADDED from AndroidManifest.xml:23:5
+	android:name
+		ADDED from AndroidManifest.xml:23:22
 permission#com.tws.soul.soulbrown.permission.C2D_MESSAGE
-ADDED from AndroidManifest.xml:30:5
+ADDED from AndroidManifest.xml:31:5
 	android:protectionLevel
+		ADDED from AndroidManifest.xml:33:9
+	android:name
 		ADDED from AndroidManifest.xml:32:9
-	android:name
-		ADDED from AndroidManifest.xml:31:9
 uses-permission#com.tws.soul.soulbrown.permission.C2D_MESSAGE
-ADDED from AndroidManifest.xml:34:5
+ADDED from AndroidManifest.xml:35:5
 	android:name
-		ADDED from AndroidManifest.xml:34:22
+		ADDED from AndroidManifest.xml:35:22
 uses-permission#com.google.android.c2dm.permission.RECEIVE
-ADDED from AndroidManifest.xml:37:5
+ADDED from AndroidManifest.xml:38:5
 	android:name
-		ADDED from AndroidManifest.xml:37:22
+		ADDED from AndroidManifest.xml:38:22
 application
 ADDED from AndroidManifest.xml:40:5
-MERGED from slideMenu:TwsNetworkLib:unspecified:11:5
+MERGED from SoulBrownCBT:TwsNetworkLib:unspecified:11:5
 MERGED from com.android.support:appcompat-v7:21.0.3:16:5
-MERGED from com.android.support:support-v4:21.0.3:16:5
-MERGED from com.android.support:support-v4:21.0.3:16:5
-MERGED from slideMenu:TwsCommonLib:unspecified:11:5
+MERGED from com.android.support:support-v4:22.0.0:22:5
+MERGED from com.android.support:support-v4:22.0.0:22:5
+MERGED from SoulBrownCBT:TwsCommonLib:unspecified:11:5
 MERGED from com.android.support:appcompat-v7:21.0.3:16:5
-MERGED from com.android.support:support-v4:21.0.3:16:5
+MERGED from com.android.support:support-v4:22.0.0:22:5
 MERGED from com.google.android.gms:play-services:6.5.87:20:5
-MERGED from com.android.support:support-v4:21.0.3:16:5
-MERGED from slideMenu:stickylistviewlib:unspecified:11:5
+MERGED from com.android.support:support-v4:22.0.0:22:5
+MERGED from SoulBrownCBT:stickylistviewlib:unspecified:11:5
 MERGED from com.android.support:appcompat-v7:21.0.3:16:5
-MERGED from com.android.support:support-v4:21.0.3:16:5
-MERGED from com.android.support:support-v4:21.0.3:16:5
+MERGED from com.android.support:support-v4:22.0.0:22:5
+MERGED from com.android.support:support-v4:22.0.0:22:5
 MERGED from com.android.support:recyclerview-v7:21.0.3:17:5
-MERGED from com.android.support:support-v4:21.0.3:16:5
+MERGED from com.android.support:support-v4:22.0.0:22:5
 MERGED from com.android.support:cardview-v7:21.0.3:16:5
-MERGED from com.android.support:palette-v7:21.0.3:16:5
-MERGED from com.android.support:support-v4:21.0.3:16:5
+MERGED from com.android.support:palette-v7:22.0.0:22:5
+MERGED from com.android.support:support-v4:22.0.0:22:5
 MERGED from com.android.support:appcompat-v7:21.0.3:16:5
-MERGED from com.android.support:support-v4:21.0.3:16:5
+MERGED from com.android.support:support-v4:22.0.0:22:5
 MERGED from cn.pedant.sweetalert:library:1.3:11:5
 MERGED from com.pnikosis:materialish-progress:1.0:11:5
 MERGED from com.android.support:appcompat-v7:21.0.3:16:5
-MERGED from com.android.support:support-v4:21.0.3:16:5
+MERGED from com.android.support:support-v4:22.0.0:22:5
 	android:label
-		ADDED from AndroidManifest.xml:46:9
+		ADDED from AndroidManifest.xml:45:9
 	android:allowBackup
-		ADDED from AndroidManifest.xml:43:9
+		ADDED from AndroidManifest.xml:42:9
 	android:icon
 		ADDED from AndroidManifest.xml:44:9
-		REJECTED from slideMenu:TwsNetworkLib:unspecified:13:9
-		REJECTED from slideMenu:TwsCommonLib:unspecified:13:9
-		REJECTED from slideMenu:stickylistviewlib:unspecified:13:9
+		REJECTED from SoulBrownCBT:TwsNetworkLib:unspecified:13:9
+		REJECTED from SoulBrownCBT:TwsCommonLib:unspecified:13:9
+		REJECTED from SoulBrownCBT:stickylistviewlib:unspecified:13:9
 		REJECTED from com.pnikosis:materialish-progress:1.0:13:9
 	android:theme
-		ADDED from AndroidManifest.xml:47:9
+		ADDED from AndroidManifest.xml:46:9
 	android:hardwareAccelerated
-		ADDED from AndroidManifest.xml:41:9
+		ADDED from AndroidManifest.xml:43:9
 	tools:replace
-		ADDED from AndroidManifest.xml:45:9
+		ADDED from AndroidManifest.xml:47:9
 	android:name
-		ADDED from AndroidManifest.xml:42:9
+		ADDED from AndroidManifest.xml:41:9
 activity#com.tws.soul.soulbrown.ui.SplashActivity
 ADDED from AndroidManifest.xml:48:9
 	android:screenOrientation
-		ADDED from AndroidManifest.xml:49:13
-	android:label
 		ADDED from AndroidManifest.xml:52:13
+	android:label
+		ADDED from AndroidManifest.xml:50:13
 	android:theme
 		ADDED from AndroidManifest.xml:53:13
 	android:name
-		ADDED from AndroidManifest.xml:50:13
+		ADDED from AndroidManifest.xml:49:13
 	android:launchMode
 		ADDED from AndroidManifest.xml:51:13
 intent-filter#android.intent.action.MAIN+android.intent.category.LAUNCHER
@@ -128,107 +132,121 @@ ADDED from AndroidManifest.xml:57:17
 	android:name
 		ADDED from AndroidManifest.xml:57:27
 activity#com.tws.soul.soulbrown.ui.SoulBrownMainActivity
-ADDED from AndroidManifest.xml:61:9
+ADDED from AndroidManifest.xml:60:9
 	android:screenOrientation
-		ADDED from AndroidManifest.xml:62:13
-	android:label
-		ADDED from AndroidManifest.xml:64:13
-	android:name
 		ADDED from AndroidManifest.xml:63:13
-activity#com.tws.soul.soulbrown.ui.SettingActivity
-ADDED from AndroidManifest.xml:67:9
-	android:screenOrientation
-		ADDED from AndroidManifest.xml:69:13
 	android:label
-		ADDED from AndroidManifest.xml:72:13
-	android:theme
-		ADDED from AndroidManifest.xml:70:13
+		ADDED from AndroidManifest.xml:62:13
 	android:name
-		ADDED from AndroidManifest.xml:71:13
+		ADDED from AndroidManifest.xml:61:13
+activity#com.tws.soul.soulbrown.ui.SettingActivity
+ADDED from AndroidManifest.xml:65:9
+	android:screenOrientation
+		ADDED from AndroidManifest.xml:68:13
+	android:label
+		ADDED from AndroidManifest.xml:67:13
+	android:theme
+		ADDED from AndroidManifest.xml:69:13
+	android:name
+		ADDED from AndroidManifest.xml:66:13
 meta-data#com.google.android.gms.version
-ADDED from AndroidManifest.xml:75:9
+ADDED from AndroidManifest.xml:72:9
 MERGED from com.google.android.gms:play-services:6.5.87:21:9
 	android:name
-		ADDED from AndroidManifest.xml:76:13
+		ADDED from AndroidManifest.xml:73:13
 	android:value
-		ADDED from AndroidManifest.xml:77:13
+		ADDED from AndroidManifest.xml:74:13
 receiver#com.tws.soul.soulbrown.gcm.GcmBroadcastReceiver
-ADDED from AndroidManifest.xml:86:9
+ADDED from AndroidManifest.xml:83:9
 	android:permission
-		ADDED from AndroidManifest.xml:88:13
+		ADDED from AndroidManifest.xml:85:13
 	android:name
-		ADDED from AndroidManifest.xml:87:13
+		ADDED from AndroidManifest.xml:84:13
 intent-filter#com.google.android.c2dm.intent.RECEIVE+com.google.android.gcm.demo.app
-ADDED from AndroidManifest.xml:89:13
+ADDED from AndroidManifest.xml:86:13
 action#com.google.android.c2dm.intent.RECEIVE
-ADDED from AndroidManifest.xml:92:17
+ADDED from AndroidManifest.xml:89:17
 	android:name
-		ADDED from AndroidManifest.xml:92:25
+		ADDED from AndroidManifest.xml:89:25
 category#com.google.android.gcm.demo.app
-ADDED from AndroidManifest.xml:94:17
+ADDED from AndroidManifest.xml:91:17
 	android:name
-		ADDED from AndroidManifest.xml:94:27
+		ADDED from AndroidManifest.xml:91:27
 service#com.tws.soul.soulbrown.gcm.GcmIntentService
-ADDED from AndroidManifest.xml:98:9
+ADDED from AndroidManifest.xml:95:9
 	android:name
-		ADDED from AndroidManifest.xml:98:18
+		ADDED from AndroidManifest.xml:95:18
 receiver#com.tws.soul.soulbrown.broadcast.AlarmManagerBroadcastReceiver
-ADDED from AndroidManifest.xml:100:9
+ADDED from AndroidManifest.xml:97:9
 	android:exported
-		ADDED from AndroidManifest.xml:103:13
+		ADDED from AndroidManifest.xml:100:13
 	android:enabled
-		ADDED from AndroidManifest.xml:102:13
+		ADDED from AndroidManifest.xml:99:13
 	android:name
-		ADDED from AndroidManifest.xml:101:13
+		ADDED from AndroidManifest.xml:98:13
 service#com.tws.soul.soulbrown.service.LocationService
-ADDED from AndroidManifest.xml:106:9
+ADDED from AndroidManifest.xml:103:9
 	android:exported
-		ADDED from AndroidManifest.xml:109:13
+		ADDED from AndroidManifest.xml:106:13
 	android:enabled
-		ADDED from AndroidManifest.xml:108:13
+		ADDED from AndroidManifest.xml:105:13
 	android:name
-		ADDED from AndroidManifest.xml:107:13
+		ADDED from AndroidManifest.xml:104:13
 service#com.tws.soul.soulbrown.geofence.GeofenceTransitionsIntentService
-ADDED from AndroidManifest.xml:112:9
+ADDED from AndroidManifest.xml:108:9
 	android:exported
-		ADDED from AndroidManifest.xml:115:13
+		ADDED from AndroidManifest.xml:111:13
 	android:enabled
-		ADDED from AndroidManifest.xml:114:13
+		ADDED from AndroidManifest.xml:110:13
 	android:name
-		ADDED from AndroidManifest.xml:113:13
+		ADDED from AndroidManifest.xml:109:13
+service#com.tws.soul.soulbrown.service.AlarmNotiService
+ADDED from AndroidManifest.xml:113:9
+	android:exported
+		ADDED from AndroidManifest.xml:116:13
+	android:enabled
+		ADDED from AndroidManifest.xml:115:13
+	android:name
+		ADDED from AndroidManifest.xml:114:13
 uses-sdk
 INJECTED from AndroidManifest.xml:0:0 reason: use-sdk injection requested
-MERGED from slideMenu:TwsNetworkLib:unspecified:7:5
+MERGED from SoulBrownCBT:TwsNetworkLib:unspecified:7:5
 MERGED from com.android.support:appcompat-v7:21.0.3:15:5
-MERGED from com.android.support:support-v4:21.0.3:15:5
-MERGED from com.android.support:support-v4:21.0.3:15:5
-MERGED from slideMenu:TwsCommonLib:unspecified:7:5
+MERGED from com.android.support:support-v4:22.0.0:20:5
+MERGED from com.android.support:support-v4:22.0.0:20:5
+MERGED from SoulBrownCBT:TwsCommonLib:unspecified:7:5
 MERGED from com.android.support:appcompat-v7:21.0.3:15:5
-MERGED from com.android.support:support-v4:21.0.3:15:5
+MERGED from com.android.support:support-v4:22.0.0:20:5
 MERGED from com.google.android.gms:play-services:6.5.87:18:5
-MERGED from com.android.support:support-v4:21.0.3:15:5
-MERGED from slideMenu:stickylistviewlib:unspecified:7:5
+MERGED from com.android.support:support-v4:22.0.0:20:5
+MERGED from SoulBrownCBT:stickylistviewlib:unspecified:7:5
 MERGED from com.android.support:appcompat-v7:21.0.3:15:5
-MERGED from com.android.support:support-v4:21.0.3:15:5
-MERGED from com.android.support:support-v4:21.0.3:15:5
+MERGED from com.android.support:support-v4:22.0.0:20:5
+MERGED from com.android.support:support-v4:22.0.0:20:5
 MERGED from com.android.support:recyclerview-v7:21.0.3:15:5
-MERGED from com.android.support:support-v4:21.0.3:15:5
+MERGED from com.android.support:support-v4:22.0.0:20:5
 MERGED from com.android.support:cardview-v7:21.0.3:15:5
-MERGED from com.android.support:palette-v7:21.0.3:15:5
-MERGED from com.android.support:support-v4:21.0.3:15:5
+MERGED from com.android.support:palette-v7:22.0.0:20:5
+MERGED from com.android.support:support-v4:22.0.0:20:5
 MERGED from com.makeramen:roundedimageview:1.5.0:7:5
 MERGED from com.android.support:appcompat-v7:21.0.3:15:5
-MERGED from com.android.support:support-v4:21.0.3:15:5
+MERGED from com.android.support:support-v4:22.0.0:20:5
 MERGED from cn.pedant.sweetalert:library:1.3:7:5
 MERGED from com.pnikosis:materialish-progress:1.0:7:5
 MERGED from com.android.support:appcompat-v7:21.0.3:15:5
-MERGED from com.android.support:support-v4:21.0.3:15:5
+MERGED from com.android.support:support-v4:22.0.0:20:5
 	android:targetSdkVersion
 		INJECTED from AndroidManifest.xml:0:0
 		INJECTED from AndroidManifest.xml:0:0
 	android:minSdkVersion
 		INJECTED from AndroidManifest.xml:0:0
 		INJECTED from AndroidManifest.xml:0:0
+meta-data#com.tws.network.module.TwsVolleyGlideModule
+ADDED from SoulBrownCBT:TwsNetworkLib:unspecified:15:9
+	android:name
+		ADDED from SoulBrownCBT:TwsNetworkLib:unspecified:16:13
+	android:value
+		ADDED from SoulBrownCBT:TwsNetworkLib:unspecified:17:13
 activity#android.support.v7.widget.TestActivity
 ADDED from com.android.support:recyclerview-v7:21.0.3:18:9
 	android:label

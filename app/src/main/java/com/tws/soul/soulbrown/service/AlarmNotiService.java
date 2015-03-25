@@ -4,6 +4,7 @@ import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
 import android.location.Location;
+import android.media.AudioManager;
 import android.media.SoundPool;
 import android.os.CountDownTimer;
 import android.os.Handler;
@@ -128,11 +129,21 @@ public class AlarmNotiService extends Service {
 
         mVib.vibrate(patten, -1);
     }
+    private void setMaxVolume()
+    {
+        AudioManager audioManager = (AudioManager)getSystemService(Context.AUDIO_SERVICE);
+
+        int max = audioManager.getStreamMaxVolume(audioManager.STREAM_MUSIC);
+
+        audioManager.setStreamVolume(AudioManager.STREAM_MUSIC,max,0);
+    }
 
     private void callSound()
     {
         if( mIsLoad && !mIsPlay)
         {
+            setMaxVolume();
+
             mIsPlay = true;
             mSoundManager.playSound(1);
         }

@@ -94,13 +94,15 @@
                 android:scaleType="centerCrop" />
 
             <com.tws.widget.CuzTextView
+
                 android:background="@drawable/menu_bg"
                 android:id="@+id/item_menu_info_txt"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:padding="@dimen/size_6"
 
                 android:gravity="center"
-                android:text="메뉴별 간단한 설명..."
+                android:text="가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타"
                 android:textColor="#3D454C"
                 android:textSize="@dimen/size_20"
                 android:textStyle="bold" />
@@ -127,14 +129,14 @@
 
                 <ImageView
                     android:layout_gravity="center"
-                    android:layout_width="20dp"
-                    android:layout_height="20dp"
+                    android:layout_width="16dp"
+                    android:layout_height="16dp"
                     android:background="@drawable/icon_opt"/>
 
                 <com.tws.widget.CuzTextView
                     android:id="@+id/item_menu_control_opt1_txt"
                     android:layout_width="wrap_content"
-                    android:layout_height="36dp"
+                    android:layout_height="match_parent"
                     android:layout_marginLeft="5dp"
 
                     android:gravity="center"
@@ -210,14 +212,14 @@
 
                 <ImageView
                     android:layout_gravity="center"
-                    android:layout_width="20dp"
-                    android:layout_height="20dp"
+                    android:layout_width="16dp"
+                    android:layout_height="16dp"
                     android:background="@drawable/icon_opt"/>
 
                 <com.tws.widget.CuzTextView
                     android:id="@+id/item_menu_control_opt2_txt"
                     android:layout_width="wrap_content"
-                    android:layout_height="36dp"
+                    android:layout_height="match_parent"
                     android:layout_marginLeft="5dp"
 
                     android:gravity="center"

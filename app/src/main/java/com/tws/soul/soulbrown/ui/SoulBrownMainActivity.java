@@ -18,6 +18,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.app.AppController;
 import com.app.define.LOG;
+import com.flurry.android.FlurryAgent;
 import com.tws.common.lib.gms.LocationDefines;
 import com.tws.common.lib.gms.LocationGmsClient;
 import com.tws.network.data.ExtraType;
@@ -470,6 +471,19 @@ public class SoulBrownMainActivity extends FragmentActivity
         }
 
         super.onBackPressed();
+    }
+
+    // flurry
+    @Override
+    protected void onStart() {
+        super.onStart();
+        FlurryAgent.onStartSession(this);
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        FlurryAgent.onEndSession(this);
     }
 
 

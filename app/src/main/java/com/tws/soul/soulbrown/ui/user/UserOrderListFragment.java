@@ -32,6 +32,7 @@ import com.tws.common.lib.gms.LocationDefines;
 import com.tws.common.lib.soulbrownlib.OrderDialog;
 import com.tws.common.lib.utils.TimeUtil;
 import com.tws.common.listview.adapter.StickyListAdapter;
+import com.tws.network.data.ArrayOptionData;
 import com.tws.network.data.ArrayOrderData;
 import com.tws.network.data.ArrayOrderList;
 import com.tws.network.data.ReceiptInfoRow;
@@ -476,9 +477,12 @@ public class UserOrderListFragment extends BaseFragment implements
         for (int i = 0; i < orderData.size(); i++) {
             Menu menu = new Menu();
 
-            //menu.count = orderData.get(i).count;
             menu.price = orderData.get(i).price;
             menu.name = orderData.get(i).name;
+            menu.saleprice = orderData.get(i).saleprice;
+            menu.code = orderData.get(i).code;
+            menu.option = new ArrayList<ArrayOptionData>();
+            menu.option.addAll(orderData.get(i).option);
 
             ListMenu.add(menu);
         }
@@ -488,7 +492,7 @@ public class UserOrderListFragment extends BaseFragment implements
 
     private OrderDialog orderDialog;
 
-    private void showDialog(final String storeName,final String storeID, final List<Menu> ListMenu) {
+    private void showDialog(final String storeName, final String storeID, final List<Menu> ListMenu) {
 
 
         if (orderDialog != null && orderDialog.isShowing())
@@ -504,6 +508,9 @@ public class UserOrderListFragment extends BaseFragment implements
 
                     Menu menu = ListMenu.get(i);
                     String name = menu.name;
+
+                    Log.i("jony","showDialog name : "+name);
+
 
 
                     for(int j = 0; j<menu.option.size();j++) {
@@ -691,6 +698,7 @@ public class UserOrderListFragment extends BaseFragment implements
         showToast(getString(R.string.reorder_succ));
 
         String time = orderMenuInfo.arrtime;
+        String store = orderMenuInfo.store;
 
         long arriveUnixTime = Long.parseLong(time);
         LOG.d("setSchLocation arriveUnixTime : " + arriveUnixTime);
@@ -698,6 +706,7 @@ public class UserOrderListFragment extends BaseFragment implements
         // save arriveTime
         PrefOrderInfo prefOrderInfo = new PrefOrderInfo(context);
         prefOrderInfo.setArriveTime(arriveUnixTime * 1000);
+        prefOrderInfo.setOrderStore(store);
 
         long nowUnixTime = System.currentTimeMillis() / 1000;
         LOG.d("setSchLocation nowUnixTime : " + nowUnixTime);

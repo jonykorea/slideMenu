@@ -746,6 +746,7 @@ public class OwnerOrderListFragment extends BaseFragment implements
         showToast(getString(R.string.order_succ));
 
         String time = orderMenuInfo.arrtime;
+        String store = orderMenuInfo.store;
 
         long arriveUnixTime = Long.parseLong(time);
         LOG.d("setSchLocation arriveUnixTime : " + arriveUnixTime);
@@ -753,6 +754,8 @@ public class OwnerOrderListFragment extends BaseFragment implements
         // save arriveTime
         PrefOrderInfo prefOrderInfo = new PrefOrderInfo(context);
         prefOrderInfo.setArriveTime(arriveUnixTime * 1000);
+        prefOrderInfo.setOrderStore(store);
+
 
         long nowUnixTime = System.currentTimeMillis() / 1000;
         LOG.d("setSchLocation nowUnixTime : " + nowUnixTime);

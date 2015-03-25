@@ -11,6 +11,7 @@ public class PrefOrderInfo {
 
     private final String PREF_KEY_SETTING_TIME = "SETTING_TIME"; // setting time
 
+    private final String PREF_KEY_ORDER_STORE = "ORDER_STORE"; // order store
 
     private Context mContext = null;
 	private SharedPreferences mPrefOrderInfo = null;
@@ -46,6 +47,17 @@ public class PrefOrderInfo {
 
     public String getSettingTime() {
         return mPrefOrderInfo.getString(PREF_KEY_SETTING_TIME, "30분");
+    }
+
+    public void setOrderStore(String storeID) {
+
+        mEditor.putString(PREF_KEY_ORDER_STORE, storeID);
+
+        mEditor.commit();
+    }
+
+    public String getOrderStore() {
+        return mPrefOrderInfo.getString(PREF_KEY_ORDER_STORE, "");
     }
 
 }
