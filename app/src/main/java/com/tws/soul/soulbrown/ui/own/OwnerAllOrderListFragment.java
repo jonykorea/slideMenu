@@ -24,6 +24,7 @@ import android.widget.Toast;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.app.define.LOG;
+import com.tws.common.lib.views.CuzToast;
 import com.tws.common.listview.adapter.OrderListAdapter;
 import com.tws.network.data.ArrayOrderData;
 import com.tws.network.data.ReceiptInfoRow;
@@ -34,7 +35,7 @@ import com.tws.soul.soulbrown.R;
 import com.tws.soul.soulbrown.base.BaseFragment;
 import com.tws.soul.soulbrown.gcm.GcmIntentService;
 import com.tws.soul.soulbrown.lib.ConvertData;
-import com.tws.soul.soulbrown.lib.Notice;
+;
 import com.tws.soul.soulbrown.pref.PrefUserInfo;
 
 import java.util.ArrayList;
@@ -59,6 +60,8 @@ public class OwnerAllOrderListFragment extends BaseFragment implements
 
     private Context context;
 
+    private CuzToast mCuzToast;
+
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
@@ -76,7 +79,7 @@ public class OwnerAllOrderListFragment extends BaseFragment implements
         mAdapter.notifyDataSetChanged();
         mAdapter.clear();
         */
-        Notice.toast = Toast.makeText(context, "", Toast.LENGTH_SHORT);
+        mCuzToast = new CuzToast(getActivity());
     }
 
     @Override
@@ -191,7 +194,7 @@ public class OwnerAllOrderListFragment extends BaseFragment implements
 
         mOrderListData = orderListData;
 
-        listAapter = new OrderListAdapter(context, mOrderListData.orders, this);
+        listAapter = new OrderListAdapter(context, mOrderListData.orders, R.layout.list_owner_order_info_all, this);
 
         stickyList.setAdapter(listAapter);
 
@@ -216,6 +219,9 @@ public class OwnerAllOrderListFragment extends BaseFragment implements
 
                     if( mBaseProgressDialog.isShowing() )
                         mBaseProgressDialog.dismiss();
+
+                    if( !isAdded() )
+                        return;
 
                     if (refreshLayout != null) {
 
@@ -353,19 +359,6 @@ public class OwnerAllOrderListFragment extends BaseFragment implements
 
     }
 
-    private void showToast(int resID) {
-        if (Notice.toast != null) {
-            Notice.toast.setText(resID);
-            Notice.toast.show();
-        }
-    }
-
-    private void showToast(String msg) {
-        if (Notice.toast != null) {
-            Notice.toast.setText(msg);
-            Notice.toast.show();
-        }
-    }
 
     @Override
     public void onResume() {
@@ -385,7 +378,7 @@ public class OwnerAllOrderListFragment extends BaseFragment implements
 
             String msg = intent.getStringExtra("msg");
 
-            showToast(msg);
+            mCuzToast.showToast(msg,Toast.LENGTH_SHORT);
 
             initData();
 

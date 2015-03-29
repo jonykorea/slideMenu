@@ -8,6 +8,7 @@ import android.util.Log;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.app.define.LOG;
+import com.flurry.android.FlurryAgent;
 import com.tws.network.api.ApiBase;
 import com.tws.network.data.CoreGetPublicKey;
 import com.tws.network.data.RetCode;
@@ -21,6 +22,7 @@ import com.tws.network.lib.JsonGsonRequest;
 import com.tws.network.util.CommonParams;
 import com.tws.network.util.DeviceInfo;
 import com.tws.soul.soulbrown.data.Menu;
+import com.tws.soul.soulbrown.flurry.Define;
 import com.tws.soul.soulbrown.lib.GPSUtils;
 import com.tws.soul.soulbrown.lib.StoreInfo;
 import com.tws.soul.soulbrown.pref.PrefOrderInfo;
@@ -31,6 +33,7 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by jonychoi on 14. 11. 21..
@@ -330,8 +333,23 @@ public class ApiAgent {
 
     }
     // apiOrderMenu
-    public void apiOrderMenu(Context context, String userid, String storeid, String arriveTime, List<Menu> listMenu, Response.Listener<RetOrderMenu> succListener, Response.ErrorListener failListener) {
+    public void apiOrderMenu(Context context, String userid, String storeid, String arriveTime, List<Menu> listMenu, boolean reOrder , Response.Listener<RetOrderMenu> succListener, Response.ErrorListener failListener) {
 
+        // flurry S
+        Map<String, String> flurryParams = new HashMap<String, String>();
+
+        flurryParams.put(Define.LOG_KEY_STORE, storeid);
+
+        long arrTime = Long.parseLong(arriveTime) - (System.currentTimeMillis()/1000 );
+        arrTime = arrTime / 60;
+
+        flurryParams.put(Define.LOG_KEY_ARRIVAL_TIME, Long.toString(arrTime));
+
+        if( reOrder )
+            FlurryAgent.logEvent(Define.LOG_VIEW_REORDER, flurryParams);
+        else
+            FlurryAgent.logEvent(Define.LOG_VIEW_ORDER, flurryParams);
+        // flurry E
         String url = URL_DOMAIN + URL_USER_ORDER_MENU;
 
         // set add header S

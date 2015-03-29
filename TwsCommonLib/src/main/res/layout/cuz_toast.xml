@@ -10,15 +10,15 @@ style="@style/DefaultRootLayout"
 android:padding="10dp" >
 
     <ImageView
+        android:visibility="gone"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:background="@drawable/ic_launcher"
          />
-<TextView
+<com.tws.widget.CuzTextView
     android:id="@+id/text"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:textColor="#ffffff"
-    android:textSize="18dp" >
-</TextView>
+    android:textSize="18dp" />
 </LinearLayout>

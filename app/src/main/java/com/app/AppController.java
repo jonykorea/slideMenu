@@ -31,6 +31,8 @@ public class AppController extends Application {
         // configure Flurry
         FlurryAgent.setLogEnabled(false);
 
+        FlurryAgent.setCaptureUncaughtExceptions(true);
+
         // init Flurry
         FlurryAgent.init(this, Define.FLURRY_KEY);
     }

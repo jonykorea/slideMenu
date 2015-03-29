@@ -26,6 +26,7 @@ import com.app.define.LOG;
 import com.tws.common.lib.dialog.CuzDialog;
 import com.tws.common.lib.gms.LocationDefines;
 import com.tws.common.lib.soulbrownlib.OrderDialog;
+import com.tws.common.lib.views.CuzToast;
 import com.tws.common.listview.adapter.MenuListAdapter;
 import com.tws.network.data.ArrayOptionData;
 import com.tws.network.data.ArrayStoreData;
@@ -38,7 +39,6 @@ import com.tws.soul.soulbrown.broadcast.AlarmManagerBroadcastReceiver;
 import com.tws.soul.soulbrown.data.Menu;
 import com.tws.soul.soulbrown.geofence.GeofenceClient;
 import com.tws.soul.soulbrown.lib.ConvertData;
-import com.tws.soul.soulbrown.lib.Notice;
 import com.tws.soul.soulbrown.pref.PrefOrderInfo;
 import com.tws.soul.soulbrown.pref.PrefUserInfo;
 
@@ -65,6 +65,8 @@ public class StoreMenuFragment extends BaseFragment {
 
     private ArrayStoreData storeInfo;
 
+    private CuzToast mCuzToast;
+
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
@@ -82,9 +84,9 @@ public class StoreMenuFragment extends BaseFragment {
 
         animatorSet = new AnimatorSet();
 
-        Notice.toast = Toast.makeText(context, "", Toast.LENGTH_SHORT);
+        mCuzToast = new CuzToast(getActivity());
 
-        if (mStoreID == null) {
+        if (mStoreID == null || storeInfo == null) {
             getActivity().finish();
             return;
         }
@@ -215,7 +217,7 @@ public class StoreMenuFragment extends BaseFragment {
 
 
                 if (sumPrice == 0) {
-                    showToast("주문 선택을 해주세요.");
+                    mCuzToast.showToast( getString(R.string.order_select),Toast.LENGTH_SHORT);
                 } else {
 
                     orderMenuList += "총 주문 금액 : " + ConvertData.getPrice(sumPrice);
@@ -259,7 +261,7 @@ public class StoreMenuFragment extends BaseFragment {
                 }
 
             } else {
-                showToast("주문 선택을 해주세요.");
+                mCuzToast.showToast( getString(R.string.order_select),Toast.LENGTH_SHORT);
             }
         }
 
@@ -310,12 +312,15 @@ public class StoreMenuFragment extends BaseFragment {
             if( !mBaseProgressDialog.isShowing() )
                 mBaseProgressDialog.show();
 
-            api.apiOrderMenu(context, userID, storeID, calcTime, listMenu, new Response.Listener<RetOrderMenu>() {
+            api.apiOrderMenu(context, userID, storeID, calcTime, listMenu,false, new Response.Listener<RetOrderMenu>() {
                 @Override
                 public void onResponse(RetOrderMenu retCode) {
 
                     if( mBaseProgressDialog.isShowing() )
                         mBaseProgressDialog.dismiss();
+
+                    if( !isAdded() )
+                        return;
 
                     LOG.d("retCode.result : " + retCode.ret);
                     LOG.d("retCode.errormsg : " + retCode.msg);
@@ -362,8 +367,7 @@ public class StoreMenuFragment extends BaseFragment {
                         // fail
                         LOG.d("apiOrderMenu Fail " + retCode.ret);
 
-                        showToast("주문 오류 : " + retCode.msg + "[" + retCode.ret + "]");
-
+                        mCuzToast.showToast( getString(R.string.order_fail)+" : " + retCode.msg + "[" + retCode.ret + "]",Toast.LENGTH_SHORT);
                     }
 
                 }
@@ -376,7 +380,7 @@ public class StoreMenuFragment extends BaseFragment {
 
                     LOG.d("apiOrderMenu VolleyError " + volleyError.getMessage());
 
-                    showToast("네트워크 오류 : " + volleyError.getMessage());
+                    mCuzToast.showToast( getString(R.string.network_fail),Toast.LENGTH_SHORT);
 
                 }
             });
@@ -391,7 +395,7 @@ public class StoreMenuFragment extends BaseFragment {
 
         initAdapter(mMenuData);
 
-        showToast(getString(R.string.order_succ));
+        mCuzToast.showToast( getString(R.string.order_succ),Toast.LENGTH_LONG);
 
         String time = orderMenuInfo.arrtime;
         String store = orderMenuInfo.store;
@@ -488,19 +492,6 @@ public class StoreMenuFragment extends BaseFragment {
         mRecyclerView.setAdapter(mAdapter);
     }
 
-    private void showToast(int resID) {
-        if (Notice.toast != null) {
-            Notice.toast.setText(resID);
-            Notice.toast.show();
-        }
-    }
-
-    private void showToast(String msg) {
-        if (Notice.toast != null) {
-            Notice.toast.setText(msg);
-            Notice.toast.show();
-        }
-    }
 
     private void getMenuItem(List<Menu> listMenu) {
 
@@ -532,7 +523,7 @@ public class StoreMenuFragment extends BaseFragment {
 
         if (sumPrice > 100000) {
 
-            showToast(R.string.price_warning);
+            mCuzToast.showToast( getString(R.string.price_warning),Toast.LENGTH_SHORT);
 
         }
 

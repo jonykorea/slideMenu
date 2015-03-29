@@ -124,6 +124,7 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/size_6"
                 android:orientation="horizontal">
 
                 <com.tws.widget.CuzTextView
@@ -133,8 +134,8 @@
                     android:layout_alignParentLeft="true"
                     android:gravity="center"
                     android:text="도착예정시간 : "
-                    android:textColor="#3D454C"
-                    android:textSize="@dimen/size_16" />
+                    android:textColor="#E52A19"
+                    android:textSize="@dimen/size_18" />
 
 
                 <com.tws.widget.CuzTextView
@@ -144,14 +145,15 @@
 
                     android:gravity="center"
                     android:text=""
-                    android:textColor="#3D454C"
-                    android:textSize="@dimen/size_16" />
+                    android:textColor="#E52A19"
+                    android:textSize="@dimen/size_18" />
 
             </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/size_6"
                 android:orientation="horizontal">
 
                 <com.tws.widget.CuzTextView
@@ -161,8 +163,8 @@
                     android:layout_alignParentLeft="true"
                     android:gravity="center"
                     android:text="거리정보 : "
-                    android:textColor="#3D454C"
-                    android:textSize="@dimen/size_16" />
+                    android:textColor="#E52A19"
+                    android:textSize="@dimen/size_18" />
 
 
                 <com.tws.widget.CuzTextView
@@ -172,12 +174,13 @@
 
                     android:gravity="center"
                     android:text=""
-                    android:textColor="#3D454C"
-                    android:textSize="@dimen/size_16" />
+                    android:textColor="#E52A19"
+                    android:textSize="@dimen/size_18" />
 
             </LinearLayout>
 
             <LinearLayout
+
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal">

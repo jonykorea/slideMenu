@@ -19,65 +19,42 @@
     <string name="hello_world">Hello world!</string>
     <string name="hello_blank_fragment">Hello blank fragment</string>
 
+
     <string name="store_all_list">완료 내역</string>
-
     <string name="orderlist">주문 내역</string>
-
     <string name="order_succ">정상적으로 주문되었습니다. 주문하신 음료가 준비되면 알람이 전달됩니다.</string>
-
-    <string name="reorder_succ">정상적으로 재주문되었습니다.</string>
-
+    <string name="reorder_succ">정상적으로 재주문되었습니다. 주문하신 음료가 준비되면 알람이 전달됩니다.</string>
     <string name="order_succ_cancel">정상적으로 주문취소되었습니다.</string>
-
     <string name="order_fail">주문 오류</string>
-
     <string name="network_fail">네트워크 오류</string>
-
     <string name="order_id">주문번호</string>
-
     <string name="order_sum_price">총 주문 금액</string>
-
     <string name="reorder">재주문</string>
-
     <string name="confirm">확인</string>
     <string name="cancel">취소</string>
-
     <string name="order_select">주문 선택을 해주세요.</string>
-
     <string name="order_check_list">이미 주문된 내역이 있습니다.\n주문 내역에서 확인하세요.</string>
-
     <string name="push_msg_on">Push Message 등록되었습니다.</string>
     <string name="push_msg_off">Push Message 해제되었습니다.</string>
-
     <string name="nickname">닉네임</string>
-
     <string name="check_nickname">닉네임을 확인해 주세요.</string>
     <string name="check_user">등록되지 않는 사용자입니다. 확인 부탁드립니다.</string>
-
     <string name="status_ready">접수 완료</string>
-    <string name="status_cooking">음료 쿠킹 중</string>
-    <string name="status_store_cooking">쿠킹</string>
-
+    <string name="status_cooking">음료 브루잉 중</string>
+    <string name="status_store_cooking">브루잉</string>
     <string name="status_takeout">Take out</string>
-
-    <string name="status_store_allfinish">쿠킹+\nTake out</string>
-
+    <string name="status_store_allfinish">브루잉+\nTake out</string>
     <string name="orderlist_recent">최근 주문 내역</string>
-
-    <string name="order_cancel_info">※ 접수완료 상태에서만 주문취소가 가능합니다.</string>
-
+    <string name="order_cancel_info">※ \"접수완료\" 상태에서만 주문취소가 가능합니다.</string>
     <string name="order_cancel">주문취소</string>
-
     <string name="setting_info">브루브루 사용법</string>
     <string name="setting_event">의견 및 이벤트</string>
     <string name="logout">로그아웃</string>
-    <string name="login">로그인</string>
+    <string name="login">닉네임 설정하기</string>
     <string name="setting_push_status">Push Message 상태</string>
-
     <string name="setting_mv_browser">웹페이지로 이동합니다.</string>
-
-
     <string name="setting_logout_action">로그아웃 하시겠습니까?</string>
+    <string name="finish">\'뒤로\' 버튼을 한번 더 누르시면 종료됩니다.</string>
 
 
 </resources>

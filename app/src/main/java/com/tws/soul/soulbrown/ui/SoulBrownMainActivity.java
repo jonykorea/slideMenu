@@ -21,13 +21,16 @@ import com.app.define.LOG;
 import com.flurry.android.FlurryAgent;
 import com.tws.common.lib.gms.LocationDefines;
 import com.tws.common.lib.gms.LocationGmsClient;
+import com.tws.common.lib.views.CuzToast;
 import com.tws.network.data.ExtraType;
 import com.tws.network.data.RetCode;
 import com.tws.network.data.RetMenuList;
 import com.tws.network.data.RetPushMsgStatus;
 import com.tws.network.lib.ApiAgent;
 import com.tws.soul.soulbrown.R;
+import com.tws.soul.soulbrown.base.BaseFragmentActivity;
 import com.tws.soul.soulbrown.gcm.GcmClient;
+import com.tws.soul.soulbrown.lib.BackPressCloseHandler;
 import com.tws.soul.soulbrown.pref.PrefStoreInfo;
 import com.tws.soul.soulbrown.pref.PrefUserInfo;
 import com.tws.soul.soulbrown.ui.own.OwnerAllOrderListFragment;
@@ -41,7 +44,7 @@ import java.util.concurrent.Callable;
 import java.util.concurrent.atomic.AtomicInteger;
 
 
-public class SoulBrownMainActivity extends FragmentActivity
+public class SoulBrownMainActivity extends BaseFragmentActivity
         implements NavigationDrawerFragment.NavigationDrawerCallbacks , UserStoreMenuFragment.CustomOnClickListener{
 
     // init fragment
@@ -56,8 +59,11 @@ public class SoulBrownMainActivity extends FragmentActivity
 
     Context context;
 
+    private CuzToast mCuzToast;
+
     public static int INIT_MENU_POSITION = 0;
 
+    private BackPressCloseHandler backPressCloseHandler;
     /**
      * Fragment managing the behaviors, interactions and presentation of the navigation drawer.
      */
@@ -69,7 +75,14 @@ public class SoulBrownMainActivity extends FragmentActivity
 
         context = getApplicationContext();
 
+        mCuzToast = new CuzToast(this);
+
+        backPressCloseHandler = new BackPressCloseHandler(this);
+
         if(AppController.getInstance().getIsUser()) {
+
+            if( !mBaseProgressDialog.isShowing() )
+                mBaseProgressDialog.show();
 
             apiGetMenuList("");
         }
@@ -89,6 +102,9 @@ public class SoulBrownMainActivity extends FragmentActivity
     }
     private void initViews(RetMenuList menuList)
     {
+        if( mBaseProgressDialog.isShowing() )
+            mBaseProgressDialog.dismiss();
+
         if(AppController.getInstance().getIsUser()) {
             if (menuList != null) {
 
@@ -163,38 +179,30 @@ public class SoulBrownMainActivity extends FragmentActivity
 
         ft = getSupportFragmentManager().beginTransaction();
         // Locate Position
-        switch (position) {
-            case 0:
+        if( position == 0)
+        {
+            if(AppController.getInstance().getIsUser())
+            {
+                ft.replace(R.id.container,  userOrderListFragment);
+            }
+            else
+            {
+                ft.replace(R.id.container, ownerOrderListFragment);
 
-                if(AppController.getInstance().getIsUser())
-                {
-                    ft.replace(R.id.container,  userOrderListFragment);
-                }
-                else
-                {
-                    ft.replace(R.id.container, ownerOrderListFragment);
+            }
+        }
+        else
+        {
+            if(AppController.getInstance().getIsUser())
+            {
 
-                }
+                ft.replace(R.id.container,  userStoreMenuFragment);
+            }
+            else
+            {
+                ft.replace(R.id.container, ownerAllOrderListFragment);
 
-                break;
-            case 1:
-            case 2:
-            case 3:
-            case 4:
-
-                if(AppController.getInstance().getIsUser())
-                {
-
-                    ft.replace(R.id.container,  userStoreMenuFragment);
-                }
-                else
-                {
-                    ft.replace(R.id.container, ownerAllOrderListFragment);
-
-                }
-
-                break;
-
+            }
         }
 
         ft.commit();
@@ -335,8 +343,8 @@ public class SoulBrownMainActivity extends FragmentActivity
                         // fail
                         LOG.d("apiSetPushKey Fail " + retCode.ret);
 
-                        Toast.makeText(SoulBrownMainActivity.this, retCode.msg + "(" + retCode.ret + ")", Toast.LENGTH_SHORT).show();
-
+                        //Toast.makeText(SoulBrownMainActivity.this, retCode.msg + "(" + retCode.ret + ")", Toast.LENGTH_SHORT).show();
+                        mCuzToast.showToast(retCode.msg + "(" + retCode.ret + ")",Toast.LENGTH_SHORT);
                     }
 
                 }
@@ -345,7 +353,8 @@ public class SoulBrownMainActivity extends FragmentActivity
                 public void onErrorResponse(VolleyError volleyError) {
 
                     LOG.d("apiSetPushKey VolleyError " + volleyError.getMessage());
-                    Toast.makeText(SoulBrownMainActivity.this, getString(R.string.network_fail), Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(SoulBrownMainActivity.this, getString(R.string.network_fail), Toast.LENGTH_SHORT).show();
+                    mCuzToast.showToast( getString(R.string.network_fail),Toast.LENGTH_SHORT);
 
                 }
             });
@@ -390,8 +399,8 @@ public class SoulBrownMainActivity extends FragmentActivity
                         // fail
                         LOG.d("apiSetPushKey Fail " + retCode.ret);
 
-                        Toast.makeText(SoulBrownMainActivity.this, retCode.msg + "(" + retCode.ret + ")", Toast.LENGTH_SHORT).show();
-
+                        //Toast.makeText(SoulBrownMainActivity.this, retCode.msg + "(" + retCode.ret + ")", Toast.LENGTH_SHORT).show();
+                        mCuzToast.showToast(retCode.msg + "(" + retCode.ret + ")",Toast.LENGTH_SHORT);
                     }
 
                 }
@@ -400,8 +409,8 @@ public class SoulBrownMainActivity extends FragmentActivity
                 public void onErrorResponse(VolleyError volleyError) {
 
                     LOG.d("apiSetPushKey VolleyError " + volleyError.getMessage());
-                    Toast.makeText(SoulBrownMainActivity.this, getString(R.string.network_fail), Toast.LENGTH_SHORT).show();
-
+                    //Toast.makeText(SoulBrownMainActivity.this, getString(R.string.network_fail), Toast.LENGTH_SHORT).show();
+                    mCuzToast.showToast( getString(R.string.network_fail),Toast.LENGTH_SHORT);
                 }
             });
         }
@@ -431,9 +440,15 @@ public class SoulBrownMainActivity extends FragmentActivity
 
                     } else {
                         // fail
+                        if( mBaseProgressDialog.isShowing() )
+                            mBaseProgressDialog.dismiss();
+
                         LOG.d("apiGetMenuList Fail " + retCode.ret);
 
-                        Toast.makeText(SoulBrownMainActivity.this, retCode.msg + "(" + retCode.ret + ")", Toast.LENGTH_SHORT).show();
+                        //Toast.makeText(SoulBrownMainActivity.this, retCode.msg + "(" + retCode.ret + ")", Toast.LENGTH_SHORT).show();
+                        mCuzToast.showToast(retCode.msg + "(" + retCode.ret + ")",Toast.LENGTH_SHORT);
+
+                        finish();
 
                     }
 
@@ -441,9 +456,14 @@ public class SoulBrownMainActivity extends FragmentActivity
             }, new Response.ErrorListener() {
                 @Override
                 public void onErrorResponse(VolleyError volleyError) {
+                    if( mBaseProgressDialog.isShowing() )
+                        mBaseProgressDialog.dismiss();
 
                     LOG.d("apiGetMenuList VolleyError " + volleyError.getMessage());
-                    Toast.makeText(SoulBrownMainActivity.this, getString(R.string.network_fail), Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(SoulBrownMainActivity.this, getString(R.string.network_fail), Toast.LENGTH_SHORT).show();
+                    mCuzToast.showToast( getString(R.string.network_fail),Toast.LENGTH_SHORT);
+
+                    finish();
                 }
             });
         }
@@ -466,24 +486,24 @@ public class SoulBrownMainActivity extends FragmentActivity
         }
         else
         {
-            setResult(RESULT_OK);
-            finish();
-        }
+            backPressCloseHandler.onBackPressed();
 
-        super.onBackPressed();
+            //setResult(RESULT_OK);
+            //finish();
+        }
     }
 
     // flurry
     @Override
     protected void onStart() {
         super.onStart();
-        FlurryAgent.onStartSession(this);
+        //FlurryAgent.onStartSession(this);
     }
 
     @Override
     protected void onStop() {
         super.onStop();
-        FlurryAgent.onEndSession(this);
+        //FlurryAgent.onEndSession(this);
     }
 
 

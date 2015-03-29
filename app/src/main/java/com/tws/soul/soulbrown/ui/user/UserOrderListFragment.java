@@ -31,6 +31,7 @@ import com.tws.common.lib.dialog.CuzDialog;
 import com.tws.common.lib.gms.LocationDefines;
 import com.tws.common.lib.soulbrownlib.OrderDialog;
 import com.tws.common.lib.utils.TimeUtil;
+import com.tws.common.lib.views.CuzToast;
 import com.tws.common.listview.adapter.StickyListAdapter;
 import com.tws.network.data.ArrayOptionData;
 import com.tws.network.data.ArrayOrderData;
@@ -48,7 +49,6 @@ import com.tws.soul.soulbrown.data.Menu;
 import com.tws.soul.soulbrown.gcm.GcmIntentService;
 import com.tws.soul.soulbrown.geofence.GeofenceClient;
 import com.tws.soul.soulbrown.lib.ConvertData;
-import com.tws.soul.soulbrown.lib.Notice;
 import com.tws.soul.soulbrown.lib.StoreInfo;
 import com.tws.soul.soulbrown.pref.PrefOrderInfo;
 import com.tws.soul.soulbrown.pref.PrefUserInfo;
@@ -86,6 +86,8 @@ public class UserOrderListFragment extends BaseFragment implements
     private LinearLayout llHeaderStatusCancel;
     private Button btnHeaderStatusCancel;
 
+    private CuzToast mCuzToast;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -96,7 +98,7 @@ public class UserOrderListFragment extends BaseFragment implements
         mAdapter.notifyDataSetChanged();
         mAdapter.clear();
         */
-        Notice.toast = Toast.makeText(context, "", Toast.LENGTH_SHORT);
+        mCuzToast = new CuzToast(getActivity());
     }
 
     @Override
@@ -365,6 +367,9 @@ public class UserOrderListFragment extends BaseFragment implements
                     if( mBaseProgressDialog.isShowing() )
                         mBaseProgressDialog.dismiss();
 
+                    if( !isAdded() )
+                        return;
+
                     if (refreshLayout != null) {
 
                         if (refreshLayout.isRefreshing())
@@ -568,7 +573,7 @@ public class UserOrderListFragment extends BaseFragment implements
                 orderDialog.getButtonCancel().setText(getString(R.string.cancel));
 
             } else {
-                showToast(getString(R.string.order_select));
+                mCuzToast.showToast( getString(R.string.order_select),Toast.LENGTH_SHORT);
             }
         }
 
@@ -619,12 +624,15 @@ public class UserOrderListFragment extends BaseFragment implements
             if( !mBaseProgressDialog.isShowing() )
                 mBaseProgressDialog.show();
 
-            api.apiOrderMenu(context, userID, storeID, calcTime, listMenu, new Response.Listener<RetOrderMenu>() {
+            api.apiOrderMenu(context, userID, storeID, calcTime, listMenu,true, new Response.Listener<RetOrderMenu>() {
                 @Override
                 public void onResponse(RetOrderMenu retCode) {
 
                     if( mBaseProgressDialog.isShowing() )
                         mBaseProgressDialog.dismiss();
+
+                    if( !isAdded() )
+                        return;
 
                     LOG.d("retCode.result : " + retCode.ret);
                     LOG.d("retCode.errormsg : " + retCode.msg);
@@ -670,7 +678,7 @@ public class UserOrderListFragment extends BaseFragment implements
                         // fail
                         LOG.d("apiOrderMenu Fail " + retCode.ret);
 
-                        showToast(getString(R.string.order_fail)+ " : " + retCode.msg + "[" + retCode.ret + "]");
+                        mCuzToast.showToast( getString(R.string.order_fail)+ " : " + retCode.msg + "[" + retCode.ret + "]",Toast.LENGTH_SHORT);
 
                     }
 
@@ -684,7 +692,7 @@ public class UserOrderListFragment extends BaseFragment implements
 
                     LOG.d("apiOrderMenu VolleyError " + volleyError.getMessage());
 
-                    showToast(getString(R.string.network_fail)+" : " + volleyError.getMessage());
+                    mCuzToast.showToast( getString(R.string.network_fail),Toast.LENGTH_SHORT);
 
                 }
             });
@@ -695,7 +703,7 @@ public class UserOrderListFragment extends BaseFragment implements
 
         initData();
 
-        showToast(getString(R.string.reorder_succ));
+        mCuzToast.showToast( getString(R.string.reorder_succ),Toast.LENGTH_LONG);
 
         String time = orderMenuInfo.arrtime;
         String store = orderMenuInfo.store;
@@ -778,20 +786,6 @@ public class UserOrderListFragment extends BaseFragment implements
         }
     };
 
-    private void showToast(int resID) {
-        if (Notice.toast != null) {
-            Notice.toast.setText(resID);
-            Notice.toast.show();
-        }
-    }
-
-    private void showToast(String msg) {
-        if (Notice.toast != null) {
-            Notice.toast.setText(msg);
-            Notice.toast.show();
-        }
-    }
-
     @Override
     public void onResume() {
         super.onResume();
@@ -810,7 +804,7 @@ public class UserOrderListFragment extends BaseFragment implements
 
             String msg = intent.getStringExtra("msg");
 
-            showToast(msg);
+            mCuzToast.showToast(msg,Toast.LENGTH_SHORT);
 
             initData();
 
@@ -843,12 +837,16 @@ public class UserOrderListFragment extends BaseFragment implements
                     LOG.d("retCode.result : " + retCode.ret);
                     LOG.d("retCode.errormsg : " + retCode.msg);
 
+                    if( !isAdded() )
+                        return;
+
 
                     if (retCode.ret == ServerDefineCode.NET_RESULT_SUCC) {
 
                         // success
                         LOG.d("apiOrderCancel Succ");
-                        showToast(getString(R.string.order_succ_cancel));
+
+                        mCuzToast.showToast( getString(R.string.order_succ_cancel),Toast.LENGTH_SHORT);
                         refreshData();
 
 
@@ -857,7 +855,8 @@ public class UserOrderListFragment extends BaseFragment implements
                         LOG.d("apiOrderCancel Fail " + retCode.ret);
 
                         //showToast("주문 이력 오류 : "+ retCode.errormsg+"["+retCode.result+"]");
-                        showToast(getString(R.string.order_fail)+ " : " + retCode.msg + "[" + retCode.ret + "]");
+
+                        mCuzToast.showToast( getString(R.string.order_fail)+ " : " + retCode.msg + "[" + retCode.ret + "]",Toast.LENGTH_SHORT);
                         refreshData();
                     }
 
@@ -871,7 +870,7 @@ public class UserOrderListFragment extends BaseFragment implements
 
                     LOG.d("apiOrderCancel VolleyError " + volleyError.getMessage());
 
-                    showToast(getString(R.string.network_fail)+" : " + volleyError.getMessage());
+                    mCuzToast.showToast( getString(R.string.network_fail),Toast.LENGTH_SHORT);
 
                 }
             });

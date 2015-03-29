@@ -50,13 +50,16 @@ public class OrderListAdapter extends BaseAdapter implements
     private HashMap<String,String> mOrderDate;
     private ArrayList<ArrayOrderList> mData;
 
+    private int mLayout;
+
     private final int INIT_INDEX = 0;
 
-    public OrderListAdapter(Context context, ArrayList<ArrayOrderList> data, onChangeStatusListener listener) {
+    public OrderListAdapter(Context context, ArrayList<ArrayOrderList> data,int layout, onChangeStatusListener listener) {
 
         this.context = context;
         this.customListener = listener;
         mInflater = LayoutInflater.from(context);
+        mLayout = layout;
 
         mData = data;
 
@@ -143,7 +146,9 @@ public class OrderListAdapter extends BaseAdapter implements
 
         if (convertView == null) {
             holder = new ViewHolder();
-            convertView = mInflater.inflate(R.layout.list_owner_order_info, parent, false);
+
+            //convertView = mInflater.inflate(R.layout.list_owner_order_info, parent, false);
+            convertView = mInflater.inflate(mLayout, parent, false);
             holder.tvOrderKey = (TextView) convertView.findViewById(R.id.row_key);
             holder.tvMenu = (TextView) convertView.findViewById(R.id.row_menu);
             holder.tvPrice = (TextView) convertView.findViewById(R.id.row_price);

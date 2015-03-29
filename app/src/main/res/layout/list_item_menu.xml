@@ -90,22 +90,21 @@
                 android:layout_height="140dp"
                 android:layout_gravity="center_vertical"
                 android:layout_marginRight="6dp"
+                android:background="@drawable/icon_item_bg"
 
                 android:scaleType="centerCrop" />
 
             <com.tws.widget.CuzTextView
-
                 android:background="@drawable/menu_bg"
                 android:id="@+id/item_menu_info_txt"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:padding="@dimen/size_6"
-
                 android:gravity="center"
                 android:text="가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타"
                 android:textColor="#3D454C"
                 android:textSize="@dimen/size_20"
-                android:textStyle="bold" />
+                />
         </LinearLayout>
 
 

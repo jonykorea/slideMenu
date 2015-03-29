@@ -76,7 +76,17 @@ public class MenuListAdapter extends RecyclerView.Adapter<MenuListAdapter.ViewHo
                 viewHolder.menuLayoutOpt02.setVisibility(View.GONE);
                 viewHolder.menuDiv.setVisibility(View.GONE);
 
-                viewHolder.menuTextOpt01.setText(listMenu.get(num).option.get(0).name + " : +"+listMenu.get(num).option.get(0).addprice+"원");
+                int addPrice = listMenu.get(num).option.get(0).addprice;
+
+                if( addPrice != 0)
+                {
+                    viewHolder.menuTextOpt01.setText(listMenu.get(num).option.get(0).name + " +"+addPrice+"원");
+                }
+                else
+                {
+                    viewHolder.menuTextOpt01.setText(listMenu.get(num).option.get(0).name);
+                }
+
             }
             else
             {
@@ -87,8 +97,28 @@ public class MenuListAdapter extends RecyclerView.Adapter<MenuListAdapter.ViewHo
                 viewHolder.menuLayoutOpt02.setVisibility(View.VISIBLE);
                 viewHolder.menuDiv.setVisibility(View.VISIBLE);
 
-                viewHolder.menuTextOpt01.setText(listMenu.get(num).option.get(0).name + " : +"+listMenu.get(num).option.get(0).addprice+"원");
-                viewHolder.menuTextOpt02.setText(listMenu.get(num).option.get(1).name + " : +"+listMenu.get(num).option.get(1).addprice+"원");
+                int addPrice = listMenu.get(num).option.get(0).addprice;
+
+                if( addPrice != 0)
+                {
+                    viewHolder.menuTextOpt01.setText(listMenu.get(num).option.get(0).name + " +"+addPrice+"원");
+                }
+                else
+                {
+                    viewHolder.menuTextOpt01.setText(listMenu.get(num).option.get(0).name);
+                }
+
+                addPrice = listMenu.get(num).option.get(1).addprice;
+
+                if( addPrice != 0)
+                {
+                    viewHolder.menuTextOpt02.setText(listMenu.get(num).option.get(1).name + " +"+addPrice+"원");
+                }
+                else
+                {
+                    viewHolder.menuTextOpt02.setText(listMenu.get(num).option.get(1).name);
+                }
+
             }
 
         }

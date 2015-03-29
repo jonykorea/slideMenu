@@ -46,7 +46,7 @@ public class PrefOrderInfo {
     }
 
     public String getSettingTime() {
-        return mPrefOrderInfo.getString(PREF_KEY_SETTING_TIME, "30분");
+        return mPrefOrderInfo.getString(PREF_KEY_SETTING_TIME, "10분");
     }
 
     public void setOrderStore(String storeID) {

@@ -27,6 +27,7 @@ import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.gcm.GoogleCloudMessaging;
 import com.tws.common.lib.dialog.CuzDialog;
+import com.tws.common.lib.views.CuzToast;
 import com.tws.network.data.RetCode;
 import com.tws.network.lib.ApiAgent;
 import com.tws.soul.soulbrown.R;
@@ -47,6 +48,7 @@ public class SettingActivity extends BaseActivity {
     private final String INFO_URL= "http://coffeebrewbrew.blogspot.kr/2015/03/close-beta.html";
     private final String EVENT_URL= "https://www.facebook.com/coffeebrewbrew/posts/856353921103968";
 
+    private CuzToast mCuzToast;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,6 +56,8 @@ public class SettingActivity extends BaseActivity {
         setContentView(R.layout.activity_setting);
 
         context = getApplicationContext();
+
+        mCuzToast = new CuzToast(this);
 
         //Button btnPushOn = (Button)findViewById(R.id.setting_push_on_btn);
         LinearLayout llPushStatus =(LinearLayout)findViewById(R.id.setting_push_layout);
@@ -316,12 +320,15 @@ public class SettingActivity extends BaseActivity {
                         // success
                         if(TextUtils.isEmpty(regID)) {
                             setPushStatus(0);
-                            Toast.makeText(SettingActivity.this, getString(R.string.push_msg_off), Toast.LENGTH_SHORT).show();
+                            //Toast.makeText(SettingActivity.this, getString(R.string.push_msg_off), Toast.LENGTH_SHORT).show();
+                            mCuzToast.showToast(getString(R.string.push_msg_off),Toast.LENGTH_SHORT);
+
                         }
                         else{
                             setPushStatus(1);
                             gcmClient.savePushKey(regID);
-                            Toast.makeText(SettingActivity.this, getString(R.string.push_msg_on), Toast.LENGTH_SHORT).show();
+                            //Toast.makeText(SettingActivity.this, getString(R.string.push_msg_on), Toast.LENGTH_SHORT).show();
+                            mCuzToast.showToast(getString(R.string.push_msg_on),Toast.LENGTH_SHORT);
 
                         }
 
@@ -330,7 +337,8 @@ public class SettingActivity extends BaseActivity {
                         // fail
                         LOG.d("apiSetPushKey Fail " + retCode.ret);
 
-                        Toast.makeText(SettingActivity.this, retCode.msg + "(" + retCode.ret + ")", Toast.LENGTH_SHORT).show();
+                        //Toast.makeText(SettingActivity.this, retCode.msg + "(" + retCode.ret + ")", Toast.LENGTH_SHORT).show();
+                        mCuzToast.showToast(retCode.msg + "(" + retCode.ret + ")",Toast.LENGTH_SHORT);
 
                     }
 
@@ -343,7 +351,8 @@ public class SettingActivity extends BaseActivity {
                         mBaseProgressDialog.dismiss();
 
                     LOG.d("apiSetPushKey VolleyError " + volleyError.getMessage());
-                    Toast.makeText(SettingActivity.this, getString(R.string.network_fail), Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(SettingActivity.this, getString(R.string.network_fail), Toast.LENGTH_SHORT).show();
+                    mCuzToast.showToast( getString(R.string.network_fail),Toast.LENGTH_SHORT);
 
                 }
             });
@@ -415,7 +424,8 @@ public class SettingActivity extends BaseActivity {
                         // fail
                         LOG.d("apiRemovePushKey Fail " + retCode.ret);
 
-                        Toast.makeText(SettingActivity.this, retCode.msg + "(" + retCode.ret + ")", Toast.LENGTH_SHORT).show();
+                        //Toast.makeText(SettingActivity.this, retCode.msg + "(" + retCode.ret + ")", Toast.LENGTH_SHORT).show();
+                        mCuzToast.showToast(retCode.msg + "(" + retCode.ret + ")",Toast.LENGTH_SHORT);
 
                     }
 
@@ -428,7 +438,9 @@ public class SettingActivity extends BaseActivity {
                         mBaseProgressDialog.dismiss();
 
                     LOG.d("apiRemovePushKey VolleyError " + volleyError.getMessage());
-                    Toast.makeText(SettingActivity.this, getString(R.string.network_fail), Toast.LENGTH_SHORT).show();
+
+                    //Toast.makeText(SettingActivity.this, getString(R.string.network_fail), Toast.LENGTH_SHORT).show();
+                    mCuzToast.showToast( getString(R.string.network_fail),Toast.LENGTH_SHORT);
 
                 }
             });
@@ -451,12 +463,12 @@ public class SettingActivity extends BaseActivity {
     @Override
     protected void onStart() {
         super.onStart();
-        FlurryAgent.onStartSession(this);
+        //FlurryAgent.onStartSession(this);
     }
 
     @Override
     protected void onStop() {
         super.onStop();
-        FlurryAgent.onEndSession(this);
+        //FlurryAgent.onEndSession(this);
     }
 }

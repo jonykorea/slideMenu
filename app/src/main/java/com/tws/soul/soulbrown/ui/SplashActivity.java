@@ -38,6 +38,8 @@ public class SplashActivity extends BaseActivity implements TextView.OnEditorAct
     private EditText etLoginInput;
     private Button btLoginID;
 
+    private CuzToast mCuzToast;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -45,6 +47,8 @@ public class SplashActivity extends BaseActivity implements TextView.OnEditorAct
         setContentView(R.layout.activity_splash);
 
         context = getApplicationContext();
+
+        mCuzToast = new CuzToast(this);
 
         //CuzToast cuzToast = new CuzToast(context);
         //cuzToast.showToast("Test",Toast.LENGTH_SHORT);
@@ -62,7 +66,8 @@ public class SplashActivity extends BaseActivity implements TextView.OnEditorAct
 
                 if (etLoginInput.getText().toString().length() == 0) {
                     showHideLogin(true);
-                    Toast.makeText(SplashActivity.this, getString(R.string.check_nickname), Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(SplashActivity.this, getString(R.string.check_nickname), Toast.LENGTH_SHORT).show();
+                    mCuzToast.showToast( getString(R.string.check_nickname),Toast.LENGTH_SHORT);
                 } else {
                     showHideLogin(false);
                     String userID = etLoginInput.getText().toString();
@@ -85,7 +90,8 @@ public class SplashActivity extends BaseActivity implements TextView.OnEditorAct
 
             if (etLoginInput.getText().toString().length() == 0) {
                 showHideLogin(true);
-                Toast.makeText(SplashActivity.this, getString(R.string.check_nickname), Toast.LENGTH_SHORT).show();
+                //Toast.makeText(SplashActivity.this, getString(R.string.check_nickname), Toast.LENGTH_SHORT).show();
+                mCuzToast.showToast( getString(R.string.check_nickname),Toast.LENGTH_SHORT);
             } else {
                 showHideLogin(false);
                 String userID = etLoginInput.getText().toString();
@@ -170,7 +176,8 @@ public class SplashActivity extends BaseActivity implements TextView.OnEditorAct
                             startActivityForResult(intent, ACT_RESULT_CODE);
                         } else {
                             showHideLogin(true);
-                            Toast.makeText(SplashActivity.this, getString(R.string.check_user), Toast.LENGTH_SHORT).show();
+                            //Toast.makeText(SplashActivity.this, getString(R.string.check_user), Toast.LENGTH_SHORT).show();
+                            mCuzToast.showToast( getString(R.string.check_user),Toast.LENGTH_SHORT);
                         }
 
 
@@ -179,7 +186,8 @@ public class SplashActivity extends BaseActivity implements TextView.OnEditorAct
                         // fail
                         LOG.d("apiSetUserLoc Fail " + retCode.ret);
 
-                        Toast.makeText(SplashActivity.this, retCode.msg + "(" + retCode.ret + ")", Toast.LENGTH_SHORT).show();
+                        //Toast.makeText(SplashActivity.this, retCode.msg + "(" + retCode.ret + ")", Toast.LENGTH_SHORT).show();
+                        mCuzToast.showToast(retCode.msg + "(" + retCode.ret + ")",Toast.LENGTH_SHORT);
 
                     }
 
@@ -191,8 +199,8 @@ public class SplashActivity extends BaseActivity implements TextView.OnEditorAct
                     showHideLogin(true);
 
                     LOG.d("apiSetUserLoc VolleyError " + volleyError.getMessage());
-                    Toast.makeText(SplashActivity.this, getString(R.string.network_fail), Toast.LENGTH_SHORT).show();
-
+                    //Toast.makeText(SplashActivity.this, getString(R.string.network_fail), Toast.LENGTH_SHORT).show();
+                    mCuzToast.showToast( getString(R.string.network_fail),Toast.LENGTH_SHORT);
                 }
             });
         }
@@ -242,12 +250,12 @@ public class SplashActivity extends BaseActivity implements TextView.OnEditorAct
     @Override
     protected void onStart() {
         super.onStart();
-        FlurryAgent.onStartSession(this);
+        //FlurryAgent.onStartSession(this);
     }
 
     @Override
     protected void onStop() {
         super.onStop();
-        FlurryAgent.onEndSession(this);
+       // FlurryAgent.onEndSession(this);
     }
 }
