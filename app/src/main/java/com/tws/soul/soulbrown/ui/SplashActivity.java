@@ -3,6 +3,8 @@ package com.tws.soul.soulbrown.ui;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -151,15 +153,34 @@ public class SplashActivity extends BaseActivity implements TextView.OnEditorAct
                     LOG.d("retCode.result : " + retCode.ret);
                     LOG.d("retCode.errormsg : " + retCode.msg);
                     LOG.d("retCode.usertype : " + retCode.type);
+                    LOG.d("retCode.appver : " + retCode.appver);
+                    LOG.d("retCode.appurl : " + retCode.appurl);
 
 
                     if (retCode.ret == 1) {
+
+                        // version check!
+                        String version = getVersionName(context);
+
+                        LOG.d("apiUserChecker version : "+ version);
+
+                        if( version.equals(retCode.appver))
+                        {
+                            // 버젼정보 같을 경우
+
+                        }
+                        else
+                        {
+                            // 버젼정보 다를 경우
+                            String url = retCode.appurl;
+
+                        }
 
                         // success
 
                         if (retCode.type == Const.USER || retCode.type == Const.OWNER) {
 
-                            LOG.d("apiSetUserLoc Succ");
+                            LOG.d("apiUserChecker Succ");
 
                             PrefUserInfo prefUserInfo = new PrefUserInfo(SplashActivity.this);
 
@@ -184,7 +205,7 @@ public class SplashActivity extends BaseActivity implements TextView.OnEditorAct
                     } else {
                         showHideLogin(true);
                         // fail
-                        LOG.d("apiSetUserLoc Fail " + retCode.ret);
+                        LOG.d("apiUserChecker Fail " + retCode.ret);
 
                         //Toast.makeText(SplashActivity.this, retCode.msg + "(" + retCode.ret + ")", Toast.LENGTH_SHORT).show();
                         mCuzToast.showToast(retCode.msg + "(" + retCode.ret + ")",Toast.LENGTH_SHORT);
@@ -198,11 +219,21 @@ public class SplashActivity extends BaseActivity implements TextView.OnEditorAct
 
                     showHideLogin(true);
 
-                    LOG.d("apiSetUserLoc VolleyError " + volleyError.getMessage());
+                    LOG.d("apiUserChecker VolleyError " + volleyError.getMessage());
                     //Toast.makeText(SplashActivity.this, getString(R.string.network_fail), Toast.LENGTH_SHORT).show();
                     mCuzToast.showToast( getString(R.string.network_fail),Toast.LENGTH_SHORT);
                 }
             });
+        }
+    }
+
+    public static String getVersionName(Context context)
+    {
+        try {
+            PackageInfo pi= context.getPackageManager().getPackageInfo(context.getPackageName(), 0);
+            return pi.versionName;
+        } catch (PackageManager.NameNotFoundException e) {
+            return null;
         }
     }
 
