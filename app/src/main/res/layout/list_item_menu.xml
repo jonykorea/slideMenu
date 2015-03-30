@@ -92,7 +92,7 @@
                 android:layout_marginRight="6dp"
                 android:background="@drawable/icon_item_bg"
 
-                android:scaleType="centerCrop" />
+                />
 
             <com.tws.widget.CuzTextView
                 android:background="@drawable/menu_bg"
@@ -101,7 +101,7 @@
                 android:layout_height="match_parent"
                 android:padding="@dimen/size_6"
                 android:gravity="center"
-                android:text="가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타"
+                android:text=""
                 android:textColor="#3D454C"
                 android:textSize="@dimen/size_20"
                 />

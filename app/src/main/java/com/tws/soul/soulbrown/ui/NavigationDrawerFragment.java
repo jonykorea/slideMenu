@@ -256,6 +256,8 @@ public class NavigationDrawerFragment extends Fragment {
             @Override
             public void onDrawerOpened(View view) {
 
+                mCallbacks.onChangeDrawerLayoutOpened(mCurrentSelectedPosition);
+
             }
 
             @Override
@@ -332,6 +334,8 @@ public class NavigationDrawerFragment extends Fragment {
         void onNavigationDrawerItemSelected(int position);
 
         void onChangeDrawerLayout(int position);
+
+        void onChangeDrawerLayoutOpened(int position);
     }
 
     public void openCloseDrawerMenu()

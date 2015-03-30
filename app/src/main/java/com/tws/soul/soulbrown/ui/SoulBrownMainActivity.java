@@ -1,7 +1,14 @@
 package com.tws.soul.soulbrown.ui;
 
+import android.app.ActionBar;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
+import android.graphics.Bitmap;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.Drawable;
 import android.location.Location;
 import android.os.Handler;
 import android.os.Message;
@@ -12,12 +19,20 @@ import android.os.Bundle;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 import android.support.v4.widget.DrawerLayout;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.app.AppController;
 import com.app.define.LOG;
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.load.resource.drawable.GlideDrawable;
+import com.bumptech.glide.request.animation.GlideAnimation;
+import com.bumptech.glide.request.target.SimpleTarget;
 import com.flurry.android.FlurryAgent;
 import com.tws.common.lib.gms.LocationDefines;
 import com.tws.common.lib.gms.LocationGmsClient;
@@ -30,6 +45,7 @@ import com.tws.network.lib.ApiAgent;
 import com.tws.soul.soulbrown.R;
 import com.tws.soul.soulbrown.base.BaseFragmentActivity;
 import com.tws.soul.soulbrown.gcm.GcmClient;
+import com.tws.soul.soulbrown.gcm.GcmIntentService;
 import com.tws.soul.soulbrown.lib.BackPressCloseHandler;
 import com.tws.soul.soulbrown.pref.PrefStoreInfo;
 import com.tws.soul.soulbrown.pref.PrefUserInfo;
@@ -42,6 +58,11 @@ import java.io.IOException;
 import java.util.StringTokenizer;
 import java.util.concurrent.Callable;
 import java.util.concurrent.atomic.AtomicInteger;
+
+import android.widget.RelativeLayout.LayoutParams;
+
+import jp.wasabeef.glide.transformations.RoundedCornersTransformation;
+import src.com.wunderlist.slidinglayer.SlidingLayer;
 
 
 public class SoulBrownMainActivity extends BaseFragmentActivity
@@ -75,6 +96,8 @@ public class SoulBrownMainActivity extends BaseFragmentActivity
 
         context = getApplicationContext();
 
+        setCustomActionBar();
+
         mCuzToast = new CuzToast(this);
 
         backPressCloseHandler = new BackPressCloseHandler(this);
@@ -88,8 +111,28 @@ public class SoulBrownMainActivity extends BaseFragmentActivity
         }
         else
         {
-            initViews(null);
+            bindViews(null);
         }
+
+    }
+
+    private void setCustomActionBar()
+    {
+
+        ActionBar actionBar = getActionBar();
+        actionBar.setBackgroundDrawable(new ColorDrawable(Color.parseColor("#F2F4F5")));
+
+        actionBar.setDisplayShowTitleEnabled(false);
+        actionBar.setDisplayHomeAsUpEnabled(false);
+        actionBar.setDisplayUseLogoEnabled(false);
+        actionBar.setDisplayShowHomeEnabled(false);
+        actionBar.setHomeButtonEnabled(false);
+        actionBar.setIcon(null);
+
+        LayoutInflater inflater = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        View actionBarView = inflater.inflate(R.layout.actionbar_custom_layout, null);
+        getActionBar().setCustomView(actionBarView);
+        getActionBar().setDisplayShowCustomEnabled(true);
 
     }
 
@@ -100,7 +143,7 @@ public class SoulBrownMainActivity extends BaseFragmentActivity
     {
         return mMenuList;
     }
-    private void initViews(RetMenuList menuList)
+    private void bindViews(RetMenuList menuList)
     {
         if( mBaseProgressDialog.isShowing() )
             mBaseProgressDialog.dismiss();
@@ -157,9 +200,102 @@ public class SoulBrownMainActivity extends BaseFragmentActivity
         requestLocation();
 
         onChangeDrawerLayout(INIT_MENU_POSITION);
+
+        initSlidingState();
+
     }
 
+    private SlidingLayer mSlidingLayer;
+    private ImageView mIvSlidingLayer;
 
+    private void openSliding(String url)
+    {
+        if(mSlidingLayer.isClosed() && mClosedSlidingState) {
+
+
+            Glide.with(this).load(url)
+                    .bitmapTransform(new RoundedCornersTransformation(Glide.get(this).getBitmapPool(), 30, 0))
+                    .diskCacheStrategy(DiskCacheStrategy.ALL)
+                    .into(new SimpleTarget<GlideDrawable>() {
+                        @Override
+                        public void onResourceReady(GlideDrawable resource, GlideAnimation<? super GlideDrawable> glideAnimation) {
+
+                            mIvSlidingLayer.setImageDrawable(resource);
+
+                            mSlidingLayer.openLayer(true);
+
+                        }
+                    });
+
+
+        }
+    }
+    private void closeSliding()
+    {
+        if(mSlidingLayer.isOpened() && mOpenedSlidingState)
+         mSlidingLayer.closeLayer(true);
+    }
+
+    boolean mClosedSlidingState = true;
+    boolean mOpenedSlidingState = false;
+
+    private void initSlidingState() {
+
+        mSlidingLayer = (SlidingLayer) findViewById(R.id.slidingLayer1);
+        mIvSlidingLayer = (ImageView) findViewById(R.id.slidinglayer_image);
+
+        mSlidingLayer.setStickTo(SlidingLayer.STICK_TO_BOTTOM);
+
+        LayoutParams rlp = (LayoutParams) mSlidingLayer.getLayoutParams();
+        rlp.width = LayoutParams.MATCH_PARENT;
+        rlp.height = LayoutParams.MATCH_PARENT;
+        mSlidingLayer.setLayoutParams(rlp);
+
+        mSlidingLayer.setShadowSize(0);
+        mSlidingLayer.setShadowDrawable(null);
+
+        mSlidingLayer.setOffsetDistance(0);
+        mSlidingLayer.setPreviewOffsetDistance(-1);
+
+        mSlidingLayer.setOnInteractListener(new SlidingLayer.OnInteractListener() {
+            @Override
+            public void onOpen() {
+
+            }
+
+            @Override
+            public void onShowPreview() {
+
+            }
+
+            @Override
+            public void onClose() {
+
+            }
+
+            @Override
+            public void onOpened() {
+
+                mClosedSlidingState = false;
+                mOpenedSlidingState = true;
+
+            }
+
+            @Override
+            public void onPreviewShowed() {
+
+            }
+
+            @Override
+            public void onClosed() {
+
+                mClosedSlidingState = true;
+                mOpenedSlidingState = false;
+
+            }
+        });
+
+    }
 
     @Override
     public void onNavigationDrawerItemSelected(int position) {
@@ -172,6 +308,15 @@ public class SoulBrownMainActivity extends BaseFragmentActivity
     public void onChangeDrawerLayout(int position) {
 
     }
+    @Override
+    public void onChangeDrawerLayoutOpened(int position) {
+
+        if(mSlidingLayer.isOpened())
+            closeSliding();
+
+    }
+
+
 
     private void selectItem(int position) {
 
@@ -436,7 +581,7 @@ public class SoulBrownMainActivity extends BaseFragmentActivity
                     if (retCode.ret == 1) {
 
                         // success
-                        initViews(retCode);
+                        bindViews(retCode);
 
                     } else {
                         // fail
@@ -469,16 +614,14 @@ public class SoulBrownMainActivity extends BaseFragmentActivity
         }
     }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-
-    }
 
     @Override
     public void onBackPressed() {
 
-
+        if(mSlidingLayer.isOpened()) {
+            closeSliding();
+            return;
+        }
         if(mNavigationDrawerFragment.isDrawerOpen()) {
             mNavigationDrawerFragment.openCloseDrawerMenu();
 
@@ -488,7 +631,7 @@ public class SoulBrownMainActivity extends BaseFragmentActivity
         {
             backPressCloseHandler.onBackPressed();
 
-            //setResult(RESULT_OK);
+            ///setResult(RESULT_OK);
             //finish();
         }
     }
@@ -505,6 +648,37 @@ public class SoulBrownMainActivity extends BaseFragmentActivity
         super.onStop();
         //FlurryAgent.onEndSession(this);
     }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        LocalBroadcastManager.getInstance(context).registerReceiver(SlidingImageSync, new IntentFilter("image_url"));
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        LocalBroadcastManager.getInstance(context).unregisterReceiver(SlidingImageSync);
+    }
+
+    private BroadcastReceiver SlidingImageSync = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+
+            String url = intent.getStringExtra("url");
+
+            //mCuzToast.showToast(msg,Toast.LENGTH_SHORT);
+            if(mSlidingLayer != null)
+            {
+                LOG.d("SlidingImageSync url " + url);
+
+                openSliding(url);
+            }
+
+
+
+        }
+    };
 
 
 }

@@ -1,6 +1,12 @@
 package com.tws.soul.soulbrown.lib;
 
+import android.content.Context;
 import android.location.Location;
+import android.location.LocationManager;
+import android.util.Log;
+import android.widget.Toast;
+
+import com.tws.soul.soulbrown.service.LocationService;
 
 /**
  * Created by Jony on 2015-03-10.
@@ -43,5 +49,21 @@ public class GPSUtils {
         }
 
         return retDistance;
+    }
+
+    public static boolean getLocaionProvider(Context context)
+    {
+        LocationManager locationManager = (LocationManager)context.getSystemService(Context.LOCATION_SERVICE);
+
+        boolean isNetworkProvider = locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
+        boolean isGPSProvider = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
+
+        if( !isNetworkProvider && !isGPSProvider)
+        {
+            return false;
+        }
+
+        return true;
+
     }
 }

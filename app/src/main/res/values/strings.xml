@@ -22,6 +22,7 @@
 
     <string name="store_all_list">완료 내역</string>
     <string name="orderlist">주문 내역</string>
+    <string name="gps_fail">원활한 서비스를 위해 위치정보 동의가 필요합니다.</string>
     <string name="order_succ">정상적으로 주문되었습니다. 주문하신 음료가 준비되면 알람이 전달됩니다.</string>
     <string name="reorder_succ">정상적으로 재주문되었습니다. 주문하신 음료가 준비되면 알람이 전달됩니다.</string>
     <string name="order_succ_cancel">정상적으로 주문취소되었습니다.</string>
@@ -54,6 +55,7 @@
     <string name="setting_push_status">Push Message 상태</string>
     <string name="setting_mv_browser">웹페이지로 이동합니다.</string>
     <string name="setting_logout_action">로그아웃 하시겠습니까?</string>
+    <string name="setting_logout_detail">로그아웃시 주문된 음료에 대한 알람을 받으실 수 없습니다.</string>
     <string name="finish">\'뒤로\' 버튼을 한번 더 누르시면 종료됩니다.</string>
 
 

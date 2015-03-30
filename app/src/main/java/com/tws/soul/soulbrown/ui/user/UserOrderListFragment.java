@@ -49,6 +49,7 @@ import com.tws.soul.soulbrown.data.Menu;
 import com.tws.soul.soulbrown.gcm.GcmIntentService;
 import com.tws.soul.soulbrown.geofence.GeofenceClient;
 import com.tws.soul.soulbrown.lib.ConvertData;
+import com.tws.soul.soulbrown.lib.GPSUtils;
 import com.tws.soul.soulbrown.lib.StoreInfo;
 import com.tws.soul.soulbrown.pref.PrefOrderInfo;
 import com.tws.soul.soulbrown.pref.PrefUserInfo;
@@ -731,6 +732,18 @@ public class UserOrderListFragment extends BaseFragment implements
         alarmManagerBroadcastReceiver.setRepeatTimer(context, calcUnixTime);
 
         geofenceHanlder.sendEmptyMessage(GeofenceClient.SET_GEOFENCE);
+
+        if(!GPSUtils.getLocaionProvider(context))
+        {
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    if( mCuzToast != null)
+                        mCuzToast.showToast( getString(R.string.gps_fail),Toast.LENGTH_LONG);
+
+                }
+            },3000);
+        }
 
     }
 

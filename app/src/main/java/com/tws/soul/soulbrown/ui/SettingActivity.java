@@ -144,8 +144,16 @@ public class SettingActivity extends BaseActivity {
 
                 if(mBaseDialog == null || !mBaseDialog.isShowing()) {
 
+                    String msg = getString(R.string.setting_logout_action);
+                    if( AppController.getInstance().getIsUser() )
+                    {
+                        msg = getString(R.string.setting_logout_detail) +"\n"+getString(R.string.setting_logout_action);
+                    }
+
+
+
                     mBaseDialog = new CuzDialog(SettingActivity.this,
-                            getString(R.string.confirm), getString(R.string.setting_logout_action));
+                            getString(R.string.confirm), msg);
 
                     mBaseDialog.show();
 

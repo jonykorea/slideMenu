@@ -19,6 +19,7 @@ import com.tws.common.lib.utils.FileLOG;
 import com.tws.network.data.RetCode;
 import com.tws.network.data.ServerDefineCode;
 import com.tws.network.lib.ApiAgent;
+import com.tws.soul.soulbrown.lib.GPSUtils;
 import com.tws.soul.soulbrown.pref.PrefUserInfo;
 
 public class LocationService extends Service {
@@ -60,6 +61,8 @@ public class LocationService extends Service {
 
     // apiSetUserLoc
     public void apiSetUserLoc(Location location) {
+
+
 
         FileLOG.writeLog("LocationService : apiSetUserLoc");
 

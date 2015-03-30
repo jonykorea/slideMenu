@@ -1,8 +1,10 @@
 package com.tws.common.listview.adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -15,12 +17,18 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.load.engine.bitmap_recycle.BitmapPool;
 import com.tws.network.data.ArrayOptionData;
 import com.tws.soul.soulbrown.R;
 import com.tws.soul.soulbrown.data.Menu;
 import com.tws.soul.soulbrown.lib.ConvertData;
+import com.tws.soul.soulbrown.pref.PrefStoreInfo;
 
 import java.util.List;
+
+import jp.wasabeef.glide.transformations.RoundedCornersTransformation;
+
 /**
  * Created by Jony on 2015-01-11.
  */
@@ -40,12 +48,14 @@ public class MenuListAdapter extends RecyclerView.Adapter<MenuListAdapter.ViewHo
     private Context mContext;
 
     private int itemCount = 0;
+    private BitmapPool mPool;
 
     public MenuListAdapter(List<Menu> listMenu, int rowLayout, Context context, CuzOnClickListener listener) {
         this.listMenu = listMenu;
         this.rowLayout = rowLayout;
         this.mContext = context;
         this.customListener = listener;
+        this.mPool = Glide.get(mContext).getBitmapPool();
     }
 
     @Override
@@ -148,7 +158,25 @@ public class MenuListAdapter extends RecyclerView.Adapter<MenuListAdapter.ViewHo
             viewHolder.menuArrow.setVisibility(View.GONE);
         }
 
-        Glide.with(mContext).load(menu.image).into(viewHolder.menuImage);
+        //Glide.with(mContext).load(menu.image).tr.into(viewHolder.menuImage);
+
+        Glide.with(mContext).load(menu.image)
+                .bitmapTransform(new RoundedCornersTransformation(mPool, 30, 0))
+                .diskCacheStrategy(DiskCacheStrategy.ALL)
+                .into((viewHolder.menuImage));
+
+        final String imageUrl = menu.image;
+
+        viewHolder.menuImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                Log.i("jony","imageUrl : "+ imageUrl);
+
+                sendSlidingImage(imageUrl);
+            }
+        });
+
 
         final TextView cntViewOpt01 = viewHolder.menuCountOpt01;
         final TextView cntViewOpt02 = viewHolder.menuCountOpt02;
@@ -302,4 +330,12 @@ public class MenuListAdapter extends RecyclerView.Adapter<MenuListAdapter.ViewHo
 
     }
 
+    private void sendSlidingImage(String url)
+    {
+        Intent intentSliding = new Intent("image_url");
+
+        intentSliding.putExtra("url", url);
+
+        LocalBroadcastManager.getInstance(mContext).sendBroadcast(intentSliding);
+    }
 }
