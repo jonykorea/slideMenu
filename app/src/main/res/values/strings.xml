@@ -58,6 +58,7 @@
     <string name="setting_logout_action">로그아웃 하시겠습니까?</string>
     <string name="setting_logout_detail">로그아웃시 주문된 음료에 대한 알람을 받으실 수 없습니다.</string>
     <string name="finish">\'뒤로\' 버튼을 한번 더 누르시면 종료됩니다.</string>
+    <string name="max_item">주문 가능한 음료는 최대 10잔입니다.</string>
 
 
 </resources>
