@@ -157,6 +157,8 @@ public class MenuListAdapter extends RecyclerView.Adapter<MenuListAdapter.ViewHo
                 .diskCacheStrategy(DiskCacheStrategy.ALL)
                 .into((viewHolder.menuImage));
 
+
+
         final String imageUrl = menu.image;
 
         viewHolder.menuImage.setOnClickListener(new View.OnClickListener() {

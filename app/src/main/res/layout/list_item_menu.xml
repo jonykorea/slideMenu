@@ -86,7 +86,7 @@
 
             <ImageView
                 android:id="@+id/item_menu_info_image"
-                android:layout_width="140dp"
+                android:layout_width="100dp"
                 android:layout_height="140dp"
                 android:layout_gravity="center_vertical"
                 android:layout_marginRight="6dp"
