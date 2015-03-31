@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
+import android.net.Uri;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.KeyEvent;
@@ -18,8 +19,10 @@ import android.widget.TextView;
 import android.widget.Toast;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.app.AppController;
 import com.app.define.LOG;
 import com.flurry.android.FlurryAgent;
+import com.tws.common.lib.dialog.CuzDialog;
 import com.tws.common.lib.views.CuzToast;
 import com.tws.network.data.ExtraType;
 import com.tws.network.data.RetUserChecker;
@@ -167,39 +170,68 @@ public class SplashActivity extends BaseActivity implements TextView.OnEditorAct
                         if( version.equals(retCode.appver))
                         {
                             // 버젼정보 같을 경우
+                            // success
+
+                            if (retCode.type == Const.USER || retCode.type == Const.OWNER) {
+
+                                LOG.d("apiUserChecker Succ");
+
+                                PrefUserInfo prefUserInfo = new PrefUserInfo(SplashActivity.this);
+
+                                prefUserInfo.setUserID(userID);
+
+                                if (retCode.type == Const.USER) {
+                                    prefUserInfo.setUserType(true);
+                                } else {
+                                    prefUserInfo.setUserType(false);
+                                }
+
+                                Intent intent = new Intent(context, SoulBrownMainActivity.class);
+                                intent.putExtra(ExtraType.USER_TYPE, retCode.type);
+                                startActivityForResult(intent, ACT_RESULT_CODE);
+                            } else {
+                                showHideLogin(true);
+                                //Toast.makeText(SplashActivity.this, getString(R.string.check_user), Toast.LENGTH_SHORT).show();
+                                mCuzToast.showToast( getString(R.string.check_user),Toast.LENGTH_SHORT);
+                            }
 
                         }
                         else
                         {
                             // 버젼정보 다를 경우
-                            String url = retCode.appurl;
+                            final String url = retCode.appurl;
 
-                        }
+                            // 팝업 노출
 
-                        // success
+                            if(mBaseDialog == null || !mBaseDialog.isShowing()) {
 
-                        if (retCode.type == Const.USER || retCode.type == Const.OWNER) {
 
-                            LOG.d("apiUserChecker Succ");
+                                mBaseDialog = new CuzDialog(SplashActivity.this,
+                                        getString(R.string.confirm), getString(R.string.new_version));
 
-                            PrefUserInfo prefUserInfo = new PrefUserInfo(SplashActivity.this);
+                                mBaseDialog.show();
 
-                            prefUserInfo.setUserID(userID);
+                                mBaseDialog.setCancelable(false);
 
-                            if (retCode.type == Const.USER) {
-                                prefUserInfo.setUserType(true);
-                            } else {
-                                prefUserInfo.setUserType(false);
+                                mBaseDialog.getButtonCancel().setVisibility(View.GONE);
+                                mBaseDialog.getButtonAccept().setText(getString(R.string.confirm));
+
+                                mBaseDialog.setOnAcceptButtonClickListener(new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View view) {
+
+                                        mBaseDialog.dismiss();
+
+                                        callBrowser(url);
+
+
+                                    }
+                                });
                             }
 
-                            Intent intent = new Intent(context, SoulBrownMainActivity.class);
-                            intent.putExtra(ExtraType.USER_TYPE, retCode.type);
-                            startActivityForResult(intent, ACT_RESULT_CODE);
-                        } else {
-                            showHideLogin(true);
-                            //Toast.makeText(SplashActivity.this, getString(R.string.check_user), Toast.LENGTH_SHORT).show();
-                            mCuzToast.showToast( getString(R.string.check_user),Toast.LENGTH_SHORT);
                         }
+
+
 
 
                     } else {
@@ -225,6 +257,15 @@ public class SplashActivity extends BaseActivity implements TextView.OnEditorAct
                 }
             });
         }
+    }
+
+    private void callBrowser(String url)
+    {
+        Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+        startActivity(browserIntent);
+
+        finish();
+
     }
 
     public static String getVersionName(Context context)

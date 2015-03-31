@@ -87,7 +87,7 @@ public class StoreMenuFragment extends BaseFragment {
 
         mCuzToast = new CuzToast(getActivity());
 
-        if (mStoreID == null || storeInfo == null) {
+        if (mStoreID == null || storeInfo == null || storeInfo.menu == null) {
             getActivity().finish();
             return;
         }

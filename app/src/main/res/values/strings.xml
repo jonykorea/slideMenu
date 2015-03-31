@@ -20,6 +20,7 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
 
 
+    <string name="new_version">새로운 버젼이 있습니다. 웹페이지로 이동합니다.</string>
     <string name="store_all_list">완료 내역</string>
     <string name="orderlist">주문 내역</string>
     <string name="gps_fail">원활한 서비스를 위해 위치정보 동의가 필요합니다.</string>

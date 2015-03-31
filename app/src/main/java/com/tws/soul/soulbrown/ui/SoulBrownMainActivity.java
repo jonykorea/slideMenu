@@ -1,5 +1,7 @@
 package com.tws.soul.soulbrown.ui;
 
+import android.animation.ArgbEvaluator;
+import android.animation.ObjectAnimator;
 import android.app.ActionBar;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -21,7 +23,10 @@ import android.util.Log;
 import android.support.v4.widget.DrawerLayout;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.animation.AlphaAnimation;
+import android.view.animation.Animation;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.android.volley.Response;
@@ -66,7 +71,7 @@ import src.com.wunderlist.slidinglayer.SlidingLayer;
 
 
 public class SoulBrownMainActivity extends BaseFragmentActivity
-        implements NavigationDrawerFragment.NavigationDrawerCallbacks , UserStoreMenuFragment.CustomOnClickListener{
+        implements NavigationDrawerFragment.NavigationDrawerCallbacks, UserStoreMenuFragment.CustomOnClickListener {
 
     // init fragment
 
@@ -102,22 +107,19 @@ public class SoulBrownMainActivity extends BaseFragmentActivity
 
         backPressCloseHandler = new BackPressCloseHandler(this);
 
-        if(AppController.getInstance().getIsUser()) {
+        if (AppController.getInstance().getIsUser()) {
 
-            if( !mBaseProgressDialog.isShowing() )
+            if (!mBaseProgressDialog.isShowing())
                 mBaseProgressDialog.show();
 
             apiGetMenuList("");
-        }
-        else
-        {
+        } else {
             bindViews(null);
         }
 
     }
 
-    private void setCustomActionBar()
-    {
+    private void setCustomActionBar() {
 
         ActionBar actionBar = getActionBar();
         actionBar.setBackgroundDrawable(new ColorDrawable(Color.parseColor("#F2F4F5")));
@@ -129,7 +131,7 @@ public class SoulBrownMainActivity extends BaseFragmentActivity
         actionBar.setHomeButtonEnabled(false);
         actionBar.setIcon(null);
 
-        LayoutInflater inflater = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View actionBarView = inflater.inflate(R.layout.actionbar_custom_layout, null);
         getActionBar().setCustomView(actionBarView);
         getActionBar().setDisplayShowCustomEnabled(true);
@@ -139,16 +141,15 @@ public class SoulBrownMainActivity extends BaseFragmentActivity
 
     private RetMenuList mMenuList;
 
-    public RetMenuList getMenuList()
-    {
+    public RetMenuList getMenuList() {
         return mMenuList;
     }
-    private void bindViews(RetMenuList menuList)
-    {
-        if( mBaseProgressDialog.isShowing() )
+
+    private void bindViews(RetMenuList menuList) {
+        if (mBaseProgressDialog.isShowing())
             mBaseProgressDialog.dismiss();
 
-        if(AppController.getInstance().getIsUser()) {
+        if (AppController.getInstance().getIsUser()) {
             if (menuList != null) {
 
                 mMenuList = menuList;
@@ -158,16 +159,12 @@ public class SoulBrownMainActivity extends BaseFragmentActivity
                 userStoreMenuFragment = new UserStoreMenuFragment();
 
                 setGcmClient();
-            }
-            else
-            {
+            } else {
                 // 종료 팝업.
                 finish();
             }
 
-        }
-        else
-        {
+        } else {
             // owner
             ownerOrderListFragment = new OwnerOrderListFragment();
             ownerAllOrderListFragment = new OwnerAllOrderListFragment();
@@ -178,9 +175,9 @@ public class SoulBrownMainActivity extends BaseFragmentActivity
 
         Intent intent = getIntent();
 
-        int userType = intent.getIntExtra(ExtraType.USER_TYPE,0);
+        int userType = intent.getIntExtra(ExtraType.USER_TYPE, 0);
 
-        LOG.d("SoulBrownMainActivity : userType : " +userType);
+        LOG.d("SoulBrownMainActivity : userType : " + userType);
 
         mNavigationDrawerFragment = (NavigationDrawerFragment)
                 getSupportFragmentManager().findFragmentById(R.id.navigation_drawer);
@@ -190,8 +187,7 @@ public class SoulBrownMainActivity extends BaseFragmentActivity
                 R.id.navigation_drawer,
                 (DrawerLayout) findViewById(R.id.drawer_layout));
 
-        if(!AppController.getInstance().getIsUser())
-        {
+        if (!AppController.getInstance().getIsUser()) {
             // 현재 push 상태 확인.
             apiGetPushMsgStatus();
         }
@@ -208,9 +204,8 @@ public class SoulBrownMainActivity extends BaseFragmentActivity
     private SlidingLayer mSlidingLayer;
     private ImageView mIvSlidingLayer;
 
-    private void openSliding(String url)
-    {
-        if(mSlidingLayer.isClosed() && mClosedSlidingState) {
+    private void openSliding(String url) {
+        if (mSlidingLayer.isClosed() && mClosedSlidingState) {
 
 
             Glide.with(this).load(url)
@@ -222,6 +217,8 @@ public class SoulBrownMainActivity extends BaseFragmentActivity
 
                             mIvSlidingLayer.setImageDrawable(resource);
 
+                            backgroundFadeIn();
+
                             mSlidingLayer.openLayer(true);
 
                         }
@@ -230,16 +227,55 @@ public class SoulBrownMainActivity extends BaseFragmentActivity
 
         }
     }
-    private void closeSliding()
-    {
-        if(mSlidingLayer.isOpened() && mOpenedSlidingState)
-         mSlidingLayer.closeLayer(true);
+
+    private void closeSliding() {
+        if (mSlidingLayer.isOpened() && mOpenedSlidingState) {
+
+
+            mSlidingLayer.closeLayer(true);
+        }
     }
 
     boolean mClosedSlidingState = true;
     boolean mOpenedSlidingState = false;
 
+    LinearLayout mllScreenBackground;
+
+    private void backgroundFadeIn() {
+
+        /*
+        ObjectAnimator objectAnimator = ObjectAnimator.ofObject(mllScreenBackground, "backgroundColor", new ArgbEvaluator(), Color.argb(0,255,255,255), 0x99000000);
+        objectAnimator.setDuration(500);
+        objectAnimator.start();
+        */
+
+        mllScreenBackground.setBackgroundColor(Color.argb(153,0,0,0));
+        AlphaAnimation alphaAnimation = new AlphaAnimation(0.0f,1.0f);
+        alphaAnimation.setDuration(500);
+        alphaAnimation.setFillAfter(true);
+
+        mllScreenBackground.startAnimation(alphaAnimation);
+
+    }
+
+    private void backgroundFadeOut() {
+        /*
+        ObjectAnimator objectAnimator = ObjectAnimator.ofObject(mllScreenBackground, "backgroundColor", new ArgbEvaluator(), Color.argb(153,0,0,0), 0x00000000);
+        objectAnimator.setDuratin(500);
+        objectAnimator.start();
+        */
+
+        mllScreenBackground.setBackgroundColor(Color.argb(153,0,0,0));
+        AlphaAnimation alphaAnimation = new AlphaAnimation(1.0f,0.0f);
+        alphaAnimation.setDuration(500);
+        alphaAnimation.setFillAfter(true);
+
+        mllScreenBackground.startAnimation(alphaAnimation);
+    }
+
     private void initSlidingState() {
+
+        mllScreenBackground = (LinearLayout) findViewById(R.id.screen_background);
 
         mSlidingLayer = (SlidingLayer) findViewById(R.id.slidingLayer1);
         mIvSlidingLayer = (ImageView) findViewById(R.id.slidinglayer_image);
@@ -261,6 +297,7 @@ public class SoulBrownMainActivity extends BaseFragmentActivity
             @Override
             public void onOpen() {
 
+
             }
 
             @Override
@@ -270,6 +307,8 @@ public class SoulBrownMainActivity extends BaseFragmentActivity
 
             @Override
             public void onClose() {
+
+                backgroundFadeOut();
 
             }
 
@@ -308,14 +347,14 @@ public class SoulBrownMainActivity extends BaseFragmentActivity
     public void onChangeDrawerLayout(int position) {
 
     }
+
     @Override
     public void onChangeDrawerLayoutOpened(int position) {
 
-        if(mSlidingLayer.isOpened())
+        if (mSlidingLayer.isOpened())
             closeSliding();
 
     }
-
 
 
     private void selectItem(int position) {
@@ -324,27 +363,18 @@ public class SoulBrownMainActivity extends BaseFragmentActivity
 
         ft = getSupportFragmentManager().beginTransaction();
         // Locate Position
-        if( position == 0)
-        {
-            if(AppController.getInstance().getIsUser())
-            {
-                ft.replace(R.id.container,  userOrderListFragment);
-            }
-            else
-            {
+        if (position == 0) {
+            if (AppController.getInstance().getIsUser()) {
+                ft.replace(R.id.container, userOrderListFragment);
+            } else {
                 ft.replace(R.id.container, ownerOrderListFragment);
 
             }
-        }
-        else
-        {
-            if(AppController.getInstance().getIsUser())
-            {
+        } else {
+            if (AppController.getInstance().getIsUser()) {
 
-                ft.replace(R.id.container,  userStoreMenuFragment);
-            }
-            else
-            {
+                ft.replace(R.id.container, userStoreMenuFragment);
+            } else {
                 ft.replace(R.id.container, ownerAllOrderListFragment);
 
             }
@@ -352,8 +382,7 @@ public class SoulBrownMainActivity extends BaseFragmentActivity
 
         ft.commit();
 
-        if(AppController.getInstance().getIsUser())
-        {
+        if (AppController.getInstance().getIsUser()) {
             if (position != 0 && userStoreMenuFragment != null) {
                 int movePos = position - 1;
 
@@ -371,13 +400,13 @@ public class SoulBrownMainActivity extends BaseFragmentActivity
 
     // gms location S
 
-    private void requestLocation()
-    {
+    private void requestLocation() {
         LocationGmsClient location = new LocationGmsClient(SoulBrownMainActivity.this,
                 LocationResultHandler);
 
         location.connect();
     }
+
     public Handler LocationResultHandler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
@@ -432,26 +461,22 @@ public class SoulBrownMainActivity extends BaseFragmentActivity
     // gcm S
     GcmClient gcmClient;
 
-    private void setGcmClient()
-    {
+    private void setGcmClient() {
         gcmClient = new GcmClient(this);
 
-        gcmClient.initGCM( new GcmClient.onGcmClientListener() {
+        gcmClient.initGCM(new GcmClient.onGcmClientListener() {
             @Override
             public void onGcmClientResult(int result, String msg) {
 
-                LOG.d("onGcmClientResult : "+ result + " msg : "+ msg);
+                LOG.d("onGcmClientResult : " + result + " msg : " + msg);
 
-                if( result == GcmClient.RET_CODE_SUCC)
-                {
+                if (result == GcmClient.RET_CODE_SUCC) {
                     PrefUserInfo prefUserInfo = new PrefUserInfo(SoulBrownMainActivity.this);
                     String userID = prefUserInfo.getUserID();
 
                     // 사용자
                     apiSetPushKey("USERUI", userID, msg);
-                }
-                else
-                {
+                } else {
 
                 }
 
@@ -470,7 +495,7 @@ public class SoulBrownMainActivity extends BaseFragmentActivity
         LOG.d("apiSetPushKey");
 
         if (api != null) {
-            api.apiSetPushKeyUser(this, userID, regID ,new Response.Listener<RetCode>() {
+            api.apiSetPushKeyUser(this, userID, regID, new Response.Listener<RetCode>() {
 
                 @Override
                 public void onResponse(RetCode retCode) {
@@ -489,7 +514,7 @@ public class SoulBrownMainActivity extends BaseFragmentActivity
                         LOG.d("apiSetPushKey Fail " + retCode.ret);
 
                         //Toast.makeText(SoulBrownMainActivity.this, retCode.msg + "(" + retCode.ret + ")", Toast.LENGTH_SHORT).show();
-                        mCuzToast.showToast(retCode.msg + "(" + retCode.ret + ")",Toast.LENGTH_SHORT);
+                        mCuzToast.showToast(retCode.msg + "(" + retCode.ret + ")", Toast.LENGTH_SHORT);
                     }
 
                 }
@@ -499,7 +524,7 @@ public class SoulBrownMainActivity extends BaseFragmentActivity
 
                     LOG.d("apiSetPushKey VolleyError " + volleyError.getMessage());
                     //Toast.makeText(SoulBrownMainActivity.this, getString(R.string.network_fail), Toast.LENGTH_SHORT).show();
-                    mCuzToast.showToast( getString(R.string.network_fail),Toast.LENGTH_SHORT);
+                    mCuzToast.showToast(getString(R.string.network_fail), Toast.LENGTH_SHORT);
 
                 }
             });
@@ -545,7 +570,7 @@ public class SoulBrownMainActivity extends BaseFragmentActivity
                         LOG.d("apiSetPushKey Fail " + retCode.ret);
 
                         //Toast.makeText(SoulBrownMainActivity.this, retCode.msg + "(" + retCode.ret + ")", Toast.LENGTH_SHORT).show();
-                        mCuzToast.showToast(retCode.msg + "(" + retCode.ret + ")",Toast.LENGTH_SHORT);
+                        mCuzToast.showToast(retCode.msg + "(" + retCode.ret + ")", Toast.LENGTH_SHORT);
                     }
 
                 }
@@ -555,7 +580,7 @@ public class SoulBrownMainActivity extends BaseFragmentActivity
 
                     LOG.d("apiSetPushKey VolleyError " + volleyError.getMessage());
                     //Toast.makeText(SoulBrownMainActivity.this, getString(R.string.network_fail), Toast.LENGTH_SHORT).show();
-                    mCuzToast.showToast( getString(R.string.network_fail),Toast.LENGTH_SHORT);
+                    mCuzToast.showToast(getString(R.string.network_fail), Toast.LENGTH_SHORT);
                 }
             });
         }
@@ -585,13 +610,13 @@ public class SoulBrownMainActivity extends BaseFragmentActivity
 
                     } else {
                         // fail
-                        if( mBaseProgressDialog.isShowing() )
+                        if (mBaseProgressDialog.isShowing())
                             mBaseProgressDialog.dismiss();
 
                         LOG.d("apiGetMenuList Fail " + retCode.ret);
 
                         //Toast.makeText(SoulBrownMainActivity.this, retCode.msg + "(" + retCode.ret + ")", Toast.LENGTH_SHORT).show();
-                        mCuzToast.showToast(retCode.msg + "(" + retCode.ret + ")",Toast.LENGTH_SHORT);
+                        mCuzToast.showToast(retCode.msg + "(" + retCode.ret + ")", Toast.LENGTH_SHORT);
 
                         finish();
 
@@ -601,12 +626,12 @@ public class SoulBrownMainActivity extends BaseFragmentActivity
             }, new Response.ErrorListener() {
                 @Override
                 public void onErrorResponse(VolleyError volleyError) {
-                    if( mBaseProgressDialog.isShowing() )
+                    if (mBaseProgressDialog.isShowing())
                         mBaseProgressDialog.dismiss();
 
                     LOG.d("apiGetMenuList VolleyError " + volleyError.getMessage());
                     //Toast.makeText(SoulBrownMainActivity.this, getString(R.string.network_fail), Toast.LENGTH_SHORT).show();
-                    mCuzToast.showToast( getString(R.string.network_fail),Toast.LENGTH_SHORT);
+                    mCuzToast.showToast(getString(R.string.network_fail), Toast.LENGTH_SHORT);
 
                     finish();
                 }
@@ -618,17 +643,15 @@ public class SoulBrownMainActivity extends BaseFragmentActivity
     @Override
     public void onBackPressed() {
 
-        if(mSlidingLayer.isOpened()) {
+        if (mSlidingLayer.isOpened()) {
             closeSliding();
             return;
         }
-        if(mNavigationDrawerFragment.isDrawerOpen()) {
+        if (mNavigationDrawerFragment.isDrawerOpen()) {
             mNavigationDrawerFragment.openCloseDrawerMenu();
 
             return;
-        }
-        else
-        {
+        } else {
             backPressCloseHandler.onBackPressed();
 
             ///setResult(RESULT_OK);
@@ -668,13 +691,11 @@ public class SoulBrownMainActivity extends BaseFragmentActivity
             String url = intent.getStringExtra("url");
 
             //mCuzToast.showToast(msg,Toast.LENGTH_SHORT);
-            if(mSlidingLayer != null)
-            {
+            if (mSlidingLayer != null) {
                 LOG.d("SlidingImageSync url " + url);
 
                 openSliding(url);
             }
-
 
 
         }

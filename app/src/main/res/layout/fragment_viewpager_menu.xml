@@ -116,7 +116,7 @@
 
 
             android:textColor="#349bcd"
-            android:textSize="@dimen/size_18" />
+            android:textSize="@dimen/size_16" />
 
     </LinearLayout>
 
