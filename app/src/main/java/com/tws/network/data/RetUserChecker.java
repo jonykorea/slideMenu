@@ -8,4 +8,9 @@ public class RetUserChecker extends RetCode{
     // type = 0 : 사용자 / 1: 점주
     public int type;
 
+    // 버젼정보 & URL
+    public String appver;
+    public String appurl;
+
+
 }
