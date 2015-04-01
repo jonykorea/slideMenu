@@ -7,6 +7,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.Window;
 import android.view.animation.AnimationUtils;
+import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -33,8 +34,8 @@ public class OrderDialog
     ButtonFlat buttonCancel;
 
     TextView tvArriveTime;
-    LinearLayout llArriveTimeUp;
-    LinearLayout llArriveTimeDown;
+    ImageButton ibArriveTimeUp;
+    ImageButton ibArriveTimeDown;
 
     View.OnClickListener onAcceptButtonClickListener;
     View.OnClickListener onCancelButtonClickListener;
@@ -98,18 +99,18 @@ public class OrderDialog
         });
 
         this.tvArriveTime =  (TextView) findViewById(R.id.order_arrive_time_txt);
-        this.llArriveTimeUp = (LinearLayout) findViewById(R.id.order_arrive_time_up);
+        this.ibArriveTimeUp = (ImageButton) findViewById(R.id.order_arrive_time_up);
 
-        llArriveTimeUp.setOnClickListener(new View.OnClickListener() {
+        ibArriveTimeUp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 upArriveTime();
             }
         });
 
-        this.llArriveTimeDown = (LinearLayout) findViewById(R.id.order_arrive_time_down);
+        this.ibArriveTimeDown = (ImageButton) findViewById(R.id.order_arrive_time_down);
 
-        llArriveTimeDown.setOnClickListener(new View.OnClickListener() {
+        ibArriveTimeDown.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 downArriveTime();

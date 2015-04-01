@@ -500,6 +500,9 @@ public class SoulBrownMainActivity extends BaseFragmentActivity
                 @Override
                 public void onResponse(RetCode retCode) {
 
+                    if(isFinishing())
+                        return;
+
                     LOG.d("retCode.result : " + retCode.ret);
                     LOG.d("retCode.errormsg : " + retCode.msg);
 
@@ -521,6 +524,9 @@ public class SoulBrownMainActivity extends BaseFragmentActivity
             }, new Response.ErrorListener() {
                 @Override
                 public void onErrorResponse(VolleyError volleyError) {
+
+                    if(isFinishing())
+                        return;
 
                     LOG.d("apiSetPushKey VolleyError " + volleyError.getMessage());
                     //Toast.makeText(SoulBrownMainActivity.this, getString(R.string.network_fail), Toast.LENGTH_SHORT).show();
@@ -547,6 +553,9 @@ public class SoulBrownMainActivity extends BaseFragmentActivity
 
                 @Override
                 public void onResponse(RetPushMsgStatus retCode) {
+
+                    if(isFinishing())
+                        return;
 
                     LOG.d("retCode.result : " + retCode.ret);
                     LOG.d("retCode.errormsg : " + retCode.msg);
@@ -578,6 +587,9 @@ public class SoulBrownMainActivity extends BaseFragmentActivity
                 @Override
                 public void onErrorResponse(VolleyError volleyError) {
 
+                    if(isFinishing())
+                        return;
+
                     LOG.d("apiSetPushKey VolleyError " + volleyError.getMessage());
                     //Toast.makeText(SoulBrownMainActivity.this, getString(R.string.network_fail), Toast.LENGTH_SHORT).show();
                     mCuzToast.showToast(getString(R.string.network_fail), Toast.LENGTH_SHORT);
@@ -598,6 +610,10 @@ public class SoulBrownMainActivity extends BaseFragmentActivity
 
                 @Override
                 public void onResponse(RetMenuList retCode) {
+
+                    if(isFinishing())
+                        return;
+
 
                     LOG.d("retCode.result : " + retCode.ret);
                     LOG.d("retCode.errormsg : " + retCode.msg);
@@ -626,6 +642,10 @@ public class SoulBrownMainActivity extends BaseFragmentActivity
             }, new Response.ErrorListener() {
                 @Override
                 public void onErrorResponse(VolleyError volleyError) {
+
+                    if(isFinishing())
+                        return;
+
                     if (mBaseProgressDialog.isShowing())
                         mBaseProgressDialog.dismiss();
 

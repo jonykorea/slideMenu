@@ -153,6 +153,9 @@ public class SplashActivity extends BaseActivity implements TextView.OnEditorAct
                 @Override
                 public void onResponse(RetUserChecker retCode) {
 
+                    if(isFinishing())
+                        return;
+
                     LOG.d("retCode.result : " + retCode.ret);
                     LOG.d("retCode.errormsg : " + retCode.msg);
                     LOG.d("retCode.usertype : " + retCode.type);
@@ -187,6 +190,9 @@ public class SplashActivity extends BaseActivity implements TextView.OnEditorAct
                                 }
 
                                 Intent intent = new Intent(context, SoulBrownMainActivity.class);
+                                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK
+                                        | Intent.FLAG_ACTIVITY_CLEAR_TOP
+                                        | Intent.FLAG_ACTIVITY_SINGLE_TOP);
                                 intent.putExtra(ExtraType.USER_TYPE, retCode.type);
                                 startActivityForResult(intent, ACT_RESULT_CODE);
                             } else {
@@ -249,6 +255,9 @@ public class SplashActivity extends BaseActivity implements TextView.OnEditorAct
                 @Override
                 public void onErrorResponse(VolleyError volleyError) {
 
+                    if(isFinishing())
+                        return;
+
                     showHideLogin(true);
 
                     LOG.d("apiUserChecker VolleyError " + volleyError.getMessage());
@@ -289,6 +298,10 @@ public class SplashActivity extends BaseActivity implements TextView.OnEditorAct
                 // logout 경우.//입력창 노출.
                 showHideLogin(true);
             } else if (resultCode == RESULT_OK) {
+                finish();
+            }
+            else
+            {
                 finish();
             }
         }
