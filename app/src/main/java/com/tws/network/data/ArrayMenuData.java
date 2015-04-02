@@ -14,6 +14,7 @@ public class ArrayMenuData {
     public String img;
     public String imgtb;
     public String comment;
+    public String commentwriter;
 
     public ArrayList<ArrayOptionData> option;
 }

@@ -37,43 +37,43 @@
                 android:textStyle="bold" />
 
             <LinearLayout
-                android:layout_height="26dp"
                 android:layout_width="wrap_content"
+                android:layout_height="26dp"
 
                 android:orientation="horizontal">
 
-            <com.tws.widget.CuzTextView
-                android:id="@+id/item_menu_info_price"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:gravity="center"
-                android:singleLine="true"
-                android:text="￦ 2,000원"
-                android:textColor="#3D454C"
-                android:textSize="@dimen/size_18"
-                android:textStyle="bold" />
+                <com.tws.widget.CuzTextView
+                    android:id="@+id/item_menu_info_price"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:singleLine="true"
+                    android:text="￦ 2,000원"
+                    android:textColor="#3D454C"
+                    android:textSize="@dimen/size_18"
+                    android:textStyle="bold" />
 
                 <ImageView
-                    android:layout_gravity="center"
                     android:id="@+id/item_menu_info_arrow"
-                    android:layout_marginLeft="@dimen/size_6"
-                    android:layout_marginRight="@dimen/size_6"
                     android:layout_width="24dp"
                     android:layout_height="24dp"
-                    android:background="@drawable/arrow_right"/>
+                    android:layout_gravity="center"
+                    android:layout_marginLeft="@dimen/size_6"
+                    android:layout_marginRight="@dimen/size_6"
+                    android:background="@drawable/arrow_right" />
 
-            <com.tws.widget.CuzTextView
-                android:id="@+id/item_menu_info_saleprice"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
+                <com.tws.widget.CuzTextView
+                    android:id="@+id/item_menu_info_saleprice"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
 
-                android:gravity="center"
-                android:singleLine="true"
-                android:text="￦ 2,000원"
-                android:textColor="#3D454C"
-                android:textSize="@dimen/size_20"
-                android:textStyle="bold" />
-                </LinearLayout>
+                    android:gravity="center"
+                    android:singleLine="true"
+                    android:text="￦ 2,000원"
+                    android:textColor="#3D454C"
+                    android:textSize="@dimen/size_20"
+                    android:textStyle="bold" />
+            </LinearLayout>
         </LinearLayout>
 
         <LinearLayout
@@ -94,17 +94,32 @@
 
                 />
 
-            <com.tws.widget.CuzTextView
-                android:background="@drawable/menu_bg"
-                android:id="@+id/item_menu_info_txt"
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:padding="@dimen/size_6"
+                android:background="@drawable/menu_bg"
                 android:gravity="center"
-                android:text=""
-                android:textColor="#3D454C"
-                android:textSize="@dimen/size_20"
-                />
+                android:orientation="vertical"
+                android:padding="@dimen/size_6">
+
+                <com.tws.widget.CuzTextView
+                    android:id="@+id/item_menu_info_txt"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text=""
+                    android:textColor="#3D454C"
+                    android:textSize="@dimen/size_18" />
+
+                <com.tws.widget.CuzTextView
+                    android:id="@+id/item_menu_info_txt_writer"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="right"
+                    android:text="-브루브루-"
+                    android:textColor="#3D454C"
+                    android:textSize="@dimen/size_16" />
+            </LinearLayout>
         </LinearLayout>
 
 
@@ -127,10 +142,10 @@
                 android:paddingRight="5dp">
 
                 <ImageView
-                    android:layout_gravity="center"
                     android:layout_width="16dp"
                     android:layout_height="16dp"
-                    android:background="@drawable/icon_opt"/>
+                    android:layout_gravity="center"
+                    android:background="@drawable/icon_opt" />
 
                 <com.tws.widget.CuzTextView
                     android:id="@+id/item_menu_control_opt1_txt"
@@ -210,10 +225,10 @@
                 android:paddingRight="5dp">
 
                 <ImageView
-                    android:layout_gravity="center"
                     android:layout_width="16dp"
                     android:layout_height="16dp"
-                    android:background="@drawable/icon_opt"/>
+                    android:layout_gravity="center"
+                    android:background="@drawable/icon_opt" />
 
                 <com.tws.widget.CuzTextView
                     android:id="@+id/item_menu_control_opt2_txt"

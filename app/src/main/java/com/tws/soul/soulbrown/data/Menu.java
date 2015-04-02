@@ -20,6 +20,7 @@ public class Menu {
     public String image_thumb;
 
     public String comment;
+    public String comment_write;
 
     public int price;
     public int saleprice;

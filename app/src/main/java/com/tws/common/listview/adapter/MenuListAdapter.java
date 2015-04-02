@@ -20,6 +20,9 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.load.engine.bitmap_recycle.BitmapPool;
+import com.bumptech.glide.load.resource.drawable.GlideDrawable;
+import com.bumptech.glide.request.animation.GlideAnimation;
+import com.bumptech.glide.request.target.SimpleTarget;
 import com.tws.common.lib.views.CuzToast;
 import com.tws.network.data.ArrayOptionData;
 import com.tws.soul.soulbrown.R;
@@ -65,6 +68,8 @@ public class MenuListAdapter extends RecyclerView.Adapter<MenuListAdapter.ViewHo
 
 
 
+
+
     }
 
     @Override
@@ -84,6 +89,7 @@ public class MenuListAdapter extends RecyclerView.Adapter<MenuListAdapter.ViewHo
         super.onViewRecycled(holder);
 
         Log.i("jony","onViewRecycled");
+
     }
 
     public void selectPos(int pos)
@@ -180,17 +186,31 @@ public class MenuListAdapter extends RecyclerView.Adapter<MenuListAdapter.ViewHo
 
         viewHolder.menuCommnet.setText(menu.comment);
 
-        //Glide.with(mContext).load(menu.image).tr.into(viewHolder.menuImage);
+        viewHolder.menuCommnetWriter.setText(menu.comment_write);
 
         Log.i("jony", "Glide : " + menu.image_thumb);
 
+        viewHolder.menuImage.setImageDrawable(null);
 
-        Glide.with(viewHolder.itemView.getContext()).load(menu.image_thumb)
-                .bitmapTransform(new RoundedCornersTransformation(mPool, 15, 0))
-                //.diskCacheStrategy(DiskCacheStrategy.RESULT)
+/*
+        Glide.with(viewHolder.menuImage.getContext()).load(menu.image_thumb)
+                //.bitmapTransform(new RoundedCornersTransformation(mPool, 15, 0))
+                .diskCacheStrategy(DiskCacheStrategy.ALL)
                 .into((viewHolder.menuImage));
 
+*/
+        final ImageView imageView = viewHolder.menuImage;
+        Glide.with(viewHolder.menuImage.getContext()).load(menu.image_thumb)
+                .bitmapTransform(new RoundedCornersTransformation(mPool, 15, 0))
+                .diskCacheStrategy(DiskCacheStrategy.ALL)
+                .into(new SimpleTarget<GlideDrawable>() {
+                    @Override
+                    public void onResourceReady(GlideDrawable resource, GlideAnimation<? super GlideDrawable> glideAnimation) {
 
+                        imageView.setImageDrawable(resource);
+
+                    }
+                });
 
         final String imageUrl = menu.image;
 
@@ -344,6 +364,7 @@ public class MenuListAdapter extends RecyclerView.Adapter<MenuListAdapter.ViewHo
         public TextView menuPrice;
         public TextView menuSalePrice;
         public TextView menuCommnet;
+        public TextView menuCommnetWriter;
 
         public TextView menuCountOpt01;
         public TextView menuTextOpt01;
@@ -370,6 +391,7 @@ public class MenuListAdapter extends RecyclerView.Adapter<MenuListAdapter.ViewHo
             menuImage = (ImageView) itemView.findViewById(R.id.item_menu_info_image);
 
             menuCommnet = (TextView) itemView.findViewById(R.id.item_menu_info_txt);
+            menuCommnetWriter = (TextView) itemView.findViewById(R.id.item_menu_info_txt_writer);
 
             // option
 
