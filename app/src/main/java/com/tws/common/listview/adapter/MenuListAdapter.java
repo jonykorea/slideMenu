@@ -55,15 +55,15 @@ public class MenuListAdapter extends RecyclerView.Adapter<MenuListAdapter.ViewHo
     private int mSumCnt = 0;
 
     private int itemCount = 0;
-    private BitmapPool mPool;
+    //private BitmapPool mPool;
     private CuzToast mCuzToast;
 
     public MenuListAdapter(List<Menu> listMenu, int rowLayout, Context context, CuzOnClickListener listener) {
         this.listMenu = listMenu;
         this.rowLayout = rowLayout;
-        this.mContext = context;
+        //this.mContext = context;
         this.customListener = listener;
-        this.mPool = Glide.get(mContext).getBitmapPool();
+       // this.mPool = Glide.get(mContext).getBitmapPool();
         mCuzToast = new CuzToast(context);
 
 
@@ -100,6 +100,9 @@ public class MenuListAdapter extends RecyclerView.Adapter<MenuListAdapter.ViewHo
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
         View v = LayoutInflater.from(viewGroup.getContext()).inflate(rowLayout, viewGroup, false);
+
+        this.mContext = viewGroup.getContext();
+
         return new ViewHolder(v);
     }
 
@@ -200,8 +203,8 @@ public class MenuListAdapter extends RecyclerView.Adapter<MenuListAdapter.ViewHo
 
 */
         final ImageView imageView = viewHolder.menuImage;
-        Glide.with(viewHolder.menuImage.getContext()).load(menu.image_thumb)
-                .bitmapTransform(new RoundedCornersTransformation(mPool, 15, 0))
+        Glide.with(mContext).load(menu.image_thumb)
+                //.bitmapTransform(new RoundedCornersTransformation(Glide.get(viewHolder.menuImage.getContext()).getBitmapPool(), 15, 0))
                 .diskCacheStrategy(DiskCacheStrategy.ALL)
                 .into(new SimpleTarget<GlideDrawable>() {
                     @Override

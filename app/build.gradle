@@ -41,4 +41,6 @@ dependencies {
     compile 'jp.co.cyberagent.android.gpuimage:gpuimage-library:1.2.3@aar'
     //https://github.com/wasabeef/glide-transformations
     compile project(':slidinglayerLib')
+    compile 'com.makeramen:roundedimageview:2.0.1'
+    //https://github.com/vinc3m1/RoundedImageView/blob/master/LICENSE
 }

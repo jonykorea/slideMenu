@@ -84,15 +84,18 @@
             android:layout_marginTop="6dp"
             android:orientation="horizontal">
 
-            <ImageView
+            <com.makeramen.roundedimageview.RoundedImageView
+                xmlns:app="http://schemas.android.com/apk/res-auto"
                 android:id="@+id/item_menu_info_image"
+                android:background="@drawable/icon_item_bg"
                 android:layout_width="100dp"
                 android:layout_height="140dp"
                 android:layout_gravity="center_vertical"
                 android:layout_marginRight="6dp"
-                android:background="@drawable/icon_item_bg"
-
+                app:riv_corner_radius="10dp"
                 />
+
+
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -110,6 +113,7 @@
                     android:text=""
                     android:textColor="#3D454C"
                     android:textSize="@dimen/size_18" />
+
 
                 <com.tws.widget.CuzTextView
                     android:id="@+id/item_menu_info_txt_writer"

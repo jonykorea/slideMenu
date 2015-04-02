@@ -205,19 +205,23 @@ public class SoulBrownMainActivity extends BaseFragmentActivity
     private ImageView mIvSlidingLayer;
 
     private void openSliding(String url) {
-        if (mSlidingLayer.isClosed() && mClosedSlidingState) {
+        if (mSlidingLayer.isClosed() && mClosedSlidingState ) {
+
 
 
             Log.i("jony","openSliding start");
 
             Glide.with(this).load(url)
-                    .bitmapTransform(new RoundedCornersTransformation(Glide.get(this).getBitmapPool(), 30, 0))
+                    //.bitmapTransform(new RoundedCornersTransformation(Glide.get(this).getBitmapPool(), 30, 0))
                     .diskCacheStrategy(DiskCacheStrategy.ALL)
                     .into(new SimpleTarget<GlideDrawable>() {
                         @Override
                         public void onResourceReady(GlideDrawable resource, GlideAnimation<? super GlideDrawable> glideAnimation) {
 
                             Log.i("jony","openSliding end");
+
+                            if( mNavigationDrawerFragment.isDrawerOpen())
+                                return;
 
                             mIvSlidingLayer.setImageDrawable(resource);
 
