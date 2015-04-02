@@ -8,8 +8,8 @@ android {
         applicationId "com.tws.soul.soulbrown"
         minSdkVersion 15
         targetSdkVersion 21
-        versionCode 202
-        versionName "0.2.2"
+        versionCode 203
+        versionName "0.2.3"
     }
     buildTypes {
         release {

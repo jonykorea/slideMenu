@@ -141,6 +141,9 @@ public class StoreMenuFragment extends BaseFragment {
             menu.saleprice = storeInfo.menu.get(i).saleprice;
 
             menu.image = storeInfo.menu.get(i).img;
+            menu.image_thumb = storeInfo.menu.get(i).imgtb;
+            menu.comment = storeInfo.menu.get(i).comment;
+
             mMenuData.add(menu);
         }
 

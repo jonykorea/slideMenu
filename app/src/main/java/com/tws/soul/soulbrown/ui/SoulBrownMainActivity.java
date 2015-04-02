@@ -208,12 +208,16 @@ public class SoulBrownMainActivity extends BaseFragmentActivity
         if (mSlidingLayer.isClosed() && mClosedSlidingState) {
 
 
+            Log.i("jony","openSliding start");
+
             Glide.with(this).load(url)
                     .bitmapTransform(new RoundedCornersTransformation(Glide.get(this).getBitmapPool(), 30, 0))
                     .diskCacheStrategy(DiskCacheStrategy.ALL)
                     .into(new SimpleTarget<GlideDrawable>() {
                         @Override
                         public void onResourceReady(GlideDrawable resource, GlideAnimation<? super GlideDrawable> glideAnimation) {
+
+                            Log.i("jony","openSliding end");
 
                             mIvSlidingLayer.setImageDrawable(resource);
 
@@ -695,6 +699,12 @@ public class SoulBrownMainActivity extends BaseFragmentActivity
     @Override
     public void onResume() {
         super.onResume();
+
+
+        if( mSlidingLayer!= null && mSlidingLayer.isClosed() )
+        {
+            backgroundFadeOut();
+        }
         LocalBroadcastManager.getInstance(context).registerReceiver(SlidingImageSync, new IntentFilter("image_url"));
     }
 

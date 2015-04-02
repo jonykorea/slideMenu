@@ -12,6 +12,8 @@ public class ArrayMenuData {
     public int price;
     public int saleprice;
     public String img;
+    public String imgtb;
+    public String comment;
 
     public ArrayList<ArrayOptionData> option;
 }

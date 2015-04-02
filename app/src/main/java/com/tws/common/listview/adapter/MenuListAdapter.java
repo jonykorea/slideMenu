@@ -62,6 +62,33 @@ public class MenuListAdapter extends RecyclerView.Adapter<MenuListAdapter.ViewHo
         this.customListener = listener;
         this.mPool = Glide.get(mContext).getBitmapPool();
         mCuzToast = new CuzToast(context);
+
+
+
+    }
+
+    @Override
+    public void onAttachedToRecyclerView(RecyclerView recyclerView) {
+        super.onAttachedToRecyclerView(recyclerView);
+        Log.i("jony","onAttachedToRecyclerView");
+    }
+
+    @Override
+    public void onViewAttachedToWindow(ViewHolder holder) {
+        super.onViewAttachedToWindow(holder);
+        Log.i("jony","onViewAttachedToWindow");
+    }
+
+    @Override
+    public void onViewRecycled(ViewHolder holder) {
+        super.onViewRecycled(holder);
+
+        Log.i("jony","onViewRecycled");
+    }
+
+    public void selectPos(int pos)
+    {
+        notifyItemChanged(pos);
     }
 
     @Override
@@ -69,6 +96,7 @@ public class MenuListAdapter extends RecyclerView.Adapter<MenuListAdapter.ViewHo
         View v = LayoutInflater.from(viewGroup.getContext()).inflate(rowLayout, viewGroup, false);
         return new ViewHolder(v);
     }
+
 
     @Override
     public void onBindViewHolder(ViewHolder viewHolder, int i) {
@@ -150,11 +178,16 @@ public class MenuListAdapter extends RecyclerView.Adapter<MenuListAdapter.ViewHo
             viewHolder.menuArrow.setVisibility(View.GONE);
         }
 
+        viewHolder.menuCommnet.setText(menu.comment);
+
         //Glide.with(mContext).load(menu.image).tr.into(viewHolder.menuImage);
 
-        Glide.with(mContext).load(menu.image)
-                .bitmapTransform(new RoundedCornersTransformation(mPool, 30, 0))
-                .diskCacheStrategy(DiskCacheStrategy.ALL)
+        Log.i("jony", "Glide : " + menu.image_thumb);
+
+
+        Glide.with(viewHolder.itemView.getContext()).load(menu.image_thumb)
+                .bitmapTransform(new RoundedCornersTransformation(mPool, 15, 0))
+                //.diskCacheStrategy(DiskCacheStrategy.RESULT)
                 .into((viewHolder.menuImage));
 
 
@@ -310,6 +343,7 @@ public class MenuListAdapter extends RecyclerView.Adapter<MenuListAdapter.ViewHo
         public ImageView menuImage;
         public TextView menuPrice;
         public TextView menuSalePrice;
+        public TextView menuCommnet;
 
         public TextView menuCountOpt01;
         public TextView menuTextOpt01;
@@ -334,6 +368,8 @@ public class MenuListAdapter extends RecyclerView.Adapter<MenuListAdapter.ViewHo
             menuPrice = (TextView) itemView.findViewById(R.id.item_menu_info_price);
             menuSalePrice = (TextView) itemView.findViewById(R.id.item_menu_info_saleprice);
             menuImage = (ImageView) itemView.findViewById(R.id.item_menu_info_image);
+
+            menuCommnet = (TextView) itemView.findViewById(R.id.item_menu_info_txt);
 
             // option
 

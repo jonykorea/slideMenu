@@ -17,6 +17,10 @@ public class Menu {
 
     public String image;
 
+    public String image_thumb;
+
+    public String comment;
+
     public int price;
     public int saleprice;
 
