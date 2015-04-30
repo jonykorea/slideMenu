@@ -11,6 +11,8 @@ public class PrefUserInfo {
 
     private final String PREF_KEY_USER_TYPE = "USER_TYPE"; // user type 사용자/점주
 
+    private final String PREF_KEY_USER_NAME = "USER_NAME"; // store name
+
 	private Context mContext = null;
 	private SharedPreferences mPrefUserInfo = null;
 	private SharedPreferences.Editor mEditor = null;
@@ -45,6 +47,17 @@ public class PrefUserInfo {
 
     public boolean getUserType() {
         return mPrefUserInfo.getBoolean(PREF_KEY_USER_TYPE, true);
+    }
+
+    public void setUserName(String userName) {
+
+        mEditor.putString(PREF_KEY_USER_NAME, userName);
+
+        mEditor.commit();
+    }
+
+    public String getUserName() {
+        return mPrefUserInfo.getString(PREF_KEY_USER_NAME, "");
     }
 
 }

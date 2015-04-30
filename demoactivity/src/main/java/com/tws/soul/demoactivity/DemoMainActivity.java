@@ -56,15 +56,17 @@ public class DemoMainActivity extends ActionBarActivity {
     public void onBtnVibrate(View v)
     {
 
+
         Vibrator mVib = (Vibrator)getSystemService(Context.VIBRATOR_SERVICE);
 
         mVib.vibrate(500);
+
     }
 
     public void onBtnSound(View v)
     {
 
-            mSoundManager.playSound(1);
+        mSoundManager.playSound(1);
 
     }
 
@@ -72,4 +74,18 @@ public class DemoMainActivity extends ActionBarActivity {
     {
 
     }
+
+    public void onBtnSlidingDialog(View v)
+    {
+
+        CuzSlidingDialog dialog = new CuzSlidingDialog(DemoMainActivity.this);
+        dialog.show();
+    }
+
+    public void onBtnTabActivity(View v)
+    {
+
+    }
+
+
 }

@@ -14,6 +14,7 @@ import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -236,15 +237,16 @@ public class NavigationDrawerFragment extends Fragment {
         PrefUserInfo prefUserInfo = new PrefUserInfo(getActivity());
         String userID = prefUserInfo.getUserID();
 
-        if( StoreInfo.getStoreName(userID) > 0)
+        String userName = prefUserInfo.getUserName();
+
+        if(!TextUtils.isEmpty(userName))
         {
-            tvMenuTitle.setText(StoreInfo.getStoreName(userID));
+            tvMenuTitle.setText(userName);
         }
         else
         {
             tvMenuTitle.setText(userID);
         }
-
 
 
         mDrawerLayout.setDrawerListener(new DrawerLayout.DrawerListener() {

@@ -161,6 +161,7 @@ public class SplashActivity extends BaseActivity implements TextView.OnEditorAct
                     LOG.d("retCode.usertype : " + retCode.type);
                     LOG.d("retCode.appver : " + retCode.appver);
                     LOG.d("retCode.appurl : " + retCode.appurl);
+                    LOG.d("retCode.storename : " + retCode.storename);
 
 
                     if (retCode.ret == 1) {
@@ -185,8 +186,13 @@ public class SplashActivity extends BaseActivity implements TextView.OnEditorAct
 
                                 if (retCode.type == Const.USER) {
                                     prefUserInfo.setUserType(true);
+                                    prefUserInfo.setUserName("");
+
                                 } else {
+                                    String storename = retCode.storename;
+
                                     prefUserInfo.setUserType(false);
+                                    prefUserInfo.setUserName(storename);
                                 }
 
                                 Intent intent = new Intent(context, SoulBrownMainActivity.class);

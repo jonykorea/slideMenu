@@ -2,6 +2,7 @@ package com.tws.network.lib;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.text.TextUtils;
 import android.util.Log;
 
@@ -23,6 +24,7 @@ import com.tws.network.util.CommonParams;
 import com.tws.network.util.DeviceInfo;
 import com.tws.soul.soulbrown.data.Menu;
 import com.tws.soul.soulbrown.flurry.Define;
+import com.tws.soul.soulbrown.gcm.GcmClient;
 import com.tws.soul.soulbrown.lib.GPSUtils;
 import com.tws.soul.soulbrown.lib.StoreInfo;
 import com.tws.soul.soulbrown.pref.PrefOrderInfo;
@@ -872,6 +874,14 @@ public class ApiAgent {
 
 
             jsonParams.put("store", storeID);
+
+            String pushKey = "";
+            SharedPreferences prefs = GcmClient.getGcmPreferences(context);
+            String registrationId = prefs.getString(GcmClient.PROPERTY_REG_ID, "");
+            if (!registrationId.isEmpty()) {
+                pushKey = registrationId;
+            }
+            jsonParams.put("pushkey", pushKey);
 
             //jsonParams = CommonParams.getCommonParams(context, jsonParams);
 

@@ -4,5 +4,6 @@
     <string name="app_name">demoActivity</string>
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
+    <string name="title_activity_tab_main">TabMainActivity</string>
 
 </resources>

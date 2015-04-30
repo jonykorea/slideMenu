@@ -21,7 +21,7 @@
             android:layout_width="@dimen/size_64"
             android:layout_height="@dimen/size_64"
 
-            android:background="@drawable/icon_main_logo"/>
+            android:background="@drawable/icon_bb"/>
 
         <com.tws.widget.CuzTextView
 

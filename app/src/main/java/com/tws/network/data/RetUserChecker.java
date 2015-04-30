@@ -12,5 +12,8 @@ public class RetUserChecker extends RetCode{
     public String appver;
     public String appurl;
 
+    // 점포 정보
+    public String storename;
+
 
 }

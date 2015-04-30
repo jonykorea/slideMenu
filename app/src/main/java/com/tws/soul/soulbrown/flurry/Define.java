@@ -9,6 +9,7 @@ public class Define {
 
     public static final String LOG_VIEW_ORDER = "ORDER";
     public static final String LOG_VIEW_REORDER = "RE-ORDER";
+    public static final String LOG_VIEW_TAKEOUT = "TAKEOUT";
 
     public static final String LOG_KEY_STORE = "STORE";
     public static final String LOG_KEY_ARRIVAL_TIME = "ARRIVAL_TIME";

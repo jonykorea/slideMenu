@@ -38,4 +38,27 @@
         android:onClick="onBtnScreen"
       />
 
+    <Button
+        style="?android:attr/buttonStyleSmall"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="슬라이딩 Dialog"
+        android:id="@+id/btn_sliding_dg"
+
+        android:onClick="onBtnSlidingDialog"
+        />
+
+    <Button
+        style="?android:attr/buttonStyleSmall"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="슬라이딩 Dialog"
+        android:id="@+id/btn_tab_act"
+
+        android:onClick="onBtnTabActivity"
+        />
+
+
+
+
 </LinearLayout>

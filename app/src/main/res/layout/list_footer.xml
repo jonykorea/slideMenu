@@ -8,6 +8,6 @@
        android:layout_gravity="right"
        android:layout_width="@dimen/size_20"
        android:layout_height="@dimen/size_20"
-       android:background="@drawable/icon_main_logo"/>
+       android:background="@drawable/icon_bb"/>
 
 </FrameLayout>
