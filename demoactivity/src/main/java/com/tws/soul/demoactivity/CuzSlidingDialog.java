@@ -86,7 +86,6 @@ public class CuzSlidingDialog extends Dialog {
     private void openSliding(String url) {
         if (mSlidingLayer.isClosed() && mClosedSlidingState) {
 
-            Log.i("jony", "openSliding start");
 
             if (TextUtils.isEmpty(url)) {
                 Handler handler = new Handler();
@@ -224,8 +223,6 @@ public class CuzSlidingDialog extends Dialog {
         mSlidingLayer.setOnScrollListener(new SlidingLayer.OnScrollListener() {
             @Override
             public void onScroll(int absoluteScroll) {
-
-                Log.i("jony", "onScroll absoluteScroll : " + absoluteScroll);
 
                 int colorValue = COLOR_MAX * absoluteScroll;
 

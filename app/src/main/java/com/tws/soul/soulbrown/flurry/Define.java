@@ -13,4 +13,8 @@ public class Define {
 
     public static final String LOG_KEY_STORE = "STORE";
     public static final String LOG_KEY_ARRIVAL_TIME = "ARRIVAL_TIME";
+
+    public static final String LOG_KEY_TYPE = "TYPE";
+    public static final String LOG_KEY_TYPE_NORMAL = "NORMAL";
+    public static final String LOG_KEY_TYPE_ONE_SHOT = "ONE-SHOT";
 }

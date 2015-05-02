@@ -66,8 +66,6 @@ public class MenuFragment01_listview extends Fragment {
     public void setMenuVisibility(boolean menuVisible) {
         super.setMenuVisibility(menuVisible);
 
-        Log.i("jony","setMenuVisibility "+menuVisible );
-
     }
 
     // get Publickey

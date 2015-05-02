@@ -48,6 +48,14 @@ import java.util.List;
 
 public class StoreMenuFragment extends BaseFragment {
 
+    // viewpager 로 데이터를 전달할 커스텀 리스너
+    private CuzOnMoveListener customListener;
+
+    // viewpager 로 데이터를 전달할 커스텀 리스너의 인터페이스
+    public interface CuzOnMoveListener {
+        public void onMoveOrderList();
+    }
+
     String mStoreID = null;
     List<Menu> mMenuData = null;
     String mStoreName = null;
@@ -73,6 +81,8 @@ public class StoreMenuFragment extends BaseFragment {
         super.onAttach(activity);
 
         context = getActivity();
+
+        this.customListener = (CuzOnMoveListener)activity;
     }
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -117,8 +127,6 @@ public class StoreMenuFragment extends BaseFragment {
         mMenuData =  new ArrayList<Menu>();
 
         int cnt = storeInfo.menu.size();
-
-        Log.i("jony","initMenuData "+ cnt);
 
         Menu menu = null;
         for( int i = 0; i < cnt; i++)
@@ -276,7 +284,7 @@ public class StoreMenuFragment extends BaseFragment {
     private String getArriveTime(String arriveTime) {
         LOG.d("requestOrder arriveTime : " + arriveTime);
 
-        arriveTime = arriveTime.replace("분", "");
+        arriveTime = arriveTime.replace("분 후", "");
 
         long time = Long.parseLong(arriveTime) * 60;
         LOG.d("requestOrder time : " + time);
@@ -431,16 +439,21 @@ public class StoreMenuFragment extends BaseFragment {
 
         if(!GPSUtils.getLocaionProvider(context))
         {
+            final String msg = getString(R.string.gps_fail);
 
             new Handler().postDelayed(new Runnable() {
                 @Override
                 public void run() {
                     if( mCuzToast != null)
-                    mCuzToast.showToast( getString(R.string.gps_fail),Toast.LENGTH_LONG);
+                        mCuzToast.showToast( msg,Toast.LENGTH_LONG);
 
                 }
             },3000);
         }
+
+        // 주문내역으로 이동. S
+        customListener.onMoveOrderList();
+        // 주문내역으로 이동. E
 
     }
 

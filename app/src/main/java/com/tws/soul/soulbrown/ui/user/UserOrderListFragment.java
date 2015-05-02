@@ -189,7 +189,6 @@ public class UserOrderListFragment extends BaseFragment implements
 
     private void setHeaderContent(ArrayOrderList recentOrderInfo)
     {
-        Log.i("jony","setHeaderContent");
 
         if( recentOrderInfo != null )
         {
@@ -208,8 +207,6 @@ public class UserOrderListFragment extends BaseFragment implements
             String regTime = TimeUtil.getNewSimpleDateFormat("a hh시 mm분", recentOrderInfo.regtime);
 
             tvHeaderTime.setText(date + " " +regTime);
-
-            Log.i("jony","setHeaderContent status : "+ status);
 
             if(status == 3)
             {
@@ -515,10 +512,6 @@ public class UserOrderListFragment extends BaseFragment implements
                     Menu menu = ListMenu.get(i);
                     String name = menu.name;
 
-                    Log.i("jony","showDialog name : "+name);
-
-
-
                     for(int j = 0; j<menu.option.size();j++) {
                         int cnt = menu.option.get(j).count;
                         String nameOpt = menu.option.get(j).name;
@@ -584,7 +577,7 @@ public class UserOrderListFragment extends BaseFragment implements
     private String getArriveTime(String arriveTime) {
         LOG.d("requestOrder arriveTime : " + arriveTime);
 
-        arriveTime = arriveTime.replace("분", "");
+        arriveTime = arriveTime.replace("분 후", "");
 
         long time = Long.parseLong(arriveTime) * 60;
         LOG.d("requestOrder time : " + time);

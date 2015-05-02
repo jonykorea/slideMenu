@@ -254,7 +254,6 @@ public class LocationGmsClient implements
      */
     @Override
     public void onLocationChanged(Location location) {
-        Log.i("jony", "onLocationChanged");
 
         mExpireHandler.removeCallbacks(timeoutRun);
         mCurrentLocation = location;

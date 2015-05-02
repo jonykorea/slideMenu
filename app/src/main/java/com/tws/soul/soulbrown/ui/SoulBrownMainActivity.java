@@ -58,6 +58,7 @@ import com.tws.soul.soulbrown.ui.own.OwnerAllOrderListFragment;
 import com.tws.soul.soulbrown.ui.own.OwnerOrderListFragment;
 import com.tws.soul.soulbrown.ui.user.UserOrderListFragment;
 import com.tws.soul.soulbrown.ui.user.UserStoreMenuFragment;
+import com.tws.soul.soulbrown.ui.viewpager.StoreMenuFragment;
 
 import java.io.IOException;
 import java.util.StringTokenizer;
@@ -66,12 +67,11 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 import android.widget.RelativeLayout.LayoutParams;
 
-import jp.wasabeef.glide.transformations.RoundedCornersTransformation;
 import src.com.wunderlist.slidinglayer.SlidingLayer;
 
 
 public class SoulBrownMainActivity extends BaseFragmentActivity
-        implements NavigationDrawerFragment.NavigationDrawerCallbacks, UserStoreMenuFragment.CustomOnClickListener {
+        implements NavigationDrawerFragment.NavigationDrawerCallbacks, UserStoreMenuFragment.CustomOnClickListener ,StoreMenuFragment.CuzOnMoveListener{
 
     // init fragment
 
@@ -207,10 +207,6 @@ public class SoulBrownMainActivity extends BaseFragmentActivity
     private void openSliding(String url) {
         if (mSlidingLayer.isClosed() && mClosedSlidingState ) {
 
-
-
-            Log.i("jony","openSliding start");
-
             Glide.with(this).load(url)
                     //.bitmapTransform(new RoundedCornersTransformation(Glide.get(this).getBitmapPool(), 30, 0))
                     .diskCacheStrategy(DiskCacheStrategy.ALL)
@@ -218,7 +214,6 @@ public class SoulBrownMainActivity extends BaseFragmentActivity
                         @Override
                         public void onResourceReady(GlideDrawable resource, GlideAnimation<? super GlideDrawable> glideAnimation) {
 
-                            Log.i("jony","openSliding end");
 
                             if( mNavigationDrawerFragment.isDrawerOpen())
                                 return;
@@ -734,6 +729,15 @@ public class SoulBrownMainActivity extends BaseFragmentActivity
 
         }
     };
+
+    @Override
+    public void onMoveOrderList() {
+
+        // 주문완료시 주문내역 페이지로 셋팅.
+        selectItem(0);
+        mNavigationDrawerFragment.setListViewItemChecked(0);
+
+    }
 
 
 }

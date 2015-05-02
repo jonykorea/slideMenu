@@ -176,11 +176,8 @@ public class ApiAgent {
 
         // set add header E
 
-        // test S
         float distance = GPSUtils.getDistance(Double.parseDouble(lat), Double.parseDouble(lon), StoreInfo.STORE_LATI, StoreInfo.STORE_LON);
-        Log.i("jony", "distance : " + distance);
 
-        // test E
         // set params S
         JSONObject jsonParams = new JSONObject();
         try {

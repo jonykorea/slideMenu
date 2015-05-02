@@ -121,7 +121,7 @@ public class OrderDialog
     private void upArriveTime() {
         String textTime = (String) tvArriveTime.getText();
 
-        textTime = textTime.replace("분","");
+        textTime = textTime.replace("분 후","");
 
         int time = Integer.parseInt(textTime);
 
@@ -139,7 +139,7 @@ public class OrderDialog
 
         }
 
-        tvArriveTime.setText(time+"분");
+        tvArriveTime.setText(time+"분 후");
 
     }
 
@@ -147,7 +147,7 @@ public class OrderDialog
     {
         String textTime = (String) tvArriveTime.getText();
 
-        textTime = textTime.replace("분","");
+        textTime = textTime.replace("분 후","");
 
         int time = Integer.parseInt(textTime);
 
@@ -164,7 +164,7 @@ public class OrderDialog
 
         }
 
-        tvArriveTime.setText(time+"분");
+        tvArriveTime.setText(time+"분 후");
     }
 
     public TextView getArriveTime() {

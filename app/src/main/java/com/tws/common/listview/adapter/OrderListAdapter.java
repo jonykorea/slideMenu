@@ -15,6 +15,7 @@ import android.widget.TextView;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.app.define.LOG;
+import com.flurry.android.FlurryAgent;
 import com.tws.common.lib.utils.TimeUtil;
 import com.tws.network.data.ArrayOrderData;
 import com.tws.network.data.ArrayOrderList;
@@ -24,10 +25,12 @@ import com.tws.network.data.RetOrderList;
 import com.tws.network.data.ServerDefineCode;
 import com.tws.network.lib.ApiAgent;
 import com.tws.soul.soulbrown.R;
+import com.tws.soul.soulbrown.flurry.Define;
 import com.tws.soul.soulbrown.lib.ConvertData;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
 
 import se.emilsjolander.stickylistheaders.StickyListHeadersAdapter;
 
@@ -142,8 +145,6 @@ public class OrderListAdapter extends BaseAdapter implements
     public View getView(final int position, View convertView, ViewGroup parent) {
         ViewHolder holder;
 
-        Log.i("jony", "getView position" + position);
-
         if (convertView == null) {
             holder = new ViewHolder();
 
@@ -221,7 +222,7 @@ public class OrderListAdapter extends BaseAdapter implements
             @Override
             public void onClick(View view) {
 
-                Log.i("jony","llStatusIng orderKey "+ orderKey);
+                LOG.d("llStatusIng orderKey "+ orderKey);
 
                 if( status == 3 ) {
                     apiChgOrderMenu(storeID, orderKey, 2, pos);
@@ -233,10 +234,14 @@ public class OrderListAdapter extends BaseAdapter implements
         holder.llStatusFinish.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Log.i("jony","llStatusFinish orderKey "+ orderKey);
+                LOG.d("llStatusFinish orderKey "+ orderKey);
 
-                if( status == 2 )
-                    apiChgOrderMenu(storeID, orderKey, 1 , pos);
+                if( status == 2 ) {
+
+                    sendFlurryEvent(Define.LOG_KEY_TYPE_NORMAL);
+
+                    apiChgOrderMenu(storeID, orderKey, 1, pos);
+                }
 
             }
         });
@@ -244,10 +249,14 @@ public class OrderListAdapter extends BaseAdapter implements
         holder.btnStatusAllFinish.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Log.i("jony","btnStatusAllFinish orderKey "+ orderKey);
+                LOG.d("btnStatusAllFinish orderKey "+ orderKey);
 
-                if( status == 3 || status == 2 )
-                    apiChgOrderMenu(storeID, orderKey, 1 , pos);
+                if( status == 3 || status == 2 ) {
+
+                    sendFlurryEvent(Define.LOG_KEY_TYPE_ONE_SHOT);
+
+                    apiChgOrderMenu(storeID, orderKey, 1, pos);
+                }
 
             }
         });
@@ -285,6 +294,15 @@ public class OrderListAdapter extends BaseAdapter implements
 
 
         return receiptInfoRow;
+    }
+
+    private void sendFlurryEvent(String msg)
+    {
+        Map<String, String> flurryParams = new HashMap<String, String>();
+
+        flurryParams.put(Define.LOG_KEY_TYPE, msg);
+
+        FlurryAgent.logEvent(Define.LOG_VIEW_TAKEOUT, flurryParams);
     }
 
 

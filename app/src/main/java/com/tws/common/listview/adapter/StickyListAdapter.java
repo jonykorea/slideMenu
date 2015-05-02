@@ -122,8 +122,6 @@ public class StickyListAdapter extends BaseAdapter implements
     public View getView(int position, View convertView, ViewGroup parent) {
         ViewHolder holder;
 
-        Log.i("jony", "getView position" + position);
-
         if (convertView == null) {
             holder = new ViewHolder();
             convertView = mInflater.inflate(R.layout.list_order_info, parent, false);

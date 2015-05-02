@@ -32,8 +32,6 @@ import com.tws.soul.soulbrown.pref.PrefStoreInfo;
 
 import java.util.List;
 
-import jp.wasabeef.glide.transformations.RoundedCornersTransformation;
-
 /**
  * Created by Jony on 2015-01-11.
  */
@@ -75,20 +73,18 @@ public class MenuListAdapter extends RecyclerView.Adapter<MenuListAdapter.ViewHo
     @Override
     public void onAttachedToRecyclerView(RecyclerView recyclerView) {
         super.onAttachedToRecyclerView(recyclerView);
-        Log.i("jony","onAttachedToRecyclerView");
+
     }
 
     @Override
     public void onViewAttachedToWindow(ViewHolder holder) {
         super.onViewAttachedToWindow(holder);
-        Log.i("jony","onViewAttachedToWindow");
+
     }
 
     @Override
     public void onViewRecycled(ViewHolder holder) {
         super.onViewRecycled(holder);
-
-        Log.i("jony","onViewRecycled");
 
     }
 
@@ -191,8 +187,6 @@ public class MenuListAdapter extends RecyclerView.Adapter<MenuListAdapter.ViewHo
 
         viewHolder.menuCommnetWriter.setText(menu.comment_write);
 
-        Log.i("jony", "Glide : " + menu.image_thumb);
-
         viewHolder.menuImage.setImageDrawable(null);
 
 /*
@@ -220,8 +214,6 @@ public class MenuListAdapter extends RecyclerView.Adapter<MenuListAdapter.ViewHo
         viewHolder.menuImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-                Log.i("jony", "imageUrl : " + imageUrl);
 
                 sendSlidingImage(imageUrl);
             }
@@ -258,8 +250,6 @@ public class MenuListAdapter extends RecyclerView.Adapter<MenuListAdapter.ViewHo
                 }
 
 
-                Log.i("jony", " onClick menuAdd ");
-
             }
         });
 
@@ -286,9 +276,6 @@ public class MenuListAdapter extends RecyclerView.Adapter<MenuListAdapter.ViewHo
                     }
 
                 }
-
-
-                Log.i("jony", " onClick menuRemove ");
 
             }
         });
@@ -319,8 +306,6 @@ public class MenuListAdapter extends RecyclerView.Adapter<MenuListAdapter.ViewHo
                 }
 
 
-                Log.i("jony", " onClick menuAdd ");
-
             }
         });
 
@@ -345,9 +330,6 @@ public class MenuListAdapter extends RecyclerView.Adapter<MenuListAdapter.ViewHo
 
                     }
                 }
-
-
-                Log.i("jony", " onClick menuRemove ");
 
             }
         });

@@ -28,8 +28,6 @@ public class TwsVolleyGlideModule implements GlideModule
     public void applyOptions(Context context, GlideBuilder builder) {
         // Do nothing.\
 
-        Log.i("jony", "TwsVolleyGlideModule applyOptions");
-
         builder.setDiskCache(DiskLruCacheWrapper.get(getDiskCacheDir(context, Cache.DISK_CACHE_PATH), Cache.DISK_CACHE_SIZE));
         builder.setMemoryCache(new LruResourceCache(Cache.MEMORY_CACHE_SIZE));
         builder.setBitmapPool(new LruBitmapPool(Cache.MEMORY_CACHE_SIZE));
@@ -40,7 +38,6 @@ public class TwsVolleyGlideModule implements GlideModule
     @Override
     public void registerComponents(Context context, Glide glide) {
 
-        Log.i("jony", "TwsVolleyGlideModule registerComponents");
 
         glide.register(GlideUrl.class, InputStream.class, new VolleyUrlLoader.Factory(ApiBase.getInstance(context).getRequestQueue()));
 

@@ -366,7 +366,7 @@ public class NavigationDrawerFragment extends Fragment {
 
             if( menuList != null)
             {
-                Log.i("jony", "getSideMenu : "+ menuList.store.size());
+                LOG.d("getSideMenu : "+ menuList.store.size());
 
 
                 for(int i = 0;i<menuList.store.size();i++)

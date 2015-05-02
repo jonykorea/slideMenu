@@ -16,6 +16,7 @@ import android.view.ViewGroup;
 import com.tws.network.data.RetMenuList;
 import com.tws.soul.soulbrown.R;
 import com.tws.soul.soulbrown.ui.SoulBrownMainActivity;
+import com.tws.soul.soulbrown.ui.viewpager.StoreMenuFragment;
 import com.tws.soul.soulbrown.ui.viewpager.ViewPagerAdapter;
 
 public class UserStoreMenuFragment extends Fragment {
@@ -56,17 +57,12 @@ public class UserStoreMenuFragment extends Fragment {
     public void onDestroy() {
         super.onDestroy();
 
-        Log.i("jony", "onDestroy MenuFragment02 ");
-
-
-
     }
 
     @Override
     public void onDestroyView() {
         super.onDestroyView();
 
-        Log.i("jony", "onDestroyView MenuFragment02 ");
 
         mViewPager = null;
     }
@@ -157,4 +153,6 @@ public class UserStoreMenuFragment extends Fragment {
             }, 200);
         }
     }
+
+
 }

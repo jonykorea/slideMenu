@@ -6,6 +6,7 @@ import android.text.TextUtils;
 import android.text.style.ForegroundColorSpan;
 import android.util.Log;
 
+import com.app.define.LOG;
 import com.tws.network.data.ArrayOrderData;
 import com.tws.network.data.ReceiptInfoRow;
 
@@ -84,7 +85,7 @@ public class ConvertData {
 
                     if( cnt != 0) {
 
-                        Log.i("jony", "i : "+i +" j :"+j+"orderData.size() + "+ orderData.size() +" orderData.get(i).option.size() "+ orderData.get(i).option.size());
+                        LOG.d("i: "+i +" j :"+j+"orderData.size() + "+ orderData.size() +" orderData.get(i).option.size() "+ orderData.get(i).option.size());
 
                         if (i == (orderData.size() - 1) && j == (orderData.get(i).option.size() - 1)) {
                             sumMenu += name + "(" + orderData.get(i).option.get(j).name + ")x" + orderData.get(i).option.get(j).count;

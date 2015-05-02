@@ -1,8 +1,10 @@
 package com.tws.soul.soulbrown.ui;
 
 import android.app.Activity;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
@@ -479,4 +481,27 @@ public class SettingActivity extends BaseActivity {
         super.onStop();
         //FlurryAgent.onEndSession(this);
     }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        LocalBroadcastManager.getInstance(this).registerReceiver(PushStatusSync, new IntentFilter("push_status"));
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        LocalBroadcastManager.getInstance(this).unregisterReceiver(PushStatusSync);
+    }
+
+    // mIvPushStatus
+    private BroadcastReceiver PushStatusSync = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+
+            int status = intent.getIntExtra("status",0);
+
+
+        }
+    };
 }

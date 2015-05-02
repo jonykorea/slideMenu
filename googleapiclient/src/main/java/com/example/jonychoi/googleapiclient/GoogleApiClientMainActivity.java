@@ -287,7 +287,6 @@ public class GoogleApiClientMainActivity extends ActionBarActivity implements
      */
     @Override
     public void onLocationChanged(Location location) {
-        Log.i("jony","onLocationChanged");
 
         mExpireHandler.removeCallbacks(timeoutRun);
         mCurrentLocation = location;
@@ -319,8 +318,6 @@ public class GoogleApiClientMainActivity extends ActionBarActivity implements
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
 
-            Log.i("jony","mExpireHandler");
-
         };
     };
 
@@ -330,7 +327,7 @@ public class GoogleApiClientMainActivity extends ActionBarActivity implements
 
         @Override
         public void run() {
-            Log.i("jony","timeoutRun");
+
             //handler.sendEmptyMessage(LocationDefines.GMS_LOCATION_TIMEOUT);
             if(mGoogleApiClient.isConnecting() || mGoogleApiClient.isConnected()){
                 mGoogleApiClient.disconnect();

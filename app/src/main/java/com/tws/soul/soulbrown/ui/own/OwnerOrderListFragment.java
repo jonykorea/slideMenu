@@ -28,6 +28,7 @@ import android.widget.Toast;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.app.define.LOG;
+import com.flurry.android.FlurryAgent;
 import com.tws.common.lib.soulbrownlib.OrderDialog;
 import com.tws.common.lib.utils.TimeUtil;
 import com.tws.common.lib.views.CuzToast;
@@ -44,6 +45,7 @@ import com.tws.soul.soulbrown.R;
 import com.tws.soul.soulbrown.base.BaseFragment;
 import com.tws.soul.soulbrown.broadcast.AlarmManagerBroadcastReceiver;
 import com.tws.soul.soulbrown.data.Menu;
+import com.tws.soul.soulbrown.flurry.Define;
 import com.tws.soul.soulbrown.gcm.GcmIntentService;
 import com.tws.soul.soulbrown.lib.ConvertData;
 import com.tws.soul.soulbrown.lib.StoreInfo;
@@ -51,7 +53,9 @@ import com.tws.soul.soulbrown.pref.PrefOrderInfo;
 import com.tws.soul.soulbrown.pref.PrefUserInfo;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import se.emilsjolander.stickylistheaders.StickyListHeadersListView;
 
@@ -208,9 +212,6 @@ public class OwnerOrderListFragment extends BaseFragment implements
 
             tvHeaderTime.setText(date + " " + regTime);
 
-
-            Log.i("jony", "setHeaderContent : "+ status);
-
             if (status == 3) {
 
                 llHeaderStatusIng.setBackgroundResource(R.drawable.icon_btn_bg_s);
@@ -231,6 +232,8 @@ public class OwnerOrderListFragment extends BaseFragment implements
                     @Override
                     public void onClick(View v) {
 
+                        sendFlurryEvent(Define.LOG_KEY_TYPE_ONE_SHOT);
+
                         apiChgOrderMenu(storeID, orderKey, 1 , 0);
 
 
@@ -249,6 +252,8 @@ public class OwnerOrderListFragment extends BaseFragment implements
                     @Override
                     public void onClick(View v) {
 
+                        sendFlurryEvent(Define.LOG_KEY_TYPE_NORMAL);
+
                         apiChgOrderMenu(storeID, orderKey, 1 , 0);
 
                     }
@@ -257,6 +262,9 @@ public class OwnerOrderListFragment extends BaseFragment implements
                 btnHeaderStatusAllFinish.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
+
+
+                        sendFlurryEvent(Define.LOG_KEY_TYPE_ONE_SHOT);
 
                         apiChgOrderMenu(storeID, orderKey, 1 , 0);
 
@@ -267,6 +275,15 @@ public class OwnerOrderListFragment extends BaseFragment implements
             }
         }
 
+    }
+
+    private void sendFlurryEvent(String msg)
+    {
+        Map<String, String> flurryParams = new HashMap<String, String>();
+
+        flurryParams.put(Define.LOG_KEY_TYPE, msg);
+
+        FlurryAgent.logEvent(Define.LOG_VIEW_TAKEOUT, flurryParams);
     }
 /*
     private ReceiptInfoRow getSumPrice(ArrayList<ArrayOrderData> orderData) {
@@ -561,7 +578,7 @@ public class OwnerOrderListFragment extends BaseFragment implements
     private String getArriveTime(String arriveTime) {
         LOG.d("requestOrder arriveTime : " + arriveTime);
 
-        arriveTime = arriveTime.replace("분", "");
+        arriveTime = arriveTime.replace("분 후", "");
 
         long time = Long.parseLong(arriveTime) * 60;
         LOG.d("requestOrder time : " + time);

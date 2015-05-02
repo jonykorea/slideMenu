@@ -330,7 +330,7 @@ public class OwnerAllOrderListFragment extends BaseFragment implements
     private String getArriveTime(String arriveTime) {
         LOG.d("requestOrder arriveTime : " + arriveTime);
 
-        arriveTime = arriveTime.replace("분", "");
+        arriveTime = arriveTime.replace("분 후", "");
 
         long time = Long.parseLong(arriveTime) * 60;
         LOG.d("requestOrder time : " + time);
