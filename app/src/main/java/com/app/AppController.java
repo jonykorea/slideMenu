@@ -1,20 +1,10 @@
 package com.app;
 
 import android.app.Application;
-import android.text.TextUtils;
 
-import com.android.volley.Request;
-import com.android.volley.RequestQueue;
-import com.android.volley.toolbox.ImageLoader;
-import com.android.volley.toolbox.Volley;
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.integration.volley.VolleyUrlLoader;
-import com.bumptech.glide.load.model.GlideUrl;
 import com.flurry.android.FlurryAgent;
-import com.tws.soul.soulbrown.flurry.Define;
-import com.tws.soul.soulbrown.pref.PrefUserInfo;
-
-import java.io.InputStream;
+import com.brewbrew.flurry.Define;
+import com.brewbrew.managers.pref.PrefUserInfo;
 
 public class AppController extends Application {
 

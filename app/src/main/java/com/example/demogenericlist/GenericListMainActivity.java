@@ -1,8 +1,8 @@
 package com.example.demogenericlist;
 
-import com.tws.common.listview.ui.ListFruitActivity;
-import com.tws.common.listview.ui.ListNationsActivity;
-import com.tws.soul.soulbrown.R;
+import com.brewbrew.listview.ui.ListFruitActivity;
+import com.brewbrew.listview.ui.ListNationsActivity;
+import com.brewbrew.R;
 
 import android.app.Activity;
 import android.content.Intent;

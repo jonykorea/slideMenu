@@ -8,8 +8,8 @@ package com.app.define;
  */
 public class LOG {
 
-    public static final String TAG = "SoulBrown";
-    public static final boolean DEBUG = true;
+    public static final String TAG = "BrewBrew";
+    public static final boolean DEBUG = false;
 
     public static void d(String msg) {
     	if( DEBUG )
