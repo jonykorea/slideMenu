@@ -16,6 +16,16 @@ import com.brewbrew.R;
 
 public class AlarmNotiService extends Service {
 
+
+    /* 현재 오디오모드확인 */
+/*
+http://examples.javacodegeeks.com/android/android-soundpool-example/
+    AudioManager mAudioManager = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
+    mAudioManager.getRingerMode() == AudioManager.RINGER_MODE_SILENT : 사일런트 모드일 경우(값0)
+    mAudioManager.getRingerMode() == AudioManager.RINGER_MODE_VIBRATE : 진동모드일 경우(값1)
+    mAudioManager.getRingerMode() == AudioManager.RINGER_MODE_NORMAL : 벨 모드일 경우(값2)
+    //AudioManager.ACTION_AUDIO_BECOMING_NOISY : 이어잭을 꼽고 있다가 뺏을 경우.
+    */
     public AlarmNotiService() {
     }
 
@@ -42,14 +52,12 @@ public class AlarmNotiService extends Service {
 
         callVibrator();
 
-        if( mCntTimer != null)
-        {
+        if (mCntTimer != null) {
             mCntTimer.cancel();
             mIsPlay = false;
         }
 
         mCntTimer.start();
-
 
 
         return Service.START_NOT_STICKY;
@@ -68,8 +76,7 @@ public class AlarmNotiService extends Service {
 
     }
 
-    private void initTimer()
-    {
+    private void initTimer() {
         mCntTimer = new CountDownTimer(5 * 1000, 1000) {
             @Override
             public void onTick(long millisUntilFinished) {
@@ -87,8 +94,7 @@ public class AlarmNotiService extends Service {
         };
     }
 
-    private void initSound()
-    {
+    private void initSound() {
         // 점주라면 push msg에 따른 사운드 셋팅.
         mSoundManager = new SoundManager();
 
@@ -96,7 +102,7 @@ public class AlarmNotiService extends Service {
             @Override
             public void onLoadComplete(SoundPool soundPool, int sampleId, int status) {
 
-                LOG.d("mSoundManager onLoadComplete status : "+ status);
+                LOG.d("mSoundManager onLoadComplete status : " + status);
                 mIsLoad = true;
             }
         });
@@ -104,30 +110,27 @@ public class AlarmNotiService extends Service {
         mSoundManager.addSound(1, R.raw.beep);
     }
 
-    private void callVibrator()
-    {
-        if( mVib != null)
+    private void callVibrator() {
+        if (mVib != null)
             mVib.cancel();
 
-        mVib = (Vibrator)getSystemService(Context.VIBRATOR_SERVICE);
+        mVib = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
 
-        long[] patten = { 0, 1000, 500, 1000, 500, 1000, 500, 1000, 500, 1000, 500};
+        long[] patten = {0, 1000, 500, 1000, 500, 1000, 500, 1000, 500, 1000, 500};
 
         mVib.vibrate(patten, -1);
     }
-    private void setMaxVolume()
-    {
-        AudioManager audioManager = (AudioManager)getSystemService(Context.AUDIO_SERVICE);
+
+    private void setMaxVolume() {
+        AudioManager audioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
 
         int max = audioManager.getStreamMaxVolume(audioManager.STREAM_MUSIC);
 
-        audioManager.setStreamVolume(AudioManager.STREAM_MUSIC,max,0);
+        audioManager.setStreamVolume(AudioManager.STREAM_MUSIC, max, 0);
     }
 
-    private void callSound()
-    {
-        if( mIsLoad && !mIsPlay)
-        {
+    private void callSound() {
+        if (mIsLoad && !mIsPlay) {
             setMaxVolume();
 
             mIsPlay = true;
@@ -135,6 +138,7 @@ public class AlarmNotiService extends Service {
         }
 
     }
+
     @Override
     public void onDestroy() {
         LOG.d("AlarmNotiService onDestroy ");
