@@ -102,6 +102,8 @@ public class ApiAgent {
 
     private static final String URL_STORE_LOGOUT = "/bb/if/store/logout";
 
+    private static final String URL_STORE_REG_MENU_EVENT = "/bb/if/store/regmenuevt";
+
 
     // get publickey
     public void apiPublicKey(Context context, Response.Listener<CoreGetPublicKey> succListener, Response.ErrorListener failListener) {
@@ -907,7 +909,74 @@ public class ApiAgent {
         ApiBase.getInstance(context).addToRequestQueue(gsObjRequest);
 
     }
+
+    // apiRegMenuEvent
+    public void apiRegMenuEvent(Context context, String store, String code, String name,
+                                long evtstime, long evtetime, int evtcount, int price, int saleprice, Response.Listener<RetPushMsgStatus> succListener, Response.ErrorListener failListener) {
+
+        String url = URL_DOMAIN + URL_STORE_REG_MENU_EVENT;
+
+        // set add header S
+        HashMap<String, String> header = new HashMap<String, String>();
+
+        String auth = DeviceInfo.getAuth(context);
+
+        if (!TextUtils.isEmpty(auth))
+            header.put("auth", auth);
+
+        header.put("mdn", DeviceInfo.getMDN(context));
+
+        // set add header E
+
+        // set params S
+        JSONObject jsonParams = new JSONObject();
+        try {
+
+
+            jsonParams.put("store", store);
+            jsonParams.put("code", code);
+            jsonParams.put("name", name);
+            jsonParams.put("evtstime", evtstime);
+            jsonParams.put("evtetime", evtetime);
+            jsonParams.put("evtcount", evtcount);
+            jsonParams.put("price", price);
+            jsonParams.put("saleprice", saleprice);
+
+            //jsonParams = CommonParams.getCommonParams(context, jsonParams);
+
+        } catch (Exception e) {
+            LOG.d("apiGetPushMsgStatus error:" + e.getMessage());
+            jsonParams = null;
+        }
+
+        String reqParams = null;
+
+        if (jsonParams != null)
+            reqParams = jsonParams.toString();
+
+        LOG.d("url : " + url + " reqParams : " + reqParams);
+
+
+        // set params E
+
+        // request!
+        JsonGsonRequest<RetPushMsgStatus> gsObjRequest = new JsonGsonRequest<RetPushMsgStatus>(
+                Request.Method.POST,
+                url,
+                RetPushMsgStatus.class, header, reqParams,
+                succListener, failListener
+
+        );
+
+        // request queue!
+        ApiBase.getInstance(context).addToRequestQueue(gsObjRequest);
+
+    }
+
+
+
     // ui Api E
+
 
 
 }

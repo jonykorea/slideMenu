@@ -375,6 +375,27 @@ public class StoreMenuFragment extends BaseFragment {
                         }
 
                     }
+                    else if (retCode.ret == ServerDefineCode.NET_RESULT_LIMIT_COUNT)
+                    {
+                        // 111 : 죄송합니다. 고객님. 그 사이에 다른 분이 사가셨네요. 현재 ??개가 남았습니다.
+                        // 팝업 노출.
+
+                        if( mBaseDialog == null || !mBaseDialog.isShowing()) {
+                            mBaseDialog = new CuzDialog(context,
+                                    "확인", retCode.msg);
+
+                            mBaseDialog.show();
+
+                            mBaseDialog.setCancelable(true);
+
+                            mBaseDialog.getButtonAccept().setText("확인");
+
+                            mBaseDialog.getButtonCancel().setVisibility(View.INVISIBLE);
+
+
+
+                        }
+                    }
                     else
                     {
                         // fail

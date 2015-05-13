@@ -7,4 +7,5 @@ public class ServerDefineCode {
 
     public static int NET_RESULT_SUCC = 1;
     public static int NET_RESULT_ALREADY = 105;
+    public static int NET_RESULT_LIMIT_COUNT = 111;
 }
