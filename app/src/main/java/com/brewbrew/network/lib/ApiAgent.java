@@ -44,7 +44,8 @@ public class ApiAgent {
     // into Domain
     //private static final String URL_DOMAIN = "https://airagt.inavi.com";
     //private static final String URL_DOMAIN = "http://107.191.60.183:8020";
-    private static final String URL_DOMAIN = "http://api.brewbrew.co.kr:8020";
+    //private static final String URL_DOMAIN = "http://api.brewbrew.co.kr:8020";
+    private static final String URL_DOMAIN = "http://devapi.brewbrew.co.kr:8020";
 
 
     // publickey info

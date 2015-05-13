@@ -364,7 +364,6 @@ public class NavigationDrawerFragment extends Fragment {
             {
                 LOG.d("getSideMenu : "+ menuList.store.size());
 
-
                 for(int i = 0;i<menuList.store.size();i++)
                 {
                     String name = menuList.store.get(i).storename;
@@ -398,6 +397,15 @@ public class NavigationDrawerFragment extends Fragment {
 
             sideMenuArrayList.add(  new SideMenu(getString(R.string.store_all_list),
                     R.xml.xml_icon_menu_list)) ;
+
+            // Time Sale
+            PrefUserInfo prefUserInfo = new PrefUserInfo(getActivity());
+            String storeID = prefUserInfo.getUserID();
+            // 1022만 처리
+            if( storeID.equals("PGA010002")) {
+                sideMenuArrayList.add(new SideMenu(getString(R.string.time_sale),
+                        R.xml.xml_icon_menu_list));
+            }
 
             return sideMenuArrayList;
         }

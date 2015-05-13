@@ -34,6 +34,7 @@ import com.brewbrew.managers.pref.PrefStoreInfo;
 import com.brewbrew.managers.pref.PrefUserInfo;
 import com.brewbrew.views.own.OwnerAllOrderListFragment;
 import com.brewbrew.views.own.OwnerOrderListFragment;
+import com.brewbrew.views.own.OwnerTimeSaleFragment;
 import com.brewbrew.views.user.UserOrderListFragment;
 import com.brewbrew.views.user.UserStoreMenuFragment;
 import com.bumptech.glide.Glide;
@@ -69,6 +70,7 @@ public class SoulBrownMainActivity extends BaseFragmentActivity
     // owner
     Fragment ownerOrderListFragment;
     Fragment ownerAllOrderListFragment;
+    Fragment timeSaleFragment;
 
     Context context;
 
@@ -155,6 +157,9 @@ public class SoulBrownMainActivity extends BaseFragmentActivity
             // owner
             ownerOrderListFragment = new OwnerOrderListFragment();
             ownerAllOrderListFragment = new OwnerAllOrderListFragment();
+
+            // time sale
+            timeSaleFragment = new OwnerTimeSaleFragment();
 
         }
 
@@ -365,8 +370,16 @@ public class SoulBrownMainActivity extends BaseFragmentActivity
 
                 ft.replace(R.id.container, userStoreMenuFragment);
             } else {
-                ft.replace(R.id.container, ownerAllOrderListFragment);
 
+                if(position == 1) {
+                    ft.replace(R.id.container, ownerAllOrderListFragment);
+                }
+                else
+                {
+                    // time sale
+                    ft.replace(R.id.container, timeSaleFragment);
+
+                }
             }
         }
 

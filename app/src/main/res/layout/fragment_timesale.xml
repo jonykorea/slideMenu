@@ -1,0 +1,280 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:orientation="vertical">
+
+        <com.tws.widget.CuzTextView
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/size_36"
+            android:layout_marginTop="@dimen/size_8"
+            android:gravity="center"
+            android:text="@string/time.sale"
+            android:textColor="#349BCD"
+            android:textSize="@dimen/size_26" />
+
+        <com.tws.widget.CuzTextView
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/size_36"
+            android:layout_marginTop="@dimen/size_8"
+            android:gravity="center"
+            android:text="@string/time.sale.menu"
+            android:textSize="@dimen/size_18" />
+
+        <com.tws.widget.CuzRadioButton
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/size_36"
+            android:checked="true"
+            android:text="클럽샌드위치" />
+
+        <com.tws.widget.CuzTextView
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/size_36"
+            android:layout_marginTop="@dimen/size_8"
+            android:gravity="center"
+            android:text="@string/time.sale.price"
+            android:textSize="@dimen/size_18" />
+
+        <LinearLayout
+            android:layout_marginTop="@dimen/size_8"
+            android:layout_width="wrap_content"
+            android:gravity="center"
+            android:layout_height="@dimen/size_36"
+            android:orientation="horizontal">
+
+            <com.tws.widget.CuzTextView
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/size_36"
+                android:gravity="center"
+                android:text="￦ 2,000원"
+                android:textSize="@dimen/size_18" />
+
+            <ImageView
+                android:id="@+id/item_menu_info_arrow"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_gravity="center"
+                android:layout_marginLeft="@dimen/size_6"
+                android:layout_marginRight="@dimen/size_6"
+                android:background="@drawable/arrow_right" />
+
+            <com.tws.widget.CuzEditText
+                android:id="@+id/sale_price_edt"
+                android:layout_width="@dimen/size_100"
+                android:layout_height="@dimen/size_36"
+                android:gravity="center"
+                android:inputType="number|textNoSuggestions"
+                android:singleLine="true"
+                android:textSize="@dimen/size_18" />
+
+        </LinearLayout>
+
+
+
+        <com.tws.widget.CuzTextView
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/size_36"
+            android:layout_marginTop="@dimen/size_8"
+            android:gravity="center"
+            android:text="@string/time.sale.count"
+            android:textSize="@dimen/size_18" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/size_36"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginTop="@dimen/size_8"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <ImageButton
+                android:id="@+id/item_count_remove_btn"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:background="@xml/xml_icon_remove_bg" />
+
+
+            <com.tws.widget.CuzTextView
+                android:id="@+id/item_count_txt"
+                android:layout_width="45dp"
+                android:layout_height="30dp"
+
+                android:gravity="center"
+                android:text="0"
+                android:textColor="#3D454C"
+                android:textSize="@dimen/size_20"
+                android:textStyle="bold" />
+
+
+            <ImageButton
+                android:id="@+id/item_count_add_btn"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:background="@xml/xml_icon_add_bg" />
+        </LinearLayout>
+
+        <com.tws.widget.CuzTextView
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/size_36"
+            android:layout_marginTop="@dimen/size_8"
+            android:gravity="center"
+            android:text="@string/time.sale.time"
+            android:textSize="@dimen/size_18" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/size_36"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginTop="@dimen/size_8"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <com.tws.widget.CuzTextView
+                android:layout_width="wrap_content"
+                android:layout_height="30dp"
+                android:layout_marginRight="@dimen/size_8"
+                android:gravity="center"
+                android:text="시작시간"
+                android:textColor="#3D454C"
+                android:textSize="@dimen/size_20"
+                android:textStyle="bold" />
+
+
+            <com.tws.widget.CuzTextView
+                android:id="@+id/time_start_hour_txt"
+                android:layout_width="45dp"
+                android:layout_height="30dp"
+
+                android:gravity="center"
+                android:text="0"
+                android:textColor="#3D454C"
+                android:textSize="@dimen/size_20"
+                android:textStyle="bold" />
+
+            <com.tws.widget.CuzTextView
+                android:layout_width="10dp"
+                android:layout_height="30dp"
+
+                android:gravity="center"
+                android:text=":"
+                android:textColor="#3D454C"
+                android:textSize="@dimen/size_20"
+                android:textStyle="bold" />
+
+            <com.tws.widget.CuzTextView
+                android:id="@+id/time_start_min_txt"
+                android:layout_width="45dp"
+                android:layout_height="30dp"
+
+                android:gravity="center"
+                android:text="0"
+                android:textColor="#3D454C"
+                android:textSize="@dimen/size_20"
+                android:textStyle="bold" />
+
+
+
+            <ImageButton
+                android:id="@+id/time_start_remove_btn"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_marginRight="@dimen/size_8"
+                android:background="@xml/xml_icon_remove_bg" />
+
+            <ImageButton
+                android:id="@+id/time_start_add_btn"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:background="@xml/xml_icon_add_bg" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/size_36"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginTop="@dimen/size_8"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <com.tws.widget.CuzTextView
+                android:layout_width="wrap_content"
+                android:layout_height="30dp"
+                android:layout_marginRight="@dimen/size_8"
+                android:gravity="center"
+                android:text="종료시간"
+                android:textColor="#3D454C"
+                android:textSize="@dimen/size_20"
+                android:textStyle="bold" />
+
+
+            <com.tws.widget.CuzTextView
+                android:id="@+id/time_start_hour_txt"
+                android:layout_width="45dp"
+                android:layout_height="30dp"
+
+                android:gravity="center"
+                android:text="0"
+                android:textColor="#3D454C"
+                android:textSize="@dimen/size_20"
+                android:textStyle="bold" />
+
+            <com.tws.widget.CuzTextView
+                android:layout_width="10dp"
+                android:layout_height="30dp"
+
+                android:gravity="center"
+                android:text=":"
+                android:textColor="#3D454C"
+                android:textSize="@dimen/size_20"
+                android:textStyle="bold" />
+
+            <com.tws.widget.CuzTextView
+                android:id="@+id/time_end_min_txt"
+                android:layout_width="45dp"
+                android:layout_height="30dp"
+
+                android:gravity="center"
+                android:text="0"
+                android:textColor="#3D454C"
+                android:textSize="@dimen/size_20"
+                android:textStyle="bold" />
+
+
+
+            <ImageButton
+                android:id="@+id/time_end_remove_btn"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_marginRight="@dimen/size_8"
+                android:background="@xml/xml_icon_remove_bg" />
+
+            <ImageButton
+                android:id="@+id/time_end_add_btn"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:background="@xml/xml_icon_add_bg" />
+        </LinearLayout>
+
+
+        <com.tws.widget.CuzButton
+            android:id="@+id/confirm_btn"
+            android:layout_width="@dimen/size_220"
+            android:layout_height="@dimen/size_40"
+            android:layout_gravity="center"
+            android:layout_marginTop="@dimen/size_8"
+            android:background="@xml/xml_icon_btn_bg"
+            android:text="@string/time.sale.confirm"
+            android:textColor="#349BCD"
+            android:textSize="@dimen/size_24" />
+
+    </LinearLayout>
+
+</RelativeLayout>
