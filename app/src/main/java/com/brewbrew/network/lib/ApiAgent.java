@@ -159,7 +159,7 @@ public class ApiAgent {
     }
 
     // setuserloc
-    public void apiUserLoc(Context context, String userid, String lon, String lat, Response.Listener<RetCode> succListener, Response.ErrorListener failListener) {
+    public void apiUserLoc(Context context, String userid, String lon, String lat, float accuracy, long time, Response.Listener<RetCode> succListener, Response.ErrorListener failListener) {
 
         String url = URL_DOMAIN + URL_USER_SET_USERLOC;
 
@@ -191,6 +191,8 @@ public class ApiAgent {
 
             jsonParams.put("store", storeID);
             jsonParams.put("status", (int)distance);
+            jsonParams.put("accuracy", (int)accuracy);
+            jsonParams.put("time", time);
 
             //jsonParams = CommonParams.getCommonParams(context, jsonParams);
 

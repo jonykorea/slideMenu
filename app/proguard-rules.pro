@@ -169,6 +169,8 @@
   public static <fields>;
 }
 
+
+
 # Preserve the special static methods that are required in all enumeration classes.
 -keepclassmembers enum * {
     public static **[] values();

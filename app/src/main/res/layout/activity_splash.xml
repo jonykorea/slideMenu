@@ -56,6 +56,7 @@
             android:id="@+id/splash_login_edit"
             android:layout_width="@dimen/size_220"
             android:textSize="@dimen/size_18"
+            android:inputType="text|textNoSuggestions"
             android:layout_height="@dimen/size_50" />
 
         <com.tws.widget.CuzButton

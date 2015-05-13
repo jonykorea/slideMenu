@@ -72,12 +72,16 @@ public class LocationService extends Service {
         String lon = Double.toString(location.getLongitude());
         String lat = Double.toString(location.getLatitude());
 
+        float accuracy = location.getAccuracy();
+        long time = location.getTime();
+
+
         PrefUserInfo prefUserInfo = new PrefUserInfo(this);
 
         String userID = prefUserInfo.getUserID();
 
         if (api != null && !TextUtils.isEmpty(userID)) {
-            api.apiUserLoc(this, userID, lon, lat, new Response.Listener<RetCode>() {
+            api.apiUserLoc(this, userID, lon, lat, accuracy, time,  new Response.Listener<RetCode>() {
                 @Override
                 public void onResponse(RetCode retCode) {
 
