@@ -21,6 +21,7 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.load.resource.drawable.GlideDrawable;
 import com.bumptech.glide.request.animation.GlideAnimation;
 import com.bumptech.glide.request.target.SimpleTarget;
+import com.tws.common.lib.utils.TimeUtil;
 import com.tws.common.lib.views.CuzToast;
 import com.brewbrew.R;
 import com.brewbrew.managers.data.Menu;
@@ -113,6 +114,17 @@ public class MenuListAdapter extends RecyclerView.Adapter<MenuListAdapter.ViewHo
 
             int cntOpt = listMenu.get(num).option.size();
 
+            // timesale
+            if(listMenu.get(num).evtflag == 1)
+            {
+                viewHolder.menuTimeSaleLayout.setVisibility(View.VISIBLE);
+                viewHolder.menuTimeSaleText.setText("판매가능개수 : "+listMenu.get(num).evtcount);
+            }
+            else
+            {
+                viewHolder.menuTimeSaleLayout.setVisibility(View.GONE);
+            }
+
             if (cntOpt == 1) {
                 viewHolder.menuCountOpt01.setText(Integer.toString(listMenu.get(num).option.get(0).count));
 
@@ -154,10 +166,22 @@ public class MenuListAdapter extends RecyclerView.Adapter<MenuListAdapter.ViewHo
 
             }
 
+
         }
 
+        if(menu.evtflag == 1)
+        {
+            String eventEendTime = TimeUtil.getNewSimpleDateFormat("HH:mm", Long.toString(menu.evtetime));
 
-        viewHolder.menuName.setText(menu.name);
+            String name = menu.name + "("+eventEendTime+"까지 할인)";
+
+            viewHolder.menuName.setText(name);
+        }
+        else
+        {
+            viewHolder.menuName.setText(menu.name);
+        }
+
 
         // price
         int price = menu.price;
@@ -224,6 +248,18 @@ public class MenuListAdapter extends RecyclerView.Adapter<MenuListAdapter.ViewHo
             public void onClick(View view) {
 
                 int cnt = listMenu.get(num).option.get(0).count;
+
+                // time sale
+                if(listMenu.get(num).evtflag == 1)
+                {
+                    int evtcnt = listMenu.get(num).evtcount;
+
+                    if (cnt >= evtcnt)
+                    {
+                        mCuzToast.showToast(mContext.getString(R.string.time_sale_count_check), Toast.LENGTH_SHORT);
+                        return;
+                    }
+                }
 
 
                 if (cnt < 10) {
@@ -363,6 +399,8 @@ public class MenuListAdapter extends RecyclerView.Adapter<MenuListAdapter.ViewHo
         public LinearLayout menuDiv;
         public ImageView menuArrow;
 
+        public RelativeLayout menuTimeSaleLayout;
+        public TextView menuTimeSaleText;
 
         public ViewHolder(View itemView) {
             super(itemView);
@@ -391,6 +429,11 @@ public class MenuListAdapter extends RecyclerView.Adapter<MenuListAdapter.ViewHo
             menuTextOpt02 = (TextView) itemView.findViewById(R.id.item_menu_control_opt2_txt);
             menuRemoveOpt02 = (ImageButton) itemView.findViewById(R.id.item_menu_control_opt2_remove_btn);
             menuCountOpt02 = (TextView) itemView.findViewById(R.id.item_menu_control_opt2_count);
+
+            // timesale
+            menuTimeSaleLayout = (RelativeLayout) itemView.findViewById(R.id.item_menu_control_timesale_layout);
+            menuTimeSaleText = (TextView) itemView.findViewById(R.id.item_menu_control_timesale_txt);
+
         }
 
     }

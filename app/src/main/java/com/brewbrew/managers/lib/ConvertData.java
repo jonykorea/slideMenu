@@ -83,10 +83,16 @@ public class ConvertData {
 
                         LOG.d("i: "+i +" j :"+j+"orderData.size() + "+ orderData.size() +" orderData.get(i).option.size() "+ orderData.get(i).option.size());
 
+                        String nameOpt = orderData.get(i).option.get(j).name;
+                        if(nameOpt.equals("주문 개수"))
+                        {
+                            nameOpt = "Time Sale";
+                        }
+
                         if (i == (orderData.size() - 1) && j == (orderData.get(i).option.size() - 1)) {
-                            sumMenu += name + "(" + orderData.get(i).option.get(j).name + ")x" + orderData.get(i).option.get(j).count;
+                            sumMenu += name + "(" + nameOpt + ")x" + orderData.get(i).option.get(j).count;
                         } else {
-                            sumMenu += name + "(" + orderData.get(i).option.get(j).name + ")x" + orderData.get(i).option.get(j).count + ",";
+                            sumMenu += name + "(" +nameOpt + ")x" + orderData.get(i).option.get(j).count + ",";
                         }
                     }
 

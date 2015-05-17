@@ -6,6 +6,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -77,6 +78,7 @@ public class UserOrderListFragment extends BaseFragment implements
 
     private TextView tvHeaderPrice;
     private TextView tvHeaderTime;
+    private TextView tvHeaderVisitTime;
     private TextView tvHeaderMenu;
     private TextView tvHeaderStore;
     private TextView tvHeaderKey;
@@ -85,6 +87,7 @@ public class UserOrderListFragment extends BaseFragment implements
     private LinearLayout llHeaderStatusFinish;
     private LinearLayout llHeaderStatusCancel;
     private Button btnHeaderStatusCancel;
+    private Button btnHeaderStatusRecall;
 
     private CuzToast mCuzToast;
 
@@ -114,7 +117,7 @@ public class UserOrderListFragment extends BaseFragment implements
 
         this.inflater = inflater;
 
-        return inflater.inflate(R.layout.fragment_orderlist_sticky, container, false);
+        return inflater.inflate(R.layout.fragment_orderlist_sticky_user, container, false);
     }
 
     @Override
@@ -146,6 +149,7 @@ public class UserOrderListFragment extends BaseFragment implements
         View vHeader = inflater.inflate(R.layout.list_header, null);
         tvHeaderPrice = (TextView) vHeader.findViewById(R.id.header_recent_row_price);
         tvHeaderTime = (TextView) vHeader.findViewById(R.id.header_recent_row_time);
+        tvHeaderVisitTime = (TextView) vHeader.findViewById(R.id.header_recent_row_visit_time);
         tvHeaderKey = (TextView) vHeader.findViewById(R.id.header_recent_row_key);
         tvHeaderMenu = (TextView) vHeader.findViewById(R.id.header_recent_row_menu);
         tvHeaderStore = (TextView) vHeader.findViewById(R.id.header_recent_row_store);
@@ -157,10 +161,12 @@ public class UserOrderListFragment extends BaseFragment implements
 
         btnHeaderStatusCancel = (Button) vHeader.findViewById(R.id.header_recent_cancel_btn);
 
+        btnHeaderStatusRecall = (Button) vHeader.findViewById(R.id.header_recent_recall_btn);
+
         // header content E
 
         stickyList.addHeaderView(vHeader);
-        stickyList.addFooterView(inflater.inflate(R.layout.list_footer, null));
+        stickyList.addFooterView(inflater.inflate(R.layout.list_footer_user, null));
         stickyList.setEmptyView(view.findViewById(R.id.empty));
         stickyList.setDrawingListUnderStickyHeader(true);
         stickyList.setAreHeadersSticky(true);
@@ -197,16 +203,18 @@ public class UserOrderListFragment extends BaseFragment implements
             ReceiptInfoRow info = ConvertData.getSumPrice(recentOrderInfo.order);
 
             tvHeaderKey.setText(getString(R.string.order_id)+" : "+recentOrderInfo.orderkey);
-            tvHeaderStore.setText(recentOrderInfo.storename);
+            tvHeaderStore.setText(getString(R.string.order_store)+" : "+recentOrderInfo.storename);
             tvHeaderMenu.setText(info.sumMenu);
             tvHeaderPrice.setText(getString(R.string.order_sum_price)+" : "+info.sumPrice);
 
             String date = TimeUtil.getSoulBrownOrderDateInfo(recentOrderInfo.regtime);
 
+
             String regTime = TimeUtil.getNewSimpleDateFormat("a hh시 mm분", recentOrderInfo.regtime);
+            String arrTime = TimeUtil.getNewSimpleDateFormat("a hh시 mm분", recentOrderInfo.arrtime);
 
-            tvHeaderTime.setText(date + " " +regTime);
-
+            tvHeaderTime.setText("음료 주문시간 : "+date + " " +regTime);
+            tvHeaderVisitTime.setText("방문 예정시간 : "+date + " " +arrTime);
             if(status == 3)
             {
                 llHeaderStatusReady.setBackgroundResource(R.drawable.icon_btn_bg_s);
@@ -262,6 +270,69 @@ public class UserOrderListFragment extends BaseFragment implements
                     }
                 });
 
+                Log.i("jony"," recentOrderInfo "+ recentOrderInfo.regtime);
+
+
+
+                    final long regUnixTime = Long.parseLong(recentOrderInfo.regtime);
+                   // btnHeaderStatusRecall.setTextColor(Color.parseColor("E52A19"));
+                    btnHeaderStatusRecall.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+
+                            // 현재시간이랑 비교후 5분이상 지난 후에만 클릭 가능하게 처리.
+                            final int FIVE_MIN = 60 * 5;
+                            long nowUnixTime = System.currentTimeMillis() / 1000L;
+                            long tmpTime = regUnixTime + FIVE_MIN;
+
+                            if (tmpTime <= nowUnixTime) {
+
+                            if (!TextUtils.isEmpty(orderkey)) {
+                                // cancel popup
+                                if (mBaseDialog == null || !mBaseDialog.isShowing()) {
+
+                                    // order info
+                                    String orderInfo =
+                                            tvHeaderStore.getText().toString() + "\n\n"
+                                                    + tvHeaderTime.getText().toString() + "\n"
+                                                    + tvHeaderKey.getText().toString() + "\n"
+                                                    + tvHeaderPrice.getText().toString() + "\n"
+                                                    + tvHeaderMenu.getText().toString();
+
+                                    mBaseDialog = new CuzDialog(context,
+                                            getString(R.string.order_recall), orderInfo);
+
+                                    mBaseDialog.show();
+
+                                    mBaseDialog.setCancelable(true);
+
+                                    mBaseDialog.getButtonAccept().setText(getString(R.string.order_recall));
+
+                                    mBaseDialog.getButtonCancel().setText(getString(R.string.cancel));
+
+                                    mBaseDialog.setOnAcceptButtonClickListener(new View.OnClickListener() {
+                                        @Override
+                                        public void onClick(View view) {
+
+                                            mBaseDialog.dismiss();
+                                            // api
+                                            apiOrderRecall(orderkey);
+                                        }
+                                    });
+                                }
+                            } else {
+                                // order key error
+                            }
+                            } else {
+                                // 5분 미만일 경우
+
+                                mCuzToast.showToast(getString(R.string.order_recall_fail), Toast.LENGTH_LONG);
+                            }
+                        }
+                    });
+
+
+
             }else if(status == 2)
             {
                 llHeaderStatusReady.setBackgroundResource(R.drawable.icon_btn_bg_p);
@@ -305,7 +376,14 @@ public class UserOrderListFragment extends BaseFragment implements
 
                 for(int j = 0; j < orderData.get(i).option.size();j++)
                 {
-                    sumMenu += name +"("+orderData.get(i).option.get(j).name+")x" +orderData.get(i).option.get(j).count+",";
+                    String nameOpt = orderData.get(i).option.get(j).name;
+                    // timesale
+                    if(nameOpt.equals("주문 개수"))
+                    {
+                        nameOpt = "Time Sale";
+                    }
+
+                    sumMenu += name +"("+nameOpt+")x" +orderData.get(i).option.get(j).count+",";
                 }
 
             }
@@ -514,6 +592,13 @@ public class UserOrderListFragment extends BaseFragment implements
                     for(int j = 0; j<menu.option.size();j++) {
                         int cnt = menu.option.get(j).count;
                         String nameOpt = menu.option.get(j).name;
+
+                        // timesale
+                        if(nameOpt.equals("주문 개수"))
+                        {
+                            nameOpt = "Time Sale";
+                        }
+
                         int saleprice = menu.saleprice;
 
                         sumPrice += (saleprice + menu.option.get(j).addprice) * cnt;
@@ -537,7 +622,8 @@ public class UserOrderListFragment extends BaseFragment implements
 
                         String arriveTime = (String) ((TextView) orderDialog.getArriveTime()).getText();
 
-                        apiOrderMenu(storeID, ListMenu, arriveTime);
+                        confirmOrder(storeID, ListMenu, arriveTime);
+                        //apiOrderMenu(storeID, ListMenu, arriveTime);
 
                     }
                 });
@@ -562,14 +648,55 @@ public class UserOrderListFragment extends BaseFragment implements
                 // get setting time E
 
 
-                orderDialog.getButtonAccept().setText(getString(R.string.reorder));
-                orderDialog.getButtonCancel().setText(getString(R.string.cancel));
+                orderDialog.getButtonAccept().setText(getString(R.string.order_confirm));
+                orderDialog.getButtonCancel().setText(getString(R.string.order_cancel));
 
             } else {
                 mCuzToast.showToast( getString(R.string.order_select),Toast.LENGTH_SHORT);
             }
         }
 
+
+    }
+
+    private void confirmOrder(final String storeId, final List<Menu> ListMenu,final String arriveTime)
+    {
+
+        if( mBaseDialog == null || !mBaseDialog.isShowing()) {
+            mBaseDialog = new CuzDialog(context,
+                    getString(R.string.confirm),getString(R.string.order_menu_confirm_content));
+
+            mBaseDialog.setOnAcceptButtonClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+
+                    new Handler().postDelayed(new Runnable() {// 0.2 초 후에 실행
+                        @Override
+                        public void run() {
+                            // 실행할 동작 코딩
+                            apiOrderMenu(storeId, ListMenu, arriveTime);
+                        }
+                    }, 200);
+
+
+                }
+            });
+
+            mBaseDialog.setOnCancelButtonClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+
+                }
+            });
+
+            mBaseDialog.show();
+
+            mBaseDialog.setCancelable(true);
+
+            mBaseDialog.getButtonAccept().setText(getString(R.string.order_confirm));
+            mBaseDialog.getButtonCancel().setText(getString(R.string.order_cancel));
+            mBaseDialog.getButtonCancel().setVisibility(View.VISIBLE);
+        }
 
     }
 
@@ -876,6 +1003,61 @@ public class UserOrderListFragment extends BaseFragment implements
                     LOG.d("apiOrderCancel VolleyError " + volleyError.getMessage());
 
                     mCuzToast.showToast( getString(R.string.network_fail),Toast.LENGTH_SHORT);
+
+                }
+            });
+        }
+    }
+
+    public void apiOrderRecall(String orderKey) {
+
+        ApiAgent api = new ApiAgent();
+
+        LOG.d("apiOrderRecall orderKey " + orderKey);
+
+        if (api != null && !TextUtils.isEmpty(orderKey)) {
+            api.apiOrderRecall(context, orderKey, new Response.Listener<RetCode>() {
+                @Override
+                public void onResponse(RetCode retCode) {
+
+
+                    LOG.d("retCode.result : " + retCode.ret);
+                    LOG.d("retCode.errormsg : " + retCode.msg);
+
+                    if (!isAdded())
+                        return;
+
+
+                    if (retCode.ret == ServerDefineCode.NET_RESULT_SUCC) {
+
+                        // success
+                        LOG.d("apiOrderRecall Succ");
+
+                        mCuzToast.showToast(getString(R.string.order_recall_succ), Toast.LENGTH_LONG);
+                        refreshData();
+
+
+                    } else {
+                        // fail
+                        LOG.d("apiOrderRecall Fail " + retCode.ret);
+
+                        //showToast("주문 이력 오류 : "+ retCode.errormsg+"["+retCode.result+"]");
+
+                        mCuzToast.showToast(getString(R.string.order_fail) + " : " + retCode.msg + "[" + retCode.ret + "]", Toast.LENGTH_SHORT);
+                        refreshData();
+                    }
+
+                }
+            }, new Response.ErrorListener() {
+
+
+                @Override
+                public void onErrorResponse(VolleyError volleyError) {
+
+
+                    LOG.d("apiOrderRecall VolleyError " + volleyError.getMessage());
+
+                    mCuzToast.showToast(getString(R.string.network_fail), Toast.LENGTH_SHORT);
 
                 }
             });

@@ -87,7 +87,7 @@ public class OwnerAllOrderListFragment extends BaseFragment implements
 
         this.inflater = inflater;
 
-        return inflater.inflate(R.layout.fragment_orderlist_sticky, container, false);
+        return inflater.inflate(R.layout.fragment_orderlist_sticky_owner, container, false);
     }
 
     @Override
@@ -119,7 +119,7 @@ public class OwnerAllOrderListFragment extends BaseFragment implements
         // header content E
 
         stickyList.addHeaderView(vHeader);
-        stickyList.addFooterView(inflater.inflate(R.layout.list_footer, null));
+        stickyList.addFooterView(inflater.inflate(R.layout.list_footer_owner, null));
         stickyList.setEmptyView(view.findViewById(R.id.empty));
         stickyList.setDrawingListUnderStickyHeader(true);
         stickyList.setAreHeadersSticky(true);

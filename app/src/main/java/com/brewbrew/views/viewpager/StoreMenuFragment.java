@@ -153,6 +153,12 @@ public class StoreMenuFragment extends BaseFragment {
             menu.comment = storeInfo.menu.get(i).comment;
             menu.comment_write = storeInfo.menu.get(i).commentwriter;
 
+            menu.evtcount = storeInfo.menu.get(i).evtcount;
+            menu.evtflag = storeInfo.menu.get(i).evtflag;
+
+            menu.evtetime = storeInfo.menu.get(i).evtetime;
+            menu.evtstime = storeInfo.menu.get(i).evtstime;
+
             mMenuData.add(menu);
         }
 
@@ -215,6 +221,13 @@ public class StoreMenuFragment extends BaseFragment {
                     for(int j = 0; j<menu.option.size();j++) {
                         int cnt = menu.option.get(j).count;
                         String nameOpt = menu.option.get(j).name;
+
+                        // timesale
+                        if(menu.evtflag == 1)
+                        {
+                            nameOpt = "Time Sale";
+                        }
+
                         int saleprice = menu.saleprice;
 
                         sumPrice += (saleprice + menu.option.get(j).addprice) * cnt;
@@ -245,7 +258,9 @@ public class StoreMenuFragment extends BaseFragment {
 
                             String arriveTime = (String) ((TextView) orderDialog.getArriveTime()).getText();
 
-                            apiOrderMenu(mStoreID, ListMenu, arriveTime);
+                            confirmOrder(mStoreID, ListMenu, arriveTime);
+                            //apiOrderMenu(mStoreID, ListMenu, arriveTime);
+
 
                         }
                     });
@@ -269,7 +284,7 @@ public class StoreMenuFragment extends BaseFragment {
 
                     // get setting time E
 
-                    orderDialog.getButtonAccept().setText("주문");
+                    orderDialog.getButtonAccept().setText("시간 설정");
                     orderDialog.getButtonCancel().setText("취소");
                 }
 
@@ -277,7 +292,45 @@ public class StoreMenuFragment extends BaseFragment {
                 mCuzToast.showToast( getString(R.string.order_select),Toast.LENGTH_SHORT);
             }
         }
+    }
 
+    private void confirmOrder(final String storeId, final List<Menu> ListMenu,final String arriveTime)
+    {
+
+        if( mBaseDialog == null || !mBaseDialog.isShowing()) {
+            mBaseDialog = new CuzDialog(context,
+                    getString(R.string.confirm),getString(R.string.order_menu_confirm_content));
+
+            mBaseDialog.setOnAcceptButtonClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+
+                    new Handler().postDelayed(new Runnable() {// 0.2 초 후에 실행
+                        @Override
+                        public void run() {
+                            // 실행할 동작 코딩
+                            apiOrderMenu(storeId, ListMenu, arriveTime);
+                        }
+                    }, 200);
+
+                }
+            });
+
+            mBaseDialog.setOnCancelButtonClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+
+                }
+            });
+
+            mBaseDialog.show();
+
+            mBaseDialog.setCancelable(true);
+
+            mBaseDialog.getButtonAccept().setText(getString(R.string.order_confirm));
+            mBaseDialog.getButtonCancel().setText(getString(R.string.order_cancel));
+            mBaseDialog.getButtonCancel().setVisibility(View.VISIBLE);
+        }
 
     }
 

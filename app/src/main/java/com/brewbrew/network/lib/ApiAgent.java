@@ -45,7 +45,7 @@ public class ApiAgent {
     //private static final String URL_DOMAIN = "https://airagt.inavi.com";
     //private static final String URL_DOMAIN = "http://107.191.60.183:8020";
     //private static final String URL_DOMAIN = "http://api.brewbrew.co.kr:8020";
-    private static final String URL_DOMAIN = "http://devapi.brewbrew.co.kr:8020";
+    private static final String URL_DOMAIN = "http://107.191.60.183:8020";
 
 
     // publickey info
@@ -104,6 +104,10 @@ public class ApiAgent {
     private static final String URL_STORE_LOGOUT = "/bb/if/store/logout";
 
     private static final String URL_STORE_REG_MENU_EVENT = "/bb/if/store/regmenuevt";
+
+    private static final String URL_STORE_ORDER_REPUSH = "/bb/if/store/orderrepush";
+
+
 
 
     // get publickey
@@ -915,7 +919,7 @@ public class ApiAgent {
 
     // apiRegMenuEvent
     public void apiRegMenuEvent(Context context, String store, String code, String name,
-                                long evtstime, long evtetime, int evtcount, int price, int saleprice, Response.Listener<RetPushMsgStatus> succListener, Response.ErrorListener failListener) {
+                                long evtstime, long evtetime, int evtcount, int price, int saleprice, Response.Listener<RetCode> succListener, Response.ErrorListener failListener) {
 
         String url = URL_DOMAIN + URL_STORE_REG_MENU_EVENT;
 
@@ -948,7 +952,7 @@ public class ApiAgent {
             //jsonParams = CommonParams.getCommonParams(context, jsonParams);
 
         } catch (Exception e) {
-            LOG.d("apiGetPushMsgStatus error:" + e.getMessage());
+            LOG.d("apiRegMenuEvent error:" + e.getMessage());
             jsonParams = null;
         }
 
@@ -963,10 +967,64 @@ public class ApiAgent {
         // set params E
 
         // request!
-        JsonGsonRequest<RetPushMsgStatus> gsObjRequest = new JsonGsonRequest<RetPushMsgStatus>(
+        JsonGsonRequest<RetCode> gsObjRequest = new JsonGsonRequest<RetCode>(
                 Request.Method.POST,
                 url,
-                RetPushMsgStatus.class, header, reqParams,
+                RetCode.class, header, reqParams,
+                succListener, failListener
+
+        );
+
+        // request queue!
+        ApiBase.getInstance(context).addToRequestQueue(gsObjRequest);
+
+    }
+
+    // apiChgOrderMenu
+    public void apiOrderRecall(Context context, String orderKey, Response.Listener<RetCode> succListener, Response.ErrorListener failListener) {
+
+        String url = URL_DOMAIN + URL_STORE_ORDER_REPUSH;
+
+        // set add header S
+        HashMap<String, String> header = new HashMap<String, String>();
+
+        String auth = DeviceInfo.getAuth(context);
+
+        if (!TextUtils.isEmpty(auth))
+            header.put("auth", auth);
+
+        header.put("mdn", DeviceInfo.getMDN(context));
+
+        // set add header E
+
+        // set params S
+        JSONObject jsonParams = new JSONObject();
+        try {
+
+            jsonParams.put("orderkey", orderKey);
+
+            //jsonParams = CommonParams.getCommonParams(context, jsonParams);
+
+        } catch (Exception e) {
+            LOG.d("apiOrderRecall error:" + e.getMessage());
+            jsonParams = null;
+        }
+
+        String reqParams = null;
+
+        if (jsonParams != null)
+            reqParams = jsonParams.toString();
+
+        LOG.d("url : " + url + " reqParams : " + reqParams);
+
+
+        // set params E
+
+        // request!
+        JsonGsonRequest<RetCode> gsObjRequest = new JsonGsonRequest<RetCode>(
+                Request.Method.POST,
+                url,
+                RetCode.class, header, reqParams,
                 succListener, failListener
 
         );

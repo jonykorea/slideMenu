@@ -9,7 +9,7 @@ package com.app.define;
 public class LOG {
 
     public static final String TAG = "BrewBrew";
-    public static final boolean DEBUG = false;
+    public static final boolean DEBUG = true;
 
     public static void d(String msg) {
     	if( DEBUG )
