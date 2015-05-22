@@ -1275,6 +1275,8 @@ com.brewbrew.network.lib.ApiAgent:
     private static final java.lang.String URL_STORE_GET_ORDERLIST
     private static final java.lang.String URL_STORE_CHG_ORDERSTATUS
     private static final java.lang.String URL_STORE_LOGOUT
+    private static final java.lang.String URL_STORE_REG_MENU_EVENT
+    private static final java.lang.String URL_STORE_ORDER_REPUSH
 com.brewbrew.views.NavigationDrawerFragment:
     private static final java.lang.String STATE_SELECTED_POSITION
     private boolean mFromSavedInstanceState
@@ -1288,7 +1290,7 @@ com.brewbrew.views.own.OwnerOrderListFragment:
 com.brewbrew.views.own.OwnerOrderListFragment$10
 com.brewbrew.views.own.OwnerOrderListFragment$9
 com.brewbrew.views.user.UserOrderListFragment:
-    290:317:private com.brewbrew.network.data.ReceiptInfoRow getSumPrice(java.util.ArrayList)
+    358:392:private com.brewbrew.network.data.ReceiptInfoRow getSumPrice(java.util.ArrayList)
 com.brewbrew.views.viewpager.ViewPagerAdapter:
     private com.brewbrew.views.viewpager.StoreMenuFragment$CuzOnMoveListener listener
 com.bumptech.glide.BitmapOptions

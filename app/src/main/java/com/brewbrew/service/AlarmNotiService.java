@@ -77,7 +77,8 @@ http://examples.javacodegeeks.com/android/android-soundpool-example/
     }
 
     private void initTimer() {
-        mCntTimer = new CountDownTimer(5 * 1000, 1000) {
+
+        mCntTimer = new CountDownTimer(6 * 1000, 2000) {
             @Override
             public void onTick(long millisUntilFinished) {
 
@@ -107,7 +108,7 @@ http://examples.javacodegeeks.com/android/android-soundpool-example/
             }
         });
 
-        mSoundManager.addSound(1, R.raw.beep);
+        mSoundManager.addSound(1, R.raw.buru_retailer_400);
     }
 
     private void callVibrator() {

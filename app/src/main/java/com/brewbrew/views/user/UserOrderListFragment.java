@@ -270,9 +270,6 @@ public class UserOrderListFragment extends BaseFragment implements
                     }
                 });
 
-                Log.i("jony"," recentOrderInfo "+ recentOrderInfo.regtime);
-
-
 
                     final long regUnixTime = Long.parseLong(recentOrderInfo.regtime);
                    // btnHeaderStatusRecall.setTextColor(Color.parseColor("E52A19"));

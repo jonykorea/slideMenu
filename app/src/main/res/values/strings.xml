@@ -20,7 +20,7 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
 
 
-    <string name="new_version">새로운 버젼이 있습니다. 마켓으로 이동합니다.</string>
+    <string name="new_version">새로운 버젼이 있습니다. 스토어로 이동합니다.</string>
     <string name="store_all_list">완료 내역</string>
     <string name="orderlist">주문 내역</string>
     <string name="time.sale">Time Sale</string>
@@ -80,7 +80,7 @@
     <string name="order.menu.confirm_content">[주문넣기] 버튼을 클릭하면 커피숍으로 주문이 들어갑니다.\n\n설정하신 시간에 맞춰 커피숍으로 가셔서 음료를 Take out하시기 바랍니다. 결제는 커피숍에서 진행됩니다.\n\n주문하고 안가면 미워할꺼예요!</string>
 
     <string name="info.brew">※ 브루잉 : 주문 접수 및 음료를 만든다는 뜻입니다.</string>
-    <string name="info.takeout">※ Take out :  \"가져가시옵소서\ "라는 뜻입니다.</string>
+    <string name="info.takeout">※ Take out :  \"가져가시옵소서\                   "라는 뜻입니다.</string>
 
     <string name="order.recall.succ">주문을 다시 전달하였습니다.\n조금만 기다려 주세요!(사장님 빨리빨리! 이러다 손님 떨어질라!)</string>
     <string name="order.recall.fail">주문한지 5분이 지난 후에 사용 할 수 있습니다. 5분 후에 다시 사용 바랍니다.</string>
