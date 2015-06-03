@@ -5,12 +5,14 @@
       <module fileurl="file://$PROJECT_DIR$/SoulBrownCBT.iml" filepath="$PROJECT_DIR$/SoulBrownCBT.iml" />
       <module fileurl="file://$PROJECT_DIR$/TwsCommonLib/TwsCommonLib.iml" filepath="$PROJECT_DIR$/TwsCommonLib/TwsCommonLib.iml" />
       <module fileurl="file://$PROJECT_DIR$/TwsNetworkLib/TwsNetworkLib.iml" filepath="$PROJECT_DIR$/TwsNetworkLib/TwsNetworkLib.iml" />
+      <module fileurl="file://$PROJECT_DIR$/ViewPagerIndicator/ViewPagerIndicator.iml" filepath="$PROJECT_DIR$/ViewPagerIndicator/ViewPagerIndicator.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/brewbrew/brewbrew.iml" filepath="$PROJECT_DIR$/brewbrew/brewbrew.iml" />
       <module fileurl="file://$PROJECT_DIR$/demoactivity/demoactivity.iml" filepath="$PROJECT_DIR$/demoactivity/demoactivity.iml" />
       <module fileurl="file://$PROJECT_DIR$/googleapiclient/googleapiclient.iml" filepath="$PROJECT_DIR$/googleapiclient/googleapiclient.iml" />
+      <module fileurl="file://$PROJECT_DIR$/kakaosdk/kakaosdk.iml" filepath="$PROJECT_DIR$/kakaosdk/kakaosdk.iml" />
       <module fileurl="file://$PROJECT_DIR$/slidinglayerLib/slidinglayerLib.iml" filepath="$PROJECT_DIR$/slidinglayerLib/slidinglayerLib.iml" />
       <module fileurl="file://$PROJECT_DIR$/stickylistviewlib/stickylistviewlib.iml" filepath="$PROJECT_DIR$/stickylistviewlib/stickylistviewlib.iml" />
     </modules>
   </component>
 </project>
-

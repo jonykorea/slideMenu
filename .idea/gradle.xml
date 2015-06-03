@@ -12,9 +12,12 @@
             <option value="$PROJECT_DIR$" />
             <option value="$PROJECT_DIR$/TwsCommonLib" />
             <option value="$PROJECT_DIR$/TwsNetworkLib" />
+            <option value="$PROJECT_DIR$/ViewPagerIndicator" />
             <option value="$PROJECT_DIR$/app" />
+            <option value="$PROJECT_DIR$/brewbrew" />
             <option value="$PROJECT_DIR$/demoactivity" />
             <option value="$PROJECT_DIR$/googleapiclient" />
+            <option value="$PROJECT_DIR$/kakaosdk" />
             <option value="$PROJECT_DIR$/slidinglayerLib" />
             <option value="$PROJECT_DIR$/stickylistviewlib" />
           </set>

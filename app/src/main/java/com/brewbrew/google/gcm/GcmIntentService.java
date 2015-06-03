@@ -33,8 +33,10 @@ import android.app.IntentService;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
+import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -101,9 +103,9 @@ public class GcmIntentService extends IntentService {
              * not interested in, or that you don't recognize.
              */
             if (GoogleCloudMessaging.MESSAGE_TYPE_SEND_ERROR.equals(messageType)) {
-                sendNotification("Send error: " + extras.toString());
+                sendNotification("Send error: " + extras.toString(),true);
             } else if (GoogleCloudMessaging.MESSAGE_TYPE_DELETED.equals(messageType)) {
-                sendNotification("Deleted messages on server: " + extras.toString());
+                sendNotification("Deleted messages on server: " + extras.toString(),true);
                 // If it's a regular GCM message, do some work.
             } else if (GoogleCloudMessaging.MESSAGE_TYPE_MESSAGE.equals(messageType)) {
                 // This loop represents the service doing some work.
@@ -140,7 +142,7 @@ public class GcmIntentService extends IntentService {
 
 
 
-                    sendNotification(decMsg);
+                   //sendNotification(decMsg,true);
 
                     Intent intentGcm = new Intent(GCM_BROADCAST);
 
@@ -152,6 +154,7 @@ public class GcmIntentService extends IntentService {
                     // alarm , geofence off
                     if (pushFlag.equals(GcmDefine.PUSH_CHG_ORDER) ) {
 
+                        sendNotification(decMsg,true);
                         //if( status == 1 ) {
                             LOG.d("GcmIntentService alarm , geofence off");
 
@@ -167,6 +170,7 @@ public class GcmIntentService extends IntentService {
                     }else if(pushFlag.equals(GcmDefine.PUSH_CANCEL_ORDER) || pushFlag.equals(GcmDefine.PUSH_APPROACH_USER) || pushFlag.equals(GcmDefine.PUSH_NEW_ORDER))
                     {
                         // alarm service call
+                        sendNotification(decMsg,false);
 
                         Intent intentSvc = new Intent(this, AlarmNotiService.class);
 
@@ -174,6 +178,7 @@ public class GcmIntentService extends IntentService {
 
                     }else if(pushFlag.equals(GcmDefine.PUSH_CHG_PUSHKEY))
                     {
+                        sendNotification(decMsg,true);
                         setPushStatus(0);
                     }
 
@@ -213,7 +218,7 @@ public class GcmIntentService extends IntentService {
     // Put the message into a notification and post it.
     // This is just one simple example of what you might choose to do with
     // a GCM message.
-    private void sendNotification(String msg) {
+    private void sendNotification(String msg, boolean isUser) {
 
         WakeupMgr wakeupMgr;
         wakeupMgr = new WakeupMgr(this);
@@ -237,10 +242,14 @@ public class GcmIntentService extends IntentService {
                         .setStyle(new NotificationCompat.BigTextStyle()
                                 .bigText(msg))
                         .setAutoCancel(true)
-                        .setDefaults(Notification.DEFAULT_LIGHTS | Notification.DEFAULT_SOUND)
+                        .setDefaults(Notification.DEFAULT_LIGHTS)
                         .setContentText(msg);
 
-
+        if(isUser) {
+            long[] patten = {0, 1000};
+            mBuilder.setVibrate(patten);
+            mBuilder.setSound(Uri.parse(ContentResolver.SCHEME_ANDROID_RESOURCE + "://" + getPackageName() + "/raw/buru_user_100"));
+        }
         mBuilder.setContentIntent(contentIntent);
 
         mNotificationManager.notify(NOTIFICATION_ID, mBuilder.build());

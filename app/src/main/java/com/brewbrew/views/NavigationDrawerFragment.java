@@ -368,6 +368,23 @@ public class NavigationDrawerFragment extends Fragment {
                 {
                     String name = menuList.store.get(i).storename;
 
+                    // time sale check S
+
+                    for(int j = 0;j <menuList.store.size();j++) {
+
+                        int flag = menuList.store.get(i).menu.get(j).evtflag;
+
+                        if( flag == 1)
+                        {
+                            name = menuList.store.get(i).storename+"(Time Sale)";
+
+                            break;
+                        }
+
+                    }
+
+                    // time sale check E
+
                     sideMenuArrayList.add(  new SideMenu(name,
                             R.xml.xml_icon_store)) ;
                 }

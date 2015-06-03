@@ -1,0 +1,19 @@
+<resources>
+    <string name="app_name">브루브루</string>
+
+    <!-- Kakao ApiKey S -->
+    <string name="kakao_app_key">8a24f0c78d769d0604a0b086d226060c</string>
+    <string name="kakao_scheme">kakao8a24f0c78d769d0604a0b086d226060c</string>
+    <string name="kakaolink_host">kakaolink</string>
+    <!-- Kakao ApiKey E -->
+
+
+    <string name="hello_world">Hello world!</string>
+    <string name="action_settings">Settings</string>
+    <string name="title_activity_dm_slidnig_up_panel">DmSlidnigUpPanelActivity</string>
+    <string name="title_activity_dm_daum_map_main">DmDaumMapMainActivity</string>
+    <string name="title_activity_dm_kakao_link_main">DmKakaoLinkMainActivity</string>
+    <string name="title_activity_dm_sliding_dialog_main">DmSlidingDialogMainActivity</string>
+    <string name="title_activity_tutorial">TutorialActivity</string>
+    <string name="title_activity_dm_grid_layout_main">DmGridLayoutMainActivity</string>
+</resources>

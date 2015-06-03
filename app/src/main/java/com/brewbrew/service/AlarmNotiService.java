@@ -8,6 +8,7 @@ import android.media.SoundPool;
 import android.os.CountDownTimer;
 import android.os.IBinder;
 import android.os.Vibrator;
+import android.util.Log;
 
 import com.app.define.LOG;
 import com.tws.common.lib.mgr.WakeupMgr;
@@ -78,7 +79,7 @@ http://examples.javacodegeeks.com/android/android-soundpool-example/
 
     private void initTimer() {
 
-        mCntTimer = new CountDownTimer(6 * 1000, 2000) {
+        mCntTimer = new CountDownTimer(8 * 1000, 2500) {
             @Override
             public void onTick(long millisUntilFinished) {
 
@@ -131,10 +132,14 @@ http://examples.javacodegeeks.com/android/android-soundpool-example/
     }
 
     private void callSound() {
-        if (mIsLoad && !mIsPlay) {
+
+        //Log.i("jony", "callSound : mIsLoad "+ mIsLoad +" mIsPlay "+ mIsPlay);
+
+        if (mIsLoad) {
             setMaxVolume();
 
             mIsPlay = true;
+
             mSoundManager.playSound(1);
         }
 

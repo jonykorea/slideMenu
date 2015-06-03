@@ -1,0 +1,37 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".DemoMainActivity">
+
+
+    <com.brewbrew.views.layout.SlidingLayer
+        android:id="@+id/slidinglayer"
+        android:layout_width="match_parent"
+
+        android:layout_height="match_parent">
+
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center">
+
+            <com.makeramen.roundedimageview.RoundedImageView xmlns:app="http://schemas.android.com/apk/res-auto"
+                android:id="@+id/slidinglayer_image"
+
+                android:layout_width="285dp"
+                android:layout_height="400dp"
+                android:src="@drawable/ic_launcher"
+                app:riv_corner_radius="10dp" />
+
+            <Button
+                android:id="@+id/slidinglayer_btn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="zzzzz" />
+
+        </RelativeLayout>
+
+    </com.brewbrew.views.layout.SlidingLayer>
+
+</RelativeLayout>

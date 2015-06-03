@@ -1237,7 +1237,7 @@ com.brewbrew.google.gcm.GcmIntentService:
     android.support.v4.app.NotificationCompat$Builder builder
     private com.tws.common.lib.soulbrownlib.SoundManager mSoundManager
     private android.os.Vibrator mVib
-    201:201:private void initExtraAlarm()
+    206:206:private void initExtraAlarm()
 com.brewbrew.google.geofence.GeofenceClient:
     private boolean mGeofencesAdded
     private android.content.SharedPreferences mSharedPreferences

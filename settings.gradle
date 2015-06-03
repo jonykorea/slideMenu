@@ -1,1 +1,3 @@
-include ':TwsNetworkLib',':stickylistviewlib',':app',':googleapiclient',':demoactivity', ':slidinglayerLib',':TwsCommonLib'
+include ':TwsNetworkLib',':stickylistviewlib',':app',':googleapiclient',':demoactivity', ':slidinglayerLib',':TwsCommonLib', ':brewbrew'
+include ':kakaosdk'
+include ':ViewPagerIndicator'

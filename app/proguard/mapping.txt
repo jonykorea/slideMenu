@@ -19139,7 +19139,8 @@ com.brewbrew.R$menu -> com.brewbrew.R$menu:
     int menu_tws_common_lib_main -> menu_tws_common_lib_main
     int menu_tws_network_demo_main -> menu_tws_network_demo_main
 com.brewbrew.R$raw -> com.brewbrew.R$raw:
-    int beep -> beep
+    int buru_retailer_400 -> buru_retailer_400
+    int buru_user_100 -> buru_user_100
     int gtm_analytics -> gtm_analytics
 com.brewbrew.R$string -> com.brewbrew.R$string:
     int LOADING -> LOADING
@@ -20011,15 +20012,15 @@ com.brewbrew.google.gcm.GcmIntentService -> com.brewbrew.google.gcm.GcmIntentSer
     android.app.NotificationManager mNotificationManager -> a
     com.brewbrew.google.geofence.GeofenceClient geofenceClient -> b
     android.os.Handler GeofenceResultHandler -> GeofenceResultHandler
-    91:187:void onHandleIntent(android.content.Intent) -> onHandleIntent
-    194:196:void onDestroy() -> onDestroy
-    206:210:void onCreate() -> onCreate
-    219:249:void sendNotification(java.lang.String) -> a
-    253:261:void setPushStatus(int) -> a
-    57:57:com.brewbrew.google.geofence.GeofenceClient access$000(com.brewbrew.google.gcm.GcmIntentService) -> a
+    93:192:void onHandleIntent(android.content.Intent) -> onHandleIntent
+    199:201:void onDestroy() -> onDestroy
+    211:215:void onCreate() -> onCreate
+    224:258:void sendNotification(java.lang.String,boolean) -> a
+    262:270:void setPushStatus(int) -> a
+    59:59:com.brewbrew.google.geofence.GeofenceClient access$000(com.brewbrew.google.gcm.GcmIntentService) -> a
 com.brewbrew.google.gcm.GcmIntentService$1 -> abn:
     com.brewbrew.google.gcm.GcmIntentService this$0 -> a
-    70:82:void handleMessage(android.os.Message) -> handleMessage
+    72:84:void handleMessage(android.os.Message) -> handleMessage
 com.brewbrew.google.geofence.Constants -> com.brewbrew.google.geofence.Constants:
     java.lang.String PACKAGE_NAME -> PACKAGE_NAME
     java.lang.String SHARED_PREFERENCES_NAME -> SHARED_PREFERENCES_NAME
@@ -20511,26 +20512,26 @@ com.brewbrew.service.AlarmNotiService -> com.brewbrew.service.AlarmNotiService:
     com.tws.common.lib.soulbrownlib.SoundManager mSoundManager -> a
     android.os.Vibrator mVib -> b
     android.os.CountDownTimer mCntTimer -> f
-    35:35:android.os.IBinder onBind(android.content.Intent) -> onBind
-    49:63:int onStartCommand(android.content.Intent,int,int) -> onStartCommand
-    69:77:void onCreate() -> onCreate
-    80:95:void initTimer() -> a
-    99:111:void initSound() -> b
-    114:122:void callVibrator() -> c
-    125:130:void setMaxVolume() -> d
-    133:140:void callSound() -> e
-    144:148:void onDestroy() -> onDestroy
-    17:17:void access$000(com.brewbrew.service.AlarmNotiService) -> a
-    17:17:boolean access$102(com.brewbrew.service.AlarmNotiService,boolean) -> a
-    17:17:com.tws.common.lib.mgr.WakeupMgr access$200(com.brewbrew.service.AlarmNotiService) -> b
-    17:17:boolean access$302(com.brewbrew.service.AlarmNotiService,boolean) -> b
+    36:36:android.os.IBinder onBind(android.content.Intent) -> onBind
+    50:64:int onStartCommand(android.content.Intent,int,int) -> onStartCommand
+    70:78:void onCreate() -> onCreate
+    82:97:void initTimer() -> a
+    101:113:void initSound() -> b
+    116:124:void callVibrator() -> c
+    127:132:void setMaxVolume() -> d
+    138:146:void callSound() -> e
+    150:154:void onDestroy() -> onDestroy
+    18:18:void access$000(com.brewbrew.service.AlarmNotiService) -> a
+    18:18:boolean access$102(com.brewbrew.service.AlarmNotiService,boolean) -> a
+    18:18:com.tws.common.lib.mgr.WakeupMgr access$200(com.brewbrew.service.AlarmNotiService) -> b
+    18:18:boolean access$302(com.brewbrew.service.AlarmNotiService,boolean) -> b
 com.brewbrew.service.AlarmNotiService$1 -> acg:
     com.brewbrew.service.AlarmNotiService this$0 -> a
-    84:85:void onTick(long) -> onTick
-    90:93:void onFinish() -> onFinish
+    86:87:void onTick(long) -> onTick
+    92:95:void onFinish() -> onFinish
 com.brewbrew.service.AlarmNotiService$2 -> ach:
     com.brewbrew.service.AlarmNotiService this$0 -> a
-    105:107:void onLoadComplete(android.media.SoundPool,int,int) -> onLoadComplete
+    107:109:void onLoadComplete(android.media.SoundPool,int,int) -> onLoadComplete
 com.brewbrew.service.LocationService -> com.brewbrew.service.LocationService:
     com.tws.common.lib.mgr.WakeupMgr wakeupMgr -> a
     android.os.Handler LocationResultHandler -> LocationResultHandler
@@ -20577,7 +20578,7 @@ com.brewbrew.views.NavigationDrawerFragment -> com.brewbrew.views.NavigationDraw
     317:319:void onSaveInstanceState(android.os.Bundle) -> onSaveInstanceState
     322:322:android.app.ActionBar getActionBar() -> a
     341:351:void openCloseDrawerMenu() -> openCloseDrawerMenu
-    355:410:java.util.ArrayList getSideMenu(com.brewbrew.network.data.RetMenuList) -> a
+    355:427:java.util.ArrayList getSideMenu(com.brewbrew.network.data.RetMenuList) -> a
     45:45:void access$000(com.brewbrew.views.NavigationDrawerFragment,int) -> a
     45:45:int access$100(com.brewbrew.views.NavigationDrawerFragment) -> a
     45:45:com.brewbrew.views.NavigationDrawerFragment$NavigationDrawerCallbacks access$200(com.brewbrew.views.NavigationDrawerFragment) -> b
@@ -20599,7 +20600,7 @@ com.brewbrew.views.NavigationDrawerFragment$4 -> aco:
     271:271:void onDrawerStateChanged(int) -> onDrawerStateChanged
 com.brewbrew.views.NavigationDrawerFragment$5 -> acp:
     com.brewbrew.views.NavigationDrawerFragment this$0 -> a
-    420:436:void onReceive(android.content.Context,android.content.Intent) -> onReceive
+    437:453:void onReceive(android.content.Context,android.content.Intent) -> onReceive
 com.brewbrew.views.NavigationDrawerFragment$NavigationDrawerCallbacks -> com.brewbrew.views.NavigationDrawerFragment$NavigationDrawerCallbacks:
     void onNavigationDrawerItemSelected(int) -> onNavigationDrawerItemSelected
     void onChangeDrawerLayout(int) -> onChangeDrawerLayout
