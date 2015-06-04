@@ -12,23 +12,54 @@
         android:layout_height="match_parent">
 
         <RelativeLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="344dp"
+            android:background="@drawable/bg_sliding_dialog"
+            android:layout_height="296dp"
             android:layout_gravity="center">
 
-            <com.makeramen.roundedimageview.RoundedImageView xmlns:app="http://schemas.android.com/apk/res-auto"
-                android:id="@+id/slidinglayer_image"
+            <RelativeLayout
+                android:id="@+id/slidinglayer_top"
+                android:layout_alignParentTop="true"
+                android:layout_width="match_parent"
+                android:layout_height="40dp">
 
-                android:layout_width="285dp"
-                android:layout_height="400dp"
-                android:src="@drawable/ic_launcher"
-                app:riv_corner_radius="10dp" />
+                <TextView
+                    android:layout_centerVertical="true"
+                    android:layout_alignParentLeft="true"
+                    android:layout_marginLeft="12dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="24dp"
+                    android:text="1022"/>
+
+                <ImageButton
+                    android:layout_centerVertical="true"
+                    android:layout_marginRight="8dp"
+                    android:layout_alignParentRight="true"
+                    android:background="@drawable/bt_close_nor"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp" />
+
+            </RelativeLayout>
+
+
+            <ImageView
+                android:id="@+id/slidinglayer_image"
+                android:layout_below="@id/slidinglayer_top"
+                android:layout_above="@+id/slidinglayer_btn"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
 
             <Button
+
+                android:layout_centerHorizontal="true"
+                android:layout_alignParentBottom="true"
                 android:id="@+id/slidinglayer_btn"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="zzzzz" />
+                android:layout_margin="12dp"
+                android:layout_width="272dp"
+                android:layout_height="40dp"
+                android:background="@drawable/selector_common_btn_brown"
+                android:text="메뉴보기"
+                android:textColor="#ffffff"/>
 
         </RelativeLayout>
 

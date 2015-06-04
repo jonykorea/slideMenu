@@ -16,7 +16,7 @@ import com.brewbrew.R;
 /**
  * Created by jony on 15. 6. 2..
  */
-public class ViewPagerAdapter extends PagerAdapter {
+public class TutorialPagerAdapter extends PagerAdapter {
     // Declare Variables
     Context context;
     String[] titleColor;
@@ -25,8 +25,8 @@ public class ViewPagerAdapter extends PagerAdapter {
     int[] image;
     LayoutInflater inflater;
 
-    public ViewPagerAdapter(Context context, String[] titleColor, String[] title,
-                            String[] contents, int[] image) {
+    public TutorialPagerAdapter(Context context, String[] titleColor, String[] title,
+                                String[] contents, int[] image) {
         this.context = context;
         this.titleColor = titleColor;
         this.title = title;

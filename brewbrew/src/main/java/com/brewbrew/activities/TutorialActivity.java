@@ -6,7 +6,7 @@ import android.support.v4.view.ViewPager;
 import android.os.Bundle;
 
 import com.brewbrew.R;
-import com.brewbrew.views.adapters.ViewPagerAdapter;
+import com.brewbrew.views.adapters.TutorialPagerAdapter;
 import com.brewbrew.views.widgets.LoadingDialog;
 import com.viewpagerindicator.CirclePageIndicator;
 
@@ -42,7 +42,7 @@ public class TutorialActivity extends Activity {
         // Locate the ViewPager in viewpager_main.xml
         viewPager = (ViewPager) findViewById(R.id.pager);
         // Pass results to ViewPagerAdapter Class
-        adapter = new ViewPagerAdapter(TutorialActivity.this, titleColor, pageTitle,
+        adapter = new TutorialPagerAdapter(TutorialActivity.this, titleColor, pageTitle,
                 pageText, imageRes);
         // Binds the Adapter to the ViewPager
         viewPager.setAdapter(adapter);

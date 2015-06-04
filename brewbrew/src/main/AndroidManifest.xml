@@ -20,9 +20,12 @@
             android:name="com.kakao.sdk.AppKey"
             android:value="@string/kakao_app_key" />
         <!-- kakao api E -->
+
         <activity
             android:name=".activities.BrewbrewMainActivity"
             android:label="@string/app_name" >
+
+
         </activity>
         <activity
             android:name=".activities.demo.DmSlidnigUpPanelActivity"
@@ -47,18 +50,18 @@
         <activity
             android:name=".activities.demo.DmSlidingDialogMainActivity"
             android:label="@string/title_activity_dm_sliding_dialog_main" >
-        </activity>
-        <activity
-            android:name=".activities.TutorialActivity"
-            android:label="@string/title_activity_tutorial"
-            android:theme="@android:style/Theme.NoTitleBar" >
-
 
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+
+        </activity>
+        <activity
+            android:name=".activities.TutorialActivity"
+            android:label="@string/title_activity_tutorial"
+            android:theme="@android:style/Theme.NoTitleBar" >
 
         </activity>
         <activity

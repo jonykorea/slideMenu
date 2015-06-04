@@ -89,7 +89,7 @@ public class CuzSlidingDialog extends Dialog {
                 handler.postDelayed(new Runnable() {
                     @Override
                     public void run() {
-                        mIvSlidingLayer.setImageResource(R.drawable.ic_launcher);
+                        mIvSlidingLayer.setImageResource(R.drawable.dummy_cafeimg);
                         backgroundFadeIn();
                         mSlidingLayer.openLayer(true);
                     }
