@@ -18,25 +18,25 @@ import com.brewbrew.R;
  */
 public class TutorialPagerAdapter extends PagerAdapter {
     // Declare Variables
-    Context context;
-    String[] titleColor;
-    String[] title;
-    String[] contents;
-    int[] image;
-    LayoutInflater inflater;
+    Context mContext;
+    String[] mTitleColor;
+    String[] mTitle;
+    String[] mContents;
+    int[] mImage;
+    LayoutInflater mInflater;
 
     public TutorialPagerAdapter(Context context, String[] titleColor, String[] title,
                                 String[] contents, int[] image) {
-        this.context = context;
-        this.titleColor = titleColor;
-        this.title = title;
-        this.contents = contents;
-        this.image = image;
+        this.mContext = context;
+        this.mTitleColor = titleColor;
+        this.mTitle = title;
+        this.mContents = contents;
+        this.mImage = image;
     }
 
     @Override
     public int getCount() {
-        return titleColor.length;
+        return mTitleColor.length;
     }
 
     @Override
@@ -52,9 +52,9 @@ public class TutorialPagerAdapter extends PagerAdapter {
         TextView tvContents;
         ImageView ivTutorial;
 
-        inflater = (LayoutInflater) context
+        mInflater = (LayoutInflater) mContext
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        View itemView = inflater.inflate(R.layout.viewpager_item, container,
+        View itemView = mInflater.inflate(R.layout.viewpager_item, container,
                 false);
 
 
@@ -62,12 +62,12 @@ public class TutorialPagerAdapter extends PagerAdapter {
         tvContents = (TextView) itemView.findViewById(R.id.contents);
 
         //txtrank.setText(titleColor[position]);
-        tvTitle.setText(title[position]);
-        tvContents.setText(contents[position]);
+        tvTitle.setText(mTitle[position]);
+        tvContents.setText(mContents[position]);
 
         ivTutorial = (ImageView) itemView.findViewById(R.id.image);
 
-        ivTutorial.setImageResource(image[position]);
+        ivTutorial.setImageResource(mImage[position]);
 
         ((ViewPager) container).addView(itemView);
 

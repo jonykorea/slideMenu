@@ -16,4 +16,6 @@
     <string name="title_activity_dm_sliding_dialog_main">DmSlidingDialogMainActivity</string>
     <string name="title_activity_tutorial">TutorialActivity</string>
     <string name="title_activity_dm_grid_layout_main">DmGridLayoutMainActivity</string>
+    <string name="title_activity_dm_module">DmModuleActivity</string>
+    <string name="title_activity_dm_widget_main">DmWidgetMainActivity</string>
 </resources>

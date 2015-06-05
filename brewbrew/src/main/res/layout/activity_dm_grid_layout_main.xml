@@ -15,16 +15,16 @@
         <!-- 계정관리 -->
         <include layout="@layout/layout_setting"
             android:id="@+id/setting_account"
-
             android:layout_width="88dp"
             android:layout_height="88dp"
             android:layout_margin="1dp"
+
             />
 
         <!-- 쿠폰함 -->
         <include layout="@layout/layout_setting"
             android:id="@+id/setting_coupon"
-            android:layout_width="match_parent"
+            android:layout_width="88dp"
             android:layout_height="88dp"
             android:layout_margin="1dp"
 
@@ -33,7 +33,7 @@
         <!-- 할인 -->
         <include layout="@layout/layout_setting"
             android:id="@+id/setting_discount"
-            android:layout_width="match_parent"
+            android:layout_width="88dp"
             android:layout_height="88dp"
             android:layout_margin="1dp"
             />
@@ -41,7 +41,7 @@
         <!-- 이벤트 -->
         <include layout="@layout/layout_setting"
             android:id="@+id/setting_event"
-            android:layout_width="match_parent"
+            android:layout_width="88dp"
             android:layout_height="88dp"
             android:layout_margin="1dp"
             />
@@ -49,7 +49,7 @@
         <!-- 공지 -->
         <include layout="@layout/layout_setting"
             android:id="@+id/setting_notice"
-            android:layout_width="match_parent"
+            android:layout_width="88dp"
             android:layout_height="88dp"
             android:layout_margin="1dp"
             />
@@ -57,7 +57,7 @@
         <!-- 질문 -->
         <include layout="@layout/layout_setting"
             android:id="@+id/setting_qa"
-            android:layout_width="match_parent"
+            android:layout_width="88dp"
             android:layout_height="88dp"
             android:layout_margin="1dp"
             />

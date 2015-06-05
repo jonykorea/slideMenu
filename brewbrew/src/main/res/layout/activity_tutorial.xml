@@ -27,17 +27,7 @@
             android:layout_width="match_parent"
             android:layout_height="8dp" />
 
-        <RelativeLayout
-            android:layout_width="fill_parent"
-            android:layout_height="72dp" >
 
-            <com.brewbrew.views.widgets.CuzBB
-            android:id="@+id/switchView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:background="#1E88E5"
-             />
-        </RelativeLayout>
 
     </LinearLayout>
 

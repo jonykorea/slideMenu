@@ -6,7 +6,7 @@ import android.support.v4.view.ViewPager;
 import android.os.Bundle;
 
 import com.brewbrew.R;
-import com.brewbrew.fragments.SampleFragment;
+import com.brewbrew.fragments.MainViewFragment;
 import com.brewbrew.views.adapters.TitlePagerAdapter;
 import com.brewbrew.views.layout.CuzPagerSlidingTabStrip;
 
@@ -25,9 +25,9 @@ public class BrewbrewMainActivity extends FragmentActivity {
         List<Fragment> fragments = new ArrayList<Fragment>();
 
         // Fragement setting
-        fragments.add(SampleFragment.newInstance(R.layout.fragment_tab_store));
-        fragments.add(SampleFragment.newInstance(R.layout.fragment_tab_list));
-        fragments.add(SampleFragment.newInstance(R.layout.fragment_tab_setting));
+        fragments.add(MainViewFragment.newInstance(R.layout.fragment_tab_store));
+        fragments.add(MainViewFragment.newInstance(R.layout.fragment_tab_list));
+        fragments.add(MainViewFragment.newInstance(R.layout.fragment_tab_setting));
 
 
         ViewPager pager = (ViewPager) findViewById(R.id.pager);

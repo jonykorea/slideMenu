@@ -15,7 +15,7 @@ import java.util.List;
  */
 public class TitlePagerAdapter extends FragmentPagerAdapter implements CuzPagerSlidingTabStrip.IconTabProvider {
  
-    private List<Fragment> fragments;
+    private List<Fragment> mFragments;
     
     private final int[] TITLES_IMG = { R.drawable.selector_title_gnb_01,R.drawable.selector_title_gnb_02, R.drawable.selector_title_gnb_03};
 	
@@ -26,18 +26,18 @@ public class TitlePagerAdapter extends FragmentPagerAdapter implements CuzPagerS
      */
     public TitlePagerAdapter(FragmentManager fm, List<Fragment> fragments) {
         super(fm);
-        this.fragments = fragments;
+        this.mFragments = fragments;
     }
     /* (non-Javadoc)
      * @see android.support.v4.app.FragmentPagerAdapter#getItem(int)
      */
     @Override
     public Fragment getItem(int position) {
-        return this.fragments.get(position);
+        return this.mFragments.get(position);
     }
  
     public List<Fragment> getFragments() {
-		return fragments;
+		return mFragments;
 	}
     
     /* (non-Javadoc)
@@ -45,7 +45,7 @@ public class TitlePagerAdapter extends FragmentPagerAdapter implements CuzPagerS
      */
     @Override
     public int getCount() {
-        return this.fragments.size();
+        return this.mFragments.size();
     }
 	@Override
 	public int getPageIconResId(int position) {

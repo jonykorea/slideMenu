@@ -18,21 +18,21 @@ import com.kakao.helper.Logger;
 
 public class DmKakaoLinkMainActivity extends ActionBarActivity {
 
-    EditText editText;
+    EditText mEditText;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dm_kakao_link_main);
 
-        editText = (EditText)findViewById(R.id.edt_message);
+        mEditText = (EditText)findViewById(R.id.edt_message);
 
     }
 
     public void onBtnSend(View v)
     {
 
-        String message = editText.getText().toString();
+        String message = mEditText.getText().toString();
 
         if(!TextUtils.isEmpty(message)) {
             sendMessage(message);
