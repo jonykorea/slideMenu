@@ -18,5 +18,7 @@ public class IntroActivity extends Activity {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_intro);
+
+
     }
 }
