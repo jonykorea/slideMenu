@@ -3,12 +3,12 @@
     android:oneshot="false" >
 
     <item
-        android:drawable="@drawable/loading"
-        android:duration="100">
+        android:drawable="@drawable/loading01"
+        android:duration="300">
     </item>
     <item
-        android:drawable="@drawable/loading"
-        android:duration="100">
+        android:drawable="@drawable/loading02"
+        android:duration="300">
     </item>
 
 
